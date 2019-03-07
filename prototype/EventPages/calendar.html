@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="https://fullcalendar.io/js/fullcalendar-3.0.1/fullcalendar.min.css">
+      <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css">
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.0.1/fullcalendar.js"></script>
+      <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js"></script>
+
+  <style id="compiled-css" type="text/css">
+    #container {
+      max-width: 80%;
+      max-height: 80%;
+      margin-left: 10%;
+      margin-right: 10%;
+      margin-top: 3%;
+    }
+
+    #buttons {
+      margin-bottom: 20px;
+    }
+
+    .button-left {
+      float: left;
+      margin-right: 1%;
+    }
+
+    .button-right {
+      float: right;
+      margin-left: 1%;
+    }
+
+    #notification-container {
+
+    }
+
+    #invitation-list {
+      border-style: solid;
+      border-width: 1px;
+      border-color: #ddd;
+    }
+
+    #hidden-container {
+      float: right;
+      display: none;
+      padding: none;
+    }
+
+    #notification-title {
+      margin-top: 0;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #notification-list {
+      padding-left: 0px;
+      display: block;
+    }
+  </style>
+
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">
+  window.onload=function(){    
+    $(document).ready(function() {
+      $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            defaultDate: '2018-03-12',
+            navLinks: true, // can click day/week names to navigate views
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end) {
+                // Display the modal.
+                // You could fill in the start and end fields based on the parameters
+                $('.modal').modal('show');
+
+            },
+            eventClick: function(event, element) {
+                // Display the modal and set the values to the event values.
+                $('.modal').modal('show');
+                $('.modal').find('#title').val(event.title);
+                $('.modal').find('#starts-at').val(event.start);
+                $('.modal').find('#ends-at').val(event.end);
+
+            },
+            editable: true,
+            eventLimit: "more" // allow "more" link when too many events
+
+        });
+
+        // Bind the dates to datetimepicker.
+        // You should pass the options you need
+        $("#starts-at, #ends-at").datetimepicker();
+
+        // Whenever the user clicks on the "save" button om the dialog
+        $('#save-event').on('click', function() {
+            var title = $('#title').val();
+            if (title) {
+                var eventData = {
+                    title: title,
+                    start: $('#starts-at').val(),
+                    end: $('#ends-at').val()
+                };
+                $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+            }
+            $('#calendar').fullCalendar('unselect');
+
+            // Clear modal inputs
+            $('.modal').find('input').val('');
+
+            // hide modal
+            $('.modal').modal('hide');
+        });
+
+        $('#button-invitations').on('click', function() {
+          $('#hidden-container').toggle("fast", function() {
+            if (! $('#hidden-container:visible').length) {
+              console.log('invisible');
+              $('#shown-container').animate({
+                width: '100%',
+              });
+              $('#hidden-container').removeClass('col-sm-3').addClass('col-sm-0');
+              $('#shown-container').removeClass('col-sm-9').addClass('col-sm-12');
+            } else {
+              console.log('visible')
+              $('#shown-container').animate({
+                width: '70%',
+              });
+              $('#hidden-container').removeClass('col-sm-0').addClass('col-sm-3');
+              $('#invitation-list').height($('table').css('height'));
+              $('#shown-container').removeClass('col-sm-12').addClass('col-sm-9');
+            }
+          });
+        });
+  });
+}
+
+</script>
+
+</head>
+<body>
+  
+<header>
+  <div> this is a pretty header. </div>
+</header>
+
+<div id='container'>
+  <div id='buttons'>
+    <a type="button" class="btn btn-primary button-left" id="button-friends" href="./friends.html">Friends</a>
+    <a type="button" class="btn btn-primary button-left" id="button-discover" href="./discover.html">Discover</a>
+    <a type="button" class="btn btn-primary button-right" id="button-groupevent" href="./addGroupEvent.html">Create Group Event</a>
+    <i class="btn btn-primary button-right fas fa-bell" id="button-invitations"></i>
+    <div style="clear:both"></div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12" id='shown-container'>
+      <div id='calendar-container'>
+        <div id='calendar'></div>
+        <div id='datepicker'></div>
+      </div>
+    </div>
+    <div class="col-sm-0" id='hidden-container'>
+      <div id='notification-container'>
+        <h2 id="notification-title"> Invitations </h2>
+        <ul id="invitation-list"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create new event</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="col-xs-4" for="title">Event title</label>
+                        <input type="text" name="title" id="title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="col-xs-4" for="starts-at">Starts at</label>
+                        <input type="text" name="starts_at" id="starts-at" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <label class="col-xs-4" for="ends-at">Ends at</label>
+                        <input type="text" name="ends_at" id="ends-at" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save-event">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<footer>
+  <div> this is a pretty footer. </div>
+</footer>
+  
+  <script>
+    // tell the embed parent frame the height of the content
+    if (window.parent && window.parent.parent){
+      window.parent.parent.postMessage(["resultsFrame", {
+        height: document.body.getBoundingClientRect().height,
+        slug: "5ozdk1ej"
+      }], "*")
+    }
+
+    // always overwrite window.name, in case users try to set it manually
+    window.name = "result"
+  </script>
+</body>
+</html>
