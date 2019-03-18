@@ -1,0 +1,61 @@
+#container {
+  max-width: 80%;
+  max-height: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 5%;
+}
+
+#button-group {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.button-left {
+  float: left;
+  margin-right: 1%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.button-right {
+  float: right;
+  margin-left: 1%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.row {
+  margin: 5px;
+}
+
+#description {
+  height: 150px;
+}
+
+#notification-container {
+
+}
+
+#invitation-list {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #ddd;
+}
+
+#hidden-container {
+  float: right;
+  display: none;
+  padding: none;
+}
+
+#notification-title {
+  margin-top: 0;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#notification-list {
+  padding-left: 0px;
+  display: block;
+}

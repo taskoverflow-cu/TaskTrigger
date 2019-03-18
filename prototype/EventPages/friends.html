@@ -5,279 +5,37 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title></title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<style id="compiled-css" type="text/css">
-		#container {
-			max-width: 60%;
-			max-height: 60%;
-			margin-left: 20%;
-			margin-right: 20%;
-			margin-top: 5%;
-		}
-
-    	#buttons {
-      		margin-bottom: 20px;
-    	}
-
-	    .button-left {
-	      float: left;
-	      margin-right: 1%;
-	    }
-
-	    .button-right {
-	      float: right;
-	      margin-left: 1%;
-	    }	
-
-	    .button-right-wide {
-	    	float: right;
-	    	margin-left: 4%;
-	    }
-
-	    .button-col-middle {
-	    	padding-top: 5%;
-	    	padding-left: 7%;
-	    }
-
-	    #list-container {
-	    	width: 100%;
-	    	clear: both;
-	    }
-
-	    #friend-request-input {
-	    	width: 20%;
-	    }
-	</style>
-
-	<script type="text/javascript">
-		window.onload=function(){
-	    	$(document).ready(function() {
-	    		var friends = [
-	    			{
-	    				"name": "Mike Anamendolla",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m101.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "Seth Frazier ",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w102.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'seth.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "Rosemary Porter",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w103.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			},
-	    			{
-	    				"name": "Mike Anamendolla",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m101.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "Seth Frazier ",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w102.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'seth.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "Rosemary Porter",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w103.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			}
-	    		]
-
-	    		// populate #friend-list with friends, hide #notification-list
-	    		$('#button-friends').on('click', function() {
-	    			$(this).addClass('active');
-	    			$('#button-notifications').removeClass('active');
-	    			$('#notification-list').hide();
-	    			$('#friend-list').empty().show();
-	    			for (var i = 0; i < friends.length; i++) {
-	    				var li = $('<li/>').attr('class', 'list-group-item');
-	    				var container = $('<div/>').attr('class', 'row w-100').appendTo(li);
-						var img = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-2 px-0').append(
-								$('<img/>').attr('src', friends[i]['imgsrc'])
-										   .attr('alt', friends[i]['name'])
-										   .attr('class', 'mx-auto d-block img-fluid')
-							).appendTo(container);
-						var textContainer = $('<div/>').attr('class', 'col-12 col-md-8 text-sm-left').append(
-								$('<span/>').attr('class', 'float-right pulse')
-							).append(
-								$('<label/>').attr('class', 'name lead').append(friends[i]['name'])
-							).append(
-								$('<br>')
-							).append(
-								$('<span/>').attr('class', 'fa fa-map-marker fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', friends[i]['addr'])
-							).append(
-								$('<span/>').attr('class', 'text-muted').append(friends[i]['addr'])
-							).append(
-								$('<br>')
-							).append(
-								$('<span/>').attr('class', 'fa fa-phone fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', friends[i]['phoneNum'])
-							).append(
-								$('<span/>').attr('class', 'text-muted small').append(friends[i]['phoneNum'])
-							).append(
-								$('<br>')
-							).append(
-								$('<span/>').attr('class', 'fa fa-phone fa-fw text-muted').attr('data-toggle', 'tooltip')
-							).append(
-								$('<span/>').attr('class', 'text-muted small text-truncate').append(friends[i]['email'])
-							).appendTo(container);
-	    				$('#friend-list').append(li);
-	    			}
-	    		});
-
-
-	    		var requests = [
-	    			{
-	    				"name": "Peppa Pig",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m104.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "George Pig",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w105.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'seth.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "Suzzy Sheep",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w106.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			},
-	    			{
-	    				"name": "Peppa Pig",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m104.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "George Pig",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w105.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'seth.ana@example.com'
-	    			}, 
-	    			{
-	    				"name": "Suzzy Sheep",
-	    				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w106.jpg',
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"email": 'mike.ana@example.com'
-	    			}
-	    		]
-
-	    		// populate #notification-list with notifications, hide #friend-list
-	    		$('#button-notifications').on('click', function() {
-	    			$(this).addClass('active');
-	    			$('#button-friends').removeClass('active');
-	    			$('#friend-list').hide();
-	    			$('#notification-list').empty().show();
-	    			
-	    			for (var i = 0; i < requests.length; i++) {
-	    				var li = $('<li/>').attr('class', 'list-group-item');
-	    				var container = $('<div/>').attr('class', 'row w-100').appendTo(li);
-
-						var img = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-2 px-0').append(
-								$('<img/>').attr('src', requests[i]['imgsrc'])
-										   .attr('alt', requests[i]['name'])
-										   .attr('class', 'rounded-circle mx-auto d-block img-fluid')
-							).appendTo(container);
-
-						var textContainer = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-5 text-sm-left').append(
-								$('<span/>').attr('class', 'float-right pulse')
-							).append(
-								$('<label/>').attr('class', 'name lead').append(requests[i]['name'])
-							).append(
-								$('<br>')
-							).append(
-								$('<span/>').attr('class', 'fa fa-map-marker fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', requests[i]['addr'])
-							).append(
-								$('<span/>').attr('class', 'text-muted').append(requests[i]['addr'])
-							).append(
-								$('<br>')
-							).append(
-								$('<span/>').attr('class', 'fa fa-phone fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', requests[i]['phoneNum'])
-							).append(
-								$('<span/>').attr('class', 'text-muted small').append(requests[i]['phoneNum'])
-							).append(
-								$('<br>')
-							).append(
-								$('<span/>').attr('class', 'fa fa-phone fa-fw text-muted').attr('data-toggle', 'tooltip')
-							).append(
-								$('<span/>').attr('class', 'text-muted small text-truncate').append(requests[i]['email'])
-							).appendTo(container);
-
-						var statusControl = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-4 button-col-middle').append(
-								$('<a/>').attr('id', 'button-confirm-request').on('click', function() {
-									console.log('you clicked on accept');
-								}).append(
-									$('<i/>').attr('class', 'far fa-2x fa-check-circle button-right-wide').css('cursor', 'pointer').css('color', 'green')
-								)
-							).append(
-								$('<a/>').attr('id', 'button-ignore-request').on('click', function() {
-									console.log('you clicked on ignore');
-								}).append(
-									$('<i/>').attr('class', 'far fa-2x fa-times-circle button-right-wide').css('cursor', 'pointer').css('color', 'red')
-								)
-							).append(
-								$('<div/>').attr('class', 'spinner-border').attr('role', 'status').append(
-										$('<span/>').attr('class', 'sr-only').append('Loading...')
-									)
-							).appendTo(container);
-	    				$('#notification-list').append(li);
-	    			}
-	    		});
-
-	    		$('#button-friends').click();
-		    });
-	    }
-	</script>
-
+	<link rel="stylesheet" type="text/css" href="./css/friends.css">
+	<script src="js/friends.js"></script>
 </head>
 
-<body>
-<div id='container'>
-	<a type="button" class="btn btn-primary button-left" id="button-calendar" href="./calendar.html">Calendar</a>
-	<div id='buttons'>
+<header>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div id="button-group">
+		<a type="button" class="btn btn-primary button-left" id="button-calendar" href="./calendar.html">Calendar</a>
 		<input type="text" class="form-control button-left" id="friend-request-input" placeholder="Recipient's username">
 		<a type="button" class="btn btn-primary button-left" id="button-addfriend">Add Friend</a>
-		<a type="button" class="btn btn-primary button-right" id="button-notifications">Notifications</a>
+		<a type="button" class="btn btn-primary button-right" id="button-notifications">Friend Requests</a>
 		<a type="button" class="btn btn-primary button-right active" id="button-friends">Friends</a>
-		<div style="clear: both"></div>
-	</div>
-	<div id='list-container'>
+		<div style="clear: left"></div>
+  </div>
+</nav>
+</header>
+
+<body>
+<div class="alert alert-success" id="alert" style="display:none">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close" style="margin:5px">&times;</a>
+  <span id="alert-text"></span>
+</div>
+<div id='container'>
+	<div id='list-container' style="clear:left">
 		<ul id="friend-list" class='main-list' style='padding-left:0px;'></ul>
 		<ul id="notification-list" class='main-list' style='padding-left:0px;'></ul>
 	</div>
-	<div class="text-center">
-	  <nav class="p-2" aria-label="...">
-	    <ul class="pagination">
-	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-	      <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
-	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
-		</ul>
-	  </nav>
-	</div>
 </div>
+
 </body>
 
 </html>
