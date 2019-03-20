@@ -1,0 +1,64 @@
+#container {
+  max-width: 60%;
+  max-height: 60%;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 5%;
+}
+
+#buttons {
+  margin-bottom: 20px;
+}
+
+#button-group {
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+#button-confirm-request {
+  margin-right: 10px;
+}
+
+#button-ignore-request {
+  margin-right: 10px;
+}
+
+#alert {
+  float: right;
+  margin: 20px;
+  height: 100px;
+  width: 250px;
+}
+
+.button-left {
+  float: left;
+  margin-right: 1%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.button-right {
+  float: right;
+  margin-left: 1%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.button-right-wide {
+  float: right;
+  margin-left: 4%;
+}
+
+.button-col-middle {
+  padding-top: 5%;
+  padding-left: 7%;
+}
+
+#list-container {
+  width: 100%;
+  clear: left;
+}
+
+#friend-request-input {
+  width: 20%;
+}
