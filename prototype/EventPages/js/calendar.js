@@ -13,8 +13,8 @@ window.onload=function(){
             select: function(start, end) {
                 // Display the modal.
                 // You could fill in the start and end fields based on the parameters
-                $('.modal').modal('show');
-
+                // $('.modal').modal('show');
+                location.href = './addevent.html'
             },
             eventClick: function(event, element) {
                 // Display the modal and set the values to the event values.
@@ -76,5 +76,70 @@ window.onload=function(){
             }
           });
         });
+
+        // populate invitations
+        var invitations = [
+          {
+            "Host": "Mike",
+            "TimeStart": "2019-3-20 19:00",
+            "TimeEnd": "2019-3-20 20:00",
+            "Description": "sample invitation 1, some descriptions here..."
+          },
+          {
+            "Host": "Sam",
+            "TimeStart": "2019-3-20 19:00",
+            "TimeEnd": "2019-3-20 20:00",
+            "Description": "sample invitation 2, some descriptions here..."
+          }
+        ]
+        for(var i=0; i<invitations.length; i++) {
+          var li = $("<li/>").attr('class', 'list-group-item').css('border', 'none').css('border-bottom', '2px solid #ddd');
+          var container = $('<div/>').attr('class', 'row w-100').append(
+                $('<row/>').append(
+                  $('<div />').attr('class', 'col-12 col-md-3').append(
+                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['Host'])
+                  )
+                ).append(
+                  $('<div />').attr('class', 'col-12 col-md-9').append(
+                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['TimeStart'])
+                  ).append(
+                    $("<br/>")
+                  ).append(
+                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['TimeEnd'])
+                  )
+                )
+              ).append(
+                $('<row/>').append(
+                  $('<div/>').attr('class', 'col-12 col-md-12').css('padding-right', '0').append(
+                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['Description'])
+                  )
+                )
+              ).append(
+                $('<row/>').css('float', 'right').append(
+                  $('<a/>').attr('type', 'button').attr('href', './viewGroupEventRequest.html').css('padding-right', '6px').css('padding-top', 'none').css('padding-bottom', 'none').append('more')
+                ).append(
+                  $('<a/>').attr('type', 'button').css('padding-right', '6px').css('padding-top', 'none').css('padding-bottom', 'none').on('click', function() {
+                    $(this).closest('li').animate({
+                      margin: '0px',
+                      padding: '0px',
+                      height: '0px'
+                    }, 500, function() {
+                      $(this).remove();
+                    });
+                  }).append('accept')
+                ).append(
+                  $('<a/>').attr('type', 'button').css('padding-right', '6px').css('padding-top', 'none').css('padding-bottom', 'none').on('click', function() {
+                    $(this).closest('li').animate({
+                      margin: '0px',
+                      padding: '0px',
+                      height: '0px'
+                    }, 500, function() {
+                      $(this).remove();
+                    });
+                  }).append('ignore')
+                )
+              ).appendTo(li);
+              $('#invitation-list').append(li);
+        };
   });
 }
