@@ -10,6 +10,13 @@ window.onload=function(){
             navLinks: true, // can click day/week names to navigate views
             selectable: true,
             selectHelper: true,
+            events: [
+              {
+                title: "event1",
+                start: "2019-03-01",
+                end: "2019-03-20"
+              }
+            ],
             select: function(start, end) {
                 // Display the modal.
                 // You could fill in the start and end fields based on the parameters
@@ -18,12 +25,13 @@ window.onload=function(){
             },
             eventClick: function(event, element) {
                 // Display the modal and set the values to the event values.
-                $('.modal').modal('show');
-                $('.modal').find('#title').val(event.title);
-                $('.modal').find('#location').val(event.location);
-                $('.modal').find('#starts-at').val(event.start);
-                $('.modal').find('#ends-at').val(event.end);
-                $('.modal').find('#description').val(event.description);
+                // $('.modal').modal('show');
+                // $('.modal').find('#title').val(event.title);
+                // $('.modal').find('#location').val(event.location);
+                // $('.modal').find('#starts-at').val(event.start);
+                // $('.modal').find('#ends-at').val(event.end);
+                // $('.modal').find('#description').val(event.description);
+                location.href = './viewevent.html'
             },
             editable: true,
             eventLimit: "more" // allow "more" link when too many events
