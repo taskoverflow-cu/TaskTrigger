@@ -1,9 +1,48 @@
 <!DOCTYPE html>
-<html>
-<body>
+<html lang="en">
 
-<h2>The map for searched events:</h2>
-<img src="https://cdn2.vectorstock.com/i/1000x1000/51/81/new-york-and-manhattan-urban-city-map-vector-18545181.jpg" alt="Map">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>EventMap</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
+    <link rel="stylesheet" href="css/map.css">
+</head>
+
+<body>
+    <div class="row">
+        <div class="col s12 header">
+            <div class="row">
+                <div class="col s9 title">
+                    <h2>Map Of Event</h2>
+                </div>
+                <div class="col s3 buttons">
+                    <a class="back waves-effect waves-light btn">Back to Calendar</a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col s12 map">
+            <div id="eventmap"></div>
+        </div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
+    <script src="js/map.js"></script>
 
 </body>
+
 </html>
