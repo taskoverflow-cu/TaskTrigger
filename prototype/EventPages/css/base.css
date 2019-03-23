@@ -1,0 +1,16 @@
+html,body,head,p,h1,h2,h3,h4,h5,h6,ul,ol,li,table,tr,td,thead,tbody,section,article,footer,a,div,span{
+    margin: 0;
+    padding: 0;
+}
+
+image{
+    display: block;
+}
+
+a{
+    text-decoration: none;
+}
+
+ul,ol,li{
+    list-style: none;
+}
