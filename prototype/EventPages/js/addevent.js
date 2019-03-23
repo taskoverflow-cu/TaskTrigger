@@ -23,4 +23,12 @@ $(function(){
     (function(){
         $('select').formSelect();
     }());
+
+
+    // cancel POST for S3
+    (function(){
+        $(".waves-effect").click(function(){
+            return false;
+        });
+    }());
 });
