@@ -34,3 +34,11 @@ with conn.cursor() as cur:
         #logger.info(row)
         print(row)
 conn.commit()
+
+"""
+NOTE: To allow lambda to use rds,
+1. Give its role a policy to access VPC
+2. Enable VPC for the lambda. 
+3. Choose a security group for the lambda
+4. In your SG rules, allow the lambda SG in the inbound traffic rules.
+"""
