@@ -10,13 +10,13 @@ produces:
   - application/json
 paths:
   /discover:
-    post:
+    get:
       summary: The endpoint for searching events.
       description: |
         This API takes in one meassage from client and return a list of events
       tags:
         - discover
-      operationId: sendMessage
+      operationId: searchEvent
       produces:
         - application/json
       parameters:
@@ -28,6 +28,64 @@ paths:
       responses:
         '200':
           description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /create_event:
+    post:
+      summary: The endpoint for creating events.
+      description: |
+        This API takes in one meassage from client and add this event to the database.
+      tags:
+        - create_event
+      operationId: createEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CreateEventRequest'
+      responses:
+        '200':
+          description: A create_event response
+          schema:
+            $ref: '#/definitions/CreateEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /create_event/get_advice:
+    get:
+      summary: The endpoint for getting event timeslot recommendation.
+      description: |
+        This API takes in one meassage from client and return recommendation on timeslot for an event.
+      tags:
+        - create_event
+      operationId: get_event_advice
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverRequest'
+      responses:
+        '200':
+          description: A create_event/get_advice response
           schema:
             $ref: '#/definitions/DiscoverResponse'
         '403':
@@ -67,6 +125,7 @@ definitions:
         format: datetime
       capacity:
         type: integer
+
 
   DiscoverRequest:
     type: object
@@ -109,6 +168,33 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Event'
+
+  CreateEventRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+
+  CreateEventResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/CreateEventResponseMessage'
+
+  CreateEventResponseMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      event_id:
+        type: integer
+      success:
+        type: integer
+
 
 
   GeneralRequest:
