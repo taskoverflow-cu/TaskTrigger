@@ -43,15 +43,17 @@ definitions:
     type: object
     properties:
       event_id:
-        type: string
+        type: integer
       creator_id:
-        type: string
+        type: integer
       event_name:
         type: string
       start_date_time:
         type: string
+        format: datetime
       end_date_time:
         type: string
+        format: datetime
       location:
         type: string
       coordinate:
@@ -59,9 +61,10 @@ definitions:
       description:
         type: string
       visibility:
-        type: string
+        type: integer
       create_time:
         type: string
+        format: datetime
       capacity:
         type: integer
 
@@ -86,9 +89,9 @@ definitions:
     type: object
     properties:
       user_id:
-        type: string
-      visibilities:
-        type: string
+        type: integer
+      visibility:
+        type: integer
       event_time:
         type: string
         format: datetime
@@ -101,7 +104,7 @@ definitions:
     type: object
     properties:
       user_id:
-        type: string
+        type: integer
       events:
         type: array
         items:
