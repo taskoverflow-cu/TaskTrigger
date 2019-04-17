@@ -175,7 +175,7 @@ definitions:
       messages:
         type: array
         items:
-          $ref: '#/definitions/Event'
+          $ref: '#/definitions/CreateEventRequestMessage'
 
   CreateEventResponse:
     type: object
@@ -184,6 +184,15 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/CreateEventResponseMessage'
+
+  CreateEventRequestMessage:
+    type: object
+    properties:
+      event:
+        $ref: '#/definitions/Event'
+      participants_id:
+        type: array
+        items: integer
 
   CreateEventResponseMessage:
     type: object
