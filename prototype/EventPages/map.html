@@ -8,6 +8,7 @@
     <title>EventMap</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin="" />
@@ -18,10 +19,42 @@
     <div class="row">
         <div class="col s12 header">
             <div class="row">
-                <div class="col s9 title">
+                <div class="col s3 title">
                     <h2>Map Of Event</h2>
                 </div>
-                <div class="col s3 buttons">
+                <div class="col s3 title checkboxes">
+                    <label class="input-field col s4">
+                        <input type="checkbox" class="filled-in ckbx" id="private-ckbx" checked="checked"/> 
+                        <span> Private </span>
+                    </label>
+                    <label class="input-field col s4">
+                        <input type="checkbox" class="filled-in ckbx" id="friend-ckbx" checked="checked"/> 
+                        <span> Friend </span>
+                    </label>
+                    <label class="input-field col s4">
+                        <input type="checkbox" class="filled-in ckbx" id="public-ckbx" checked="checked"/> 
+                        <span> Public </span>
+                    </label>
+                </div>
+                <div class="col s4 title timeranges">
+                    <div class="date input-field col s3">
+                        <input type="text" class="datepicker tmrg" id="date-start">
+                        <label for="date">Start Date:</label>
+                    </div>
+                    <div class="time input-field col s3">
+                        <input type="text" class="timepicker tmrg" id="time-start">
+                        <label for="time">Time:</label>
+                    </div>
+                    <div class="date input-field col s3">
+                        <input type="text" class="datepicker tmrg" id="date-end">
+                        <label for="date">End Date:</label>
+                    </div>
+                    <div class="time input-field col s3">
+                        <input type="text" class="timepicker tmrg" id="time-end">
+                        <label for="time">Time:</label>
+                    </div>
+                </div>
+                <div class="col s2 buttons">
                     <a class="back waves-effect waves-light btn">Back to Calendar</a>
                 </div>
 
@@ -41,7 +74,9 @@
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="js/map.js"></script>
+    <script src="js/leaflet.extra-markers.min.js"></script>
 
 </body>
 
