@@ -3,42 +3,42 @@ window.onload=function(){
 		var friends = [
 			{
 				"name": "Mike Anamendolla",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m101.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m101.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
 			}, 
 			{
 				"name": "Seth Frazier ",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w102.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w102.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'seth.ana@example.com'
 			}, 
 			{
 				"name": "Rosemary Porter",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w103.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w103.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
 			},
 			{
 				"name": "Mike Anamendolla",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m101.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m101.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
 			}, 
 			{
 				"name": "Seth Frazier ",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w102.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w102.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'seth.ana@example.com'
 			}, 
 			{
 				"name": "Rosemary Porter",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w103.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w103.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
@@ -88,42 +88,42 @@ window.onload=function(){
 		var requests = [
 			{
 				"name": "Peppa Pig",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m104.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m104.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
 			}, 
 			{
 				"name": "George Pig",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w105.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w105.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'seth.ana@example.com'
 			}, 
 			{
 				"name": "Suzzy Sheep",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w106.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w106.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
 			},
 			{
 				"name": "Peppa Pig",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/m104.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m104.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'
 			}, 
 			{
 				"name": "George Pig",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w105.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w105.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'seth.ana@example.com'
 			}, 
 			{
 				"name": "Suzzy Sheep",
-				"imgsrc": 'http://demos.themes.guide/bodeo/assets/images/users/w106.jpg',
+				"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w106.jpg',
 				"addr": '5842 Hillcrest Rd',
 				"phoneNum": '(870) 288-4149',
 				"email": 'mike.ana@example.com'

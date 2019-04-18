@@ -1,12 +1,12 @@
-window.onload=function(){    
-    $(document).ready(function() {
-      $('#calendar').fullCalendar({
+$(function() {
+    (function() {
+        $('#calendar').fullCalendar({
             header: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
-            defaultDate: '2019-03-12',
+            defaultDate: format_date(new Date()),
             navLinks: true, // can click day/week names to navigate views
             selectable: true,
             selectHelper: true,
@@ -20,8 +20,8 @@ window.onload=function(){
             select: function(start, end) {
                 // Display the modal.
                 // You could fill in the start and end fields based on the parameters
-                // $('.modal').modal('show');
-                location.href = './addevent.html'
+                $('#add-event-modal').modal('show');
+                // location.href = './addevent.html'
             },
             eventClick: function(event, element) {
                 // Display the modal and set the values to the event values.
@@ -35,11 +35,28 @@ window.onload=function(){
             },
             editable: true,
             eventLimit: "more" // allow "more" link when too many events
-
         });
+    }());
 
-        // Bind the dates to datetimepicker.
-        // You should pass the options you need
+    // independent widgets
+    (function() {
+        $('.datepicker').datetimepicker({
+          format: 'DD/MM/YYYY'
+        });
+        $('.timepicker').datetimepicker({
+          format: 'hh/mm/ss'
+        });
+        // $('select').formSelect();
+        // $('.chips').chips();
+        // $('.chips-placeholder').chips({
+        //     placeholder: 'Enter a tag',
+        //     secondaryPlaceholder: '+Tag',
+        //     limit: 20,
+        //   });
+    }());
+
+    // modal controllers
+    (function() {
         $("#starts-at, #ends-at").datetimepicker();
 
         // Whenever the user clicks on the "save" button om the dialog
@@ -63,6 +80,13 @@ window.onload=function(){
             // hide modal
             $('.modal').modal('hide');
         });
+    }());
+
+    // header buttons
+    (function() {
+        $("#button-groupevent").click(function() {
+            $("#add-group-event-modal").modal("show");
+        });
 
         $('#button-invitations').on('click', function() {
           $('#hidden-container').toggle("fast", function() {
@@ -84,8 +108,10 @@ window.onload=function(){
             }
           });
         });
+    }());
 
-        // populate invitations
+    // populate invitations
+    (function(){
         var invitations = [
           {
             "Host": "Mike",
@@ -147,7 +173,14 @@ window.onload=function(){
                   }).append('ignore')
                 )
               ).appendTo(li);
-              $('#invitation-list').append(li);
+          $('#invitation-list').append(li);
         };
-  });
+    }());
+});
+
+function format_date(raw_date) {
+  var dd = String(raw_date.getDate()).padStart(2, '0');
+  var mm = String(raw_date.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = raw_date.getFullYear();
+  return yyyy + "-" + mm + '-' + dd;  
 }
