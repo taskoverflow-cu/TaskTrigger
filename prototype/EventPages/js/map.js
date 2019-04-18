@@ -97,8 +97,12 @@ var public_mark_group;
 
 $(function () {
     (function(){
-        $('.datepicker').datepicker();
-        $('.timepicker').timepicker();
+        $('.datepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+        $('.timepicker').datetimepicker({
+            format: 'hh/mm/ss'
+        });
     }());
 
     // map initialization
@@ -159,29 +163,33 @@ $(function () {
         });
         map.doubleClickZoom.disable(); 
         map.on("dblclick", function(e) {
-            window.location.href='./addevent.html'
+            $('#add-group-event-modal').modal('show');
         });        
     }(window));
 
     // buttons in header
     (function(window){
         // time ranges
-        $("#date-start").datepicker({
+        $("#date-start").datetimepicker({
+            format: 'DD/MM/YYYY',
             onSelect: function(dateText, inst) {
                 reduce_all_layer_group_by_time(dateText, null, true, true);
             }
         });
-        $("#time-start").datepicker({
+        $("#time-start").datetimepicker({
+            format: 'hh/mm/ss',
             onSelect: function(timeText, inst) {
                 reduce_all_layer_group_by_time(null, timeText, false, true);
             }
         });
-        $("#date-end").datepicker({
+        $("#date-end").datetimepicker({
+            format: 'DD/MM/YYYY',
             onSelect: function(dateText, inst) {
                 reduce_all_layer_group_by_time(dateTxte, null, true, false);
             }
         });
-        $("#time-end").datepicker({
+        $("#time-end").datetimepicker({
+            format: 'hh/mm/ss',
             onSelect: function(timeText, inst) {
                 reduce_all_layer_group_by_time(null, timeText, false, false);
             }
