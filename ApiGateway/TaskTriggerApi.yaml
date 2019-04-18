@@ -156,6 +156,8 @@ definitions:
         format: datetime
       event_location:
         type: string
+      coordinate:
+        type: string
       event_name:
         type: string
       event_keywords:
