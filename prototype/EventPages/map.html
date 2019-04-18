@@ -8,6 +8,9 @@
     <title>EventMap</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin="" />
@@ -18,10 +21,42 @@
     <div class="row">
         <div class="col s12 header">
             <div class="row">
-                <div class="col s9 title">
+                <div class="col s3 title">
                     <h2>Map Of Event</h2>
                 </div>
-                <div class="col s3 buttons">
+                <div class="col s3 title checkboxes">
+                    <label class="input-field col s4">
+                        <input type="checkbox" class="filled-in ckbx" id="private-ckbx" checked="checked"/> 
+                        <span> Private </span>
+                    </label>
+                    <label class="input-field col s4">
+                        <input type="checkbox" class="filled-in ckbx" id="friend-ckbx" checked="checked"/> 
+                        <span> Friend </span>
+                    </label>
+                    <label class="input-field col s4">
+                        <input type="checkbox" class="filled-in ckbx" id="public-ckbx" checked="checked"/> 
+                        <span> Public </span>
+                    </label>
+                </div>
+                <div class="col s4 title timeranges">
+                    <div class="date input-field col s3">
+                        <input type="text" class="datepicker tmrg" id="date-start">
+                        <label for="date">Start Date:</label>
+                    </div>
+                    <div class="time input-field col s3">
+                        <input type="text" class="timepicker tmrg" id="time-start">
+                        <label for="time">Time:</label>
+                    </div>
+                    <div class="date input-field col s3">
+                        <input type="text" class="datepicker tmrg" id="date-end">
+                        <label for="date">End Date:</label>
+                    </div>
+                    <div class="time input-field col s3">
+                        <input type="text" class="timepicker tmrg" id="time-end">
+                        <label for="time">Time:</label>
+                    </div>
+                </div>
+                <div class="col s2 buttons">
                     <a class="back waves-effect waves-light btn">Back to Calendar</a>
                 </div>
 
@@ -35,13 +70,67 @@
 
     </div>
 
+    <div class="modal fade" id="add-group-event-modal" tabindex="-1" role="dialog" >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h2 class="modal-title" style="display:inline-block;">New Event</h2>
+              <div class="input-group" style="float:right; margin-right: 20px; margin-top:1%;">
+                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Visibility <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Private Event</a></li>
+                    <li><a href="#">Visible to Friends</a></li>
+                    <li><a href="#">Public Event</a></li>
+                  </ul>
+            </div>
+          </div>
+          <div class="modal-body">
+            <form action="#" method="POST" class="col-s-12">
+              <div class="input-group">
+                <span class="input-group-addon" id="">Event Name</span>
+                <input type="text" class="form-control" name="title" id="title"/>
+              </div>
+              <div class="input-group">
+                    <span class="input-group-addon" id="">Starts at</span>
+                    <input class="form-control" type="text" name="starts_at" id="starts-at"/>
+                    <span class="input-group-addon" id="">Ends at</span>
+                    <input class="form-control" type="text" name="ends_at" id="ends-at"/>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="">Location</span>
+                <input type="text" class="form-control" name="location" id="location"></input>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="basic-addon2">Description</span>
+                <input type="text" class="form-control" name="description" id="description"></textarea>
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="">Participants</span>
+                <input type="text" class="form-control" id="partis" data-role="tagsinput" placeholder="Enter a tag">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="save-event">Save</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
     <script src="js/map.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.min.js"></script>
+    <script src="js/leaflet.extra-markers.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js"></script>
 
 </body>
 
