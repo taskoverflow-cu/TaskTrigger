@@ -82,12 +82,12 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/DiscoverRequest'
+            $ref: '#/definitions/GetAdviceRequest'
       responses:
         '200':
           description: A create_event/get_advice response
           schema:
-            $ref: '#/definitions/DiscoverResponse'
+            $ref: '#/definitions/GetAdviceResponse'
         '403':
           description: Unauthorized
           schema:
@@ -106,10 +106,10 @@ definitions:
         type: integer
       event_name:
         type: string
-      start_date_time:
+      start_time:
         type: string
         format: datetime
-      end_date_time:
+      end_time:
         type: string
         format: datetime
       location:
@@ -158,6 +158,8 @@ definitions:
         type: string
       event_name:
         type: string
+      event_keywords:
+        type: string
 
   DiscoverResponseMessage:
     type: object
@@ -192,7 +194,8 @@ definitions:
         $ref: '#/definitions/Event'
       participants_id:
         type: array
-        items: integer
+        items:
+          type: integer
 
   CreateEventResponseMessage:
     type: object
@@ -203,6 +206,65 @@ definitions:
         type: integer
       success:
         type: integer
+
+  GetAdviceRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/GetAdviceRequestMessage'
+
+  GetAdviceResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/GetAdviceResponseMessage'
+
+  GetAdviceRequestMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      min_start_time:
+        type: string
+        format: datetime
+      max_end_time:
+        type: string
+        format: datetime
+      participants_id:
+        type: array
+        items:
+          type: integer
+
+  GetAdviceResponseMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      advices:
+        type: array
+        items:
+          $ref: '#/definitions/Advice'
+
+  Advice:
+    type: object
+    properties:
+      score:
+        type: integer
+      start_time:
+        type: string
+        format: datetime
+      end_time:
+        type: string
+        format: datetime
+      conflict_participants_id:
+        type: array
+        items:
+          type: integer
+
 
 
 
