@@ -14,7 +14,7 @@ logger.setLevel(logging.INFO)
 try:
     conn = pymysql.connect(rds_host, user=name, passwd=password, db=db_name,port=3306, connect_timeout=5)
 except:
-    logger.error("ERROR: Unexpected error: Could not connect to MySQL instance.")
+    print("ERROR: Unexpected error: Could not connect to MySQL instance.")
     sys.exit()
 
 print("SUCCESS: Connection to RDS MySQL instance succeeded")
@@ -101,7 +101,8 @@ with conn.cursor() as cur:
         description varchar(1000),\
         visibility integer not null,\
         create_time datetime,\
-        capacity integer\
+        capacity integer,\
+        state integer\
     )"
     try:
         cur.execute(command)
