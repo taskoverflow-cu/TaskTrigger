@@ -234,6 +234,8 @@ definitions:
       max_end_time:
         type: string
         format: datetime
+      time_rigidity:
+        type: integer
       participants_id:
         type: array
         items:
