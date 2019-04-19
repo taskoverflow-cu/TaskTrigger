@@ -102,6 +102,7 @@ with conn.cursor() as cur:
         visibility integer not null,\
         create_time datetime,\
         capacity integer,\
+        avatar_url varchar(200),\
         state integer\
     )"
     try:

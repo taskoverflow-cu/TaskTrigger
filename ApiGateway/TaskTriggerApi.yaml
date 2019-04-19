@@ -9,14 +9,14 @@ basePath: /v1
 produces:
   - application/json
 paths:
-  /discover:
+  /discover/search_event:
     get:
-      summary: The endpoint for searching events.
+      summary: The endpoint for searching events in discover.
       description: |
         This API takes in one meassage from client and return a list of events
       tags:
         - discover
-      operationId: searchEvent
+      operationId: discoverSearchEvent
       produces:
         - application/json
       parameters:
@@ -24,12 +24,12 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/DiscoverRequest'
+            $ref: '#/definitions/DiscoverSearchRequest'
       responses:
         '200':
           description: A Discover response
           schema:
-            $ref: '#/definitions/DiscoverResponse'
+            $ref: '#/definitions/DiscoverSearchResponse'
         '403':
           description: Unauthorized
           schema:
@@ -38,14 +38,15 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /create_event:
+
+  /discover/add_event:
     post:
-      summary: The endpoint for creating events.
+      summary: The endpoint for adding events in discover.
       description: |
-        This API takes in one meassage from client and add this event to the database.
+        This API takes in one meassage from client add the event to the user's calendar
       tags:
-        - create_event
-      operationId: createEvent
+        - discover
+      operationId: discoverAddEvent
       produces:
         - application/json
       parameters:
@@ -53,12 +54,12 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/CreateEventRequest'
+            $ref: '#/definitions/DiscoverEventRequest'
       responses:
         '200':
-          description: A create_event response
+          description: A Discover response
           schema:
-            $ref: '#/definitions/CreateEventResponse'
+            $ref: '#/definitions/DiscoverEventResponse'
         '403':
           description: Unauthorized
           schema:
@@ -67,14 +68,139 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-  /create_event/get_advice:
+
+  /discover/remove_event:
+    delete:
+      summary: The endpoint for removing events in discover.
+      description: |
+        This API takes in one meassage from client remove the event from the user's calendar
+      tags:
+        - discover
+      operationId: discoverRemoveEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/map/search_event:
+    get:
+      summary: The endpoint for searching events in discover.
+      description: |
+        This API takes in one meassage from client and return a list of events
+      tags:
+        - discover
+      operationId: discoverMapSearchEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverSearchRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverSearchResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/map/add_event:
+    post:
+      summary: The endpoint for adding events in discover.
+      description: |
+        This API takes in one meassage from client add the event to the user's calendar
+      tags:
+        - discover
+      operationId: discoverMapAddEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/map/remove_event:
+    delete:
+      summary: The endpoint for removing events in discover.
+      description: |
+        This API takes in one meassage from client remove the event from the user's calendar
+      tags:
+        - discover
+      operationId: discoverMapRemoveEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+
+  #/calendar:
+
+  /calendar/recommendation:
     get:
       summary: The endpoint for getting event timeslot recommendation.
       description: |
         This API takes in one meassage from client and return recommendation on timeslot for an event.
       tags:
-        - create_event
-      operationId: get_event_advice
+        - calendar
+      operationId: recommendation
       produces:
         - application/json
       parameters:
@@ -96,6 +222,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
+
 definitions:
   Event:
     type: object
@@ -125,45 +252,57 @@ definitions:
         format: datetime
       capacity:
         type: integer
+      avatar_url:
+        type: string
+      state:
+        type: integer
 
-
-  DiscoverRequest:
+  DiscoverSearchRequest:
     type: object
     properties:
       messages:
         type: array
         items:
-          $ref: '#/definitions/DiscoverRequestMessage'
+          $ref: '#/definitions/DiscoverSearchRequestMessage'
 
-  DiscoverResponse:
+  DiscoverSearchResponse:
     type: object
     properties:
       messages:
         type: array
         items:
-          $ref: '#/definitions/DiscoverResponseMessage'
+          $ref: '#/definitions/DiscoverSearchResponseMessage'
 
 
-  DiscoverRequestMessage:
+  DiscoverSearchRequestMessage:
     type: object
     properties:
       user_id:
         type: integer
       visibility:
         type: integer
-      event_time:
+      time_leftbound:
+        type: string
+        format: datetime
+      time_rightbound:
         type: string
         format: datetime
       event_location:
         type: string
       coordinate:
         type: string
+      radius:
+        type: integer
       event_name:
         type: string
       event_keywords:
         type: string
+      offset:
+        type: integer
+      limit:
+        type: integer
 
-  DiscoverResponseMessage:
+  DiscoverSearchResponseMessage:
     type: object
     properties:
       user_id:
@@ -172,6 +311,37 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Event'
+
+  DiscoverEventRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/DiscoverEventRequestMessage'
+
+  DiscoverEventResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/DiscoverEventResponseMessage'
+
+  DiscoverEventRequestMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      event_id:
+        type: integer
+
+  DiscoverEventResponseMessage:
+    type: object
+    properties:
+      response:
+        type: string
+
 
   CreateEventRequest:
     type: object
@@ -236,6 +406,8 @@ definitions:
       max_end_time:
         type: string
         format: datetime
+      duration:
+        type: string
       time_rigidity:
         type: integer
       participants_id:
@@ -248,7 +420,7 @@ definitions:
     properties:
       user_id:
         type: integer
-      advices:
+      recommendations:
         type: array
         items:
           $ref: '#/definitions/Advice'
