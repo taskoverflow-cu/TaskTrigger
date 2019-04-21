@@ -1,5 +1,6 @@
 html, body{
     height: 100%;
+    width: 100%;
 }
 .row{
     height: 0;
@@ -12,6 +13,7 @@ body >  .row{
 .header{
     height: 80px;
     background-color: rgb(51,122,183);
+    /*background-color: #fff;*/
     color:#fff;
 }
 .header .title h2{
@@ -29,12 +31,19 @@ body >  .row{
     margin-top: 20px;    
 }
 
+.header .ckbx {
+    height: 50px;
+    width: 50px;
+}
+
 .map.col.s12 {
     height: calc( 100% - 80px );
     padding: 0;
     margin: 0;
 }
 
-.map #eventmap{
+#eventmap{
     height: 100%;
+    width: 100%;
+    position: relative;
 }

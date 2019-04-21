@@ -14,7 +14,7 @@ $(function() {
               {
                 title: "event1",
                 start: "2019-03-01",
-                end: "2019-03-20"
+                end: "2019-03-20",
               }
             ],
             select: function(start, end) {
@@ -25,13 +25,13 @@ $(function() {
             },
             eventClick: function(event, element) {
                 // Display the modal and set the values to the event values.
-                // $('.modal').modal('show');
-                // $('.modal').find('#title').val(event.title);
-                // $('.modal').find('#location').val(event.location);
-                // $('.modal').find('#starts-at').val(event.start);
-                // $('.modal').find('#ends-at').val(event.end);
-                // $('.modal').find('#description').val(event.description);
-                location.href = './viewevent.html'
+                $('#view-event-modal').modal('show');
+                $('#view-event-modal').find('#title').val(event.title);
+                $('#view-event-modal').find('#starts-at').val(event.start);
+                $('#view-event-modal').find('#ends-at').val(event.end);
+                $('#view-event-modal').find('#location').val(event.location);
+                $('#view-event-modal').find('#description').val(event.description);
+                $('#view-event-modal').find('#participants').val(event.participants);
             },
             editable: true,
             eventLimit: "more" // allow "more" link when too many events
@@ -40,12 +40,7 @@ $(function() {
 
     // independent widgets
     (function() {
-        $('.datepicker').datetimepicker({
-          format: 'DD/MM/YYYY'
-        });
-        $('.timepicker').datetimepicker({
-          format: 'hh/mm/ss'
-        });
+        $('.datepicker').datetimepicker();
         // $('select').formSelect();
         // $('.chips').chips();
         // $('.chips-placeholder').chips({
@@ -57,28 +52,88 @@ $(function() {
 
     // modal controllers
     (function() {
+    	$('#add-group-event-modal').on('hidden.bs.modal', function () {
+		    $(this).find('input').val('');
+		    $(this).find('#recommend-slots-list li').remove();
+		    $(this).find('#plan-event').css('display', 'inline');
+		    $(this).find('#cancel-event').css('display', 'none');
+		    $(this).find('#save-event').css('display', 'none');
+		    $(this).find('#recommend-slots').css('display', 'none');
+		})
+
+    	$('#add-event-modal').on('hidden.bs.modal', function () {
+		    $(this).find('input').val('');
+		})
+
+    	$('#view-event-modal').on('hidden.bs.modal', function () {
+		    $(this).find('input').val('');
+		})
+
         $("#starts-at, #ends-at").datetimepicker();
 
         // Whenever the user clicks on the "save" button om the dialog
         $('#save-event').on('click', function() {
-            var title = $('#title').val();
+            var title = $(this).closest('.modal').find('#title').val();
+            console.log(title);
             if (title) {
                 var eventData = {
                     title: title,
-                    location: $('#location').val(),
-                    start: $('#starts-at').val(),
-                    end: $('#ends-at').val(),
-                    description: $('#description').val()
+                    start: $(this).closest('.modal').find('#starts-at').val(),
+                    end: $(this).closest('.modal').find('#ends-at').val(),
+                    location: $(this).closest('.modal').find('#location').val(),
+                    description: $(this).closest('.modal').find('#description').val(),
+                    participants: $(this).closest('.modal').find('#participants').val()
                 };
-                $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+                $('#calendar').fullCalendar('renderEvent', eventData, true);
+                // TODO: call api, add event
             }
-            $('#calendar').fullCalendar('unselect');
-
-            // Clear modal inputs
-            $('.modal').find('input').val('');
-
             // hide modal
-            $('.modal').modal('hide');
+            $(this).closest('.modal').modal('hide');
+        });
+
+        $('#edit-event').on('click', function(event) {
+        	var chosenEvent = $('#calendar').fullCalendar('clientEvents', event._id)[0];
+            var title = $(this).closest('.modal').find('#title').val();
+            if (title) {
+            	chosenEvent.title = title;
+                chosenEvent.location = $(this).closest('.modal').find('#location').val(),
+                chosenEvent.start = $(this).closest('.modal').find('#starts-at').val(),
+				chosenEvent.end = $(this).closest('.modal').find('#ends-at').val(),
+                chosenEvent.description = $(this).closest('.modal').find('#description').val(),
+                chosenEvent.participants = $(this).closest('.modal').find('#participants').val()
+                $('#calendar').fullCalendar('updateEvent', chosenEvent);
+                // TODO: call api, update event
+            }
+            // hide modal
+            $(this).closest('.modal').modal('hide');
+        });
+
+        $('#delete-event').on('click', function(event) {
+        	$('#calendar').fullCalendar('removeEvents', event._id);
+        	// TODO: call api, deletion
+        	$(this).closest(".modal").modal('hide');
+        });
+
+        $('#plan-event').on('click', function(event) {
+        	var chosenEvent = $('#calendar').fullCalendar('clientEvents', event._id)[0];
+        	var ul = $('#recommend-slots-list');
+        	// TODO: call api, get recommendations
+        	var slots = ['time slot1', 'time slot2', 'time slot3', 'time slot4', 'time slot5'];
+        	for (var i=0; i<slots.length; i++) {
+        		// <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+        		var item = $('<li/>').attr('class', 'list-group-item list-group-item-action text-center')
+        							 .append(slots[i]).appendTo(ul);
+        	}
+
+        	$('.list-group li').click(function(event) {
+		        $('.list-group').find('li').removeClass('active');
+		        $(this).addClass('active');
+		    });
+
+        	$(this).css('display', 'none');
+            $(this).closest('.modal').find('#recommend-slots').css('display', 'block');
+        	$(this).closest('.modal').find('#cancel-event').css('display', 'inline');
+        	$(this).closest('.modal').find('#save-event').css('display', 'inline');
         });
     }());
 
@@ -91,7 +146,6 @@ $(function() {
         $('#button-invitations').on('click', function() {
           $('#hidden-container').toggle("fast", function() {
             if (! $('#hidden-container:visible').length) {
-              console.log('invisible');
               $('#shown-container').animate({
                 width: '100%',
               });

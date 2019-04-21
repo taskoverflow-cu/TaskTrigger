@@ -161,10 +161,7 @@ $(function () {
                 public_mark_group
             ]
         });
-        map.doubleClickZoom.disable(); 
-        map.on("dblclick", function(e) {
-            $('#add-group-event-modal').modal('show');
-        });        
+        map.doubleClickZoom.disable();     
     }(window));
 
     // buttons in header
@@ -222,7 +219,7 @@ $(function () {
 
         // back to calendar
         $(".header .buttons .back").click(function(){
-            window.location.href = 'calendar.html';
+            window.location.href = 'discover.html';
         });
     }(window));
 })
