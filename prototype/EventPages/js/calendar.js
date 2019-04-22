@@ -1,3 +1,40 @@
+var init_x = 40.807537
+var init_y = -73.962570
+var init_event = "COMS6998 Event"
+var scale = 12
+var private_mark_data = [
+    {
+        location: [40.7911, -73.9694],
+        content: "private 1",
+        date: new Date(2019, 3, 13),
+        time: new Date(2019,3,13,5,30,0,0)
+    },
+    {
+        location: [40.7767, -73.9673],
+        content: "private 2",
+        date: new Date(2019, 3, 13),
+        time: new Date(2019,3,13,6,30,0,0)
+    },
+    {
+        location: [40.7651, -73.9922],
+        content: "private 3",
+        date: new Date(2019, 3, 13),
+        time: new Date(2019,3,13,7,30,0,0)
+    },
+    {
+        location: [40.7492, -73.9758],
+        content: "private 4",
+        date: new Date(2019, 3, 13),
+        time: new Date(2019,3,13,8,30,0,0)
+    }
+]
+
+var map;
+var private_mark_whole_list;
+var private_mark_list;
+var private_mark_group;
+
+
 $(function() {
     (function() {
         $('#calendar').fullCalendar({
@@ -34,20 +71,56 @@ $(function() {
                 $('#view-event-modal').find('#participants').val(event.participants);
             },
             editable: true,
-            eventLimit: "more" // allow "more" link when too many events
+            eventLimit: "more", // allow "more" link when too many events
+            height: $(window).height()*0.8
         });
+
+        private_mark_whole_list = [];
+        for(var i=0; i<private_mark_data.length; i++) {
+            var cur_marker = L.ExtraMarkers.icon({
+                icon: 'fa-number',
+                number: i+1,
+                markerColor: 'blue'
+            })
+            var cur_marker = L.marker(private_mark_data[i]['location'], {"icon": cur_marker}).bindPopup(
+                L.popup().setContent(make_popup_content(private_mark_data[i]['content']))
+            );
+            private_mark_whole_list.push(cur_marker)
+        }
+        private_mark_list = private_mark_whole_list.slice(0);
+        private_mark_group = L.layerGroup(private_mark_list);
+
+        var base_layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            });
+        map = L.map('eventmap', {
+            center: [init_x, init_y], 
+            zoom: scale,
+            layers: [
+                base_layer,
+                private_mark_group
+            ]
+        });
+        map.doubleClickZoom.disable(); 
+        map.on("dblclick", function(e) {
+            $('#add-event-modal').modal('show');
+        })
     }());
 
-    // independent widgets
+    // map control widgets
     (function() {
-        $('.datepicker').datetimepicker();
-        // $('select').formSelect();
-        // $('.chips').chips();
-        // $('.chips-placeholder').chips({
-        //     placeholder: 'Enter a tag',
-        //     secondaryPlaceholder: '+Tag',
-        //     limit: 20,
-        //   });
+        // time ranges
+        $(".map-datepicker").datetimepicker();
+        $("#map-starts-at").on("dp.change", function(event) {
+            var timestamp = new Date(event.date);
+            console.log(timestamp);
+            reduce_all_layer_group_by_time(timestamp, true);
+        });
+        $("#map-ends-at").on("dp.change", function(event) {
+            var timestamp = new Date(event.date);
+            console.log(timestamp);
+            reduce_all_layer_group_by_time(timestamp, false)
+        });
     }());
 
     // modal controllers
@@ -69,7 +142,7 @@ $(function() {
 		    $(this).find('input').val('');
 		})
 
-        $("#starts-at, #ends-at").datetimepicker();
+        $(".modal-datepicker").datetimepicker();
 
         // Whenever the user clicks on the "save" button om the dialog
         $('#save-event').on('click', function() {
@@ -145,20 +218,42 @@ $(function() {
 
         $('#button-invitations').on('click', function() {
           $('#hidden-container').toggle("fast", function() {
-            if (! $('#hidden-container:visible').length) {
-              $('#shown-container').animate({
-                width: '100%',
-              });
-              $('#hidden-container').removeClass('col-sm-3').addClass('col-sm-0');
-              $('#shown-container').removeClass('col-sm-9').addClass('col-sm-12');
+            console.log($('#eventmap').is('visible'));
+            if (! $('#eventmap').is('visible')) {
+              if ($('#hidden-container').is(':visible')) {
+                console.log('not visible')
+                $('#shown-container').animate({
+                  width: '70%',
+                });
+                $('#invitation-list').height($('table').css('height'));
+                $('#hidden-container').css('display', 'block');
+              } else {
+                console.log('visible')
+                $('#shown-container').animate({
+                  width: '100%',
+                });
+                $('#hidden-container').css('display', 'none');
+              }
+            }
+          });
+        });
+
+        $('#button-calendar-map').on('click', function() {
+          $('#cal-container').toggle();
+          var map_container = $('#map-container');
+
+          map_container.toggle("fast", function() {
+            if (map_container.is(':visible')) {
+              map_container.css('height', '100%').css('width', '100%');
+              map_container.css('display', 'block');
+              $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-calendar-alt');
+              setTimeout(function(){
+                map.invalidateSize();
+              }, 0);
             } else {
-              console.log('visible')
-              $('#shown-container').animate({
-                width: '70%',
-              });
-              $('#hidden-container').removeClass('col-sm-0').addClass('col-sm-3');
-              $('#invitation-list').height($('table').css('height'));
-              $('#shown-container').removeClass('col-sm-12').addClass('col-sm-9');
+              map_container.css('height', '0px').css('width', '0px');
+              map_container.css('display', 'none');
+              $('#button-calendar-map').find('i').removeClass('fa-calendar-alt').addClass('fa-map-marked-alt');
             }
           });
         });
@@ -237,4 +332,56 @@ function format_date(raw_date) {
   var mm = String(raw_date.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = raw_date.getFullYear();
   return yyyy + "-" + mm + '-' + dd;  
+}
+
+function make_popup_content(content) {
+    return content;
+}
+
+function check_timestamp_valid(mark_list, j, whole_list, i, cur_ts, target_ts, start_check) {
+    if (start_check == true) {
+        if (cur_ts >= target_ts) {
+            return 1;
+        } else {
+            mark_list.splice(j, 1);
+            return 0;
+        }
+    } else {
+        if (cur_ts <= target_ts) {
+            return 1;
+        } else {
+            mark_list.splice(j, 1);
+            return 0;
+        }
+    }
+}
+
+// reduce by date when date_check == true, reduce by time when date_check == false
+// reduce by starting time when start_check == true, reduce by ending time when start_check == false
+function reduce_layer_group_by_time(visible, group_layer, mark_list, whole_list, mark_data, timestamp, start_check) {
+    map.removeLayer(group_layer);
+    var cur_timestamp;
+    var j=0;
+    if (visible) {
+        for (var i=0; i<whole_list.length; i++) {
+            cur_timestamp = mark_data[i]['date'].getTime() + mark_data[i]['time'].getTime();
+            j += check_timestamp_valid(mark_list, j, whole_list, i, cur_timestamp, timestamp, start_check);
+        }
+    }
+    console.log(mark_list.length);
+    group_layer = L.layerGroup(mark_list);
+    map.addLayer(group_layer);
+    return group_layer;
+}
+
+
+function reduce_all_layer_group_by_time(timestamp, start) {
+    private_mark_group = reduce_layer_group_by_time(
+        true,
+        private_mark_group, 
+        private_mark_list, 
+        private_mark_whole_list, 
+        private_mark_data,
+        timestamp, start
+        )
 }

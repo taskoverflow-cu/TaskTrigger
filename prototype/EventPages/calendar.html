@@ -10,11 +10,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" type="text/css" href="./css/calendar.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <link rel="stylesheet" href="css/fullcalendar.min.css">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap-tagsinput.css">
+  <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.min.js"></script>
@@ -23,6 +25,8 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js"></script>
   <script type="text/javascript" src="js/calendar.js"></script>
   <script type="text/javascript" src="js/bootstrap-tagsinput.js"></script>
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+  <script src="js/leaflet.extra-markers.min.js"></script>
 
 </head>
 <body>
@@ -30,30 +34,18 @@
   <header>
     <nav class="navbar navbar-default navbar-fixed-top">
       <div id="button-group">
-        <div class="col-sm-4">
+        <div class="col-sm-4" style="padding: 0px;">
           <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-friends" href="./friends.html">Friends</a>
           <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./discover.html">Discover</a>
         </div>
-        <div class="col-sm-8">
-          <a type="button" class="col-sm-1 btn btn-primary button-right" id="button-calendar-map" href="./map_calendar.html"> 
-            <i class="fas fa-map-marked-alt"></i> 
-          </a>
-        </div>
-        <div style="clear:both"></div>
-      </div>
-    </nav>
-
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div id="button-group">
-        <div class="col-sm-4">
-          <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-friends" href="./friends.html">Friends</a>
-          <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./discover.html">Discover</a>
-        </div>
-        <div class="col-sm-7">
-            <a type="button" class="btn btn-primary button-right" id="button-invitations">
+        <div class="col-sm-8" style="padding: 0px;">
+            <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile">
+              <i class="fas fa-user"></i>
+            </a>
+            <a type="button" class="btn btn-primary button-right icon-button" id="button-invitations">
               <i class="fas fa-bell"></i>
             </a>
-            <a type="button" class="btn btn-primary button-right" id="button-calendar-map" href="./map_calendar.html">
+            <a type="button" class="btn btn-primary button-right icon-button" id="button-calendar-map">
               <i class="fas fa-map-marked-alt"></i>
             </a>
             <a type="button" class="btn btn-primary button-right" id="button-groupevent">Create Group Event</a>
@@ -62,7 +54,7 @@
     </nav>
   </header>
 
-  <div id='container'>
+  <div id='cal-container'>
     <div class="row">
       <div class="col-sm-12" id='shown-container'>
         <div id='calendar-container'>
@@ -70,13 +62,27 @@
           <div id='datepicker'></div>
         </div>
       </div>
-      <div class="col-sm-0" id='hidden-container'>
+      <div class="col-sm-3" id='hidden-container'>
         <div id='notification-container'>
           <h2 id="notification-title"> Invitations </h2>
           <ul id="invitation-list" style='padding-left:0px;'/>
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="map-container" style="display:none;">
+    <form class="form-inline" id="event-map-controls" style="padding:10px; margin:0px;">
+      <div class="form-check form-check-inline">
+        <input class="form-control map-datepicker" type="text" name="starts_at" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
+        <input class="form-control map-datepicker" type="text" name="ends_at" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
+
+       <!--  <a type="button" class="map-ckbx btn btn-primary active" id="private-ckbx">Private</a>
+        <a type="button" class="map-ckbx btn btn-primary active" id="friend-ckbx">Friend</a>
+        <a type="button" class="map-ckbx btn btn-primary active" id="public-ckbx">Public</a> -->
+      </div>
+    </form>
+    <div id="eventmap"></div>
   </div>
 
   <div class="modal fade" id="add-event-modal" tabindex="-1" role="dialog" data-backdrop='static'>
@@ -102,9 +108,9 @@
             </div>
             <div class="input-group">
               <span class="input-group-addon">Starts at</span>
-              <input class="form-control" type="text" name="starts_at" id="starts-at"/>
+              <input class="form-control modal-datepicker" type="text" name="starts_at" id="starts-at"/>
               <span class="input-group-addon">Ends at</span>
-              <input class="form-control" type="text" name="ends_at" id="ends-at"/>
+              <input class="form-control modal-datepicker" type="text" name="ends_at" id="ends-at"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Location</span>
@@ -152,9 +158,9 @@
             </div>
             <div class="input-group">
               <span class="input-group-addon">Starts at</span>
-              <input class="form-control" type="text" name="starts_at" id="starts-at"/>
+              <input class="form-control modal-datepicker" type="text" name="starts_at" id="starts-at"/>
               <span class="input-group-addon">Ends at</span>
-              <input class="form-control" type="text" name="ends_at" id="ends-at"/>
+              <input class="form-control modal-datepicker" type="text" name="ends_at" id="ends-at"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Location</span>
@@ -211,9 +217,9 @@
             </div>
             <div class="input-group">
               <span class="input-group-addon">Starts at</span>
-              <input class="form-control" type="text" name="starts_at" id="starts-at"/>
+              <input class="form-control modal-datepicker" type="text" name="starts_at" id="starts-at"/>
               <span class="input-group-addon">Ends at</span>
-              <input class="form-control" type="text" name="ends_at" id="ends-at"/>
+              <input class="form-control modal-datepicker" type="text" name="ends_at" id="ends-at"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Location</span>
@@ -237,10 +243,6 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-
-  <footer>
-    <div> this is a pretty footer. </div>
-  </footer>
   
   <script>
   // tell the embed parent frame the height of the content

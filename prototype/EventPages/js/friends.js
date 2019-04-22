@@ -189,9 +189,9 @@ $(function(){
 					).appendTo(container);
 
 				var statusControl = $('<div/>').attr('class', 'col col-md-4 button-col-middle controls').append(
-						$('<a/>').attr('class', 'btn btn-primary btn-right button-confirm-request').append("confirm")
+						$('<a/>').attr('class', 'btn btn-primary button-left button-confirm-request').css("margin-right", "4%").append("confirm")
 					).append(
-						$('<a/>').attr('class', 'btn btn-danger btn-right button-ignore-request').append("ignore")
+						$('<a/>').attr('class', 'btn btn-danger button-left button-ignore-request').append("ignore")
 					).appendTo(container);
 				$('#notification-list').append(li);
 			}

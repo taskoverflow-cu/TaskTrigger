@@ -1,4 +1,11 @@
-#container {
+html, body{
+    height: 100%;
+    width: 100%;
+    overflow-y: hidden;
+    position: relative;
+}
+
+#cal-container {
   max-width: 80%;
   max-height: 80%;
   margin-left: 10%;
@@ -49,6 +56,11 @@
   width: 100% !important;
 }
 
+.icon-button {
+  padding-left:8px;
+  padding-right:8px;
+}
+
 #description {
   height: 80px;
 }
@@ -78,4 +90,33 @@
 #notification-list {
   padding-left: 0px;
   display: block;
+}
+
+#event-map-controls {
+  position: absolute;
+  top: 11%;
+  right: 11%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+}
+
+#eventmap{
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    position: relative;
+}
+
+#map-container {
+  max-width: 80%;
+  max-height: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 5%;
 }
