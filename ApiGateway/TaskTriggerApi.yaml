@@ -1,0 +1,485 @@
+swagger: '2.0'
+info:
+  title: TaskTrigger API
+  description: 'API for TaskTrigger web app, built during the Cloud and Big Data course at Columbia University.'
+  version: 1.0.0
+schemes:
+  - https
+basePath: /v1
+produces:
+  - application/json
+paths:
+  /discover/search_event:
+    get:
+      summary: The endpoint for searching events in discover.
+      description: |
+        This API takes in one meassage from client and return a list of events
+      tags:
+        - discover
+      operationId: discoverSearchEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverSearchRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverSearchResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/add_event:
+    post:
+      summary: The endpoint for adding events in discover.
+      description: |
+        This API takes in one meassage from client add the event to the user's calendar
+      tags:
+        - discover
+      operationId: discoverAddEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/remove_event:
+    delete:
+      summary: The endpoint for removing events in discover.
+      description: |
+        This API takes in one meassage from client remove the event from the user's calendar
+      tags:
+        - discover
+      operationId: discoverRemoveEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/map/search_event:
+    get:
+      summary: The endpoint for searching events in discover.
+      description: |
+        This API takes in one meassage from client and return a list of events
+      tags:
+        - discover
+      operationId: discoverMapSearchEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverSearchRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverSearchResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/map/add_event:
+    post:
+      summary: The endpoint for adding events in discover.
+      description: |
+        This API takes in one meassage from client add the event to the user's calendar
+      tags:
+        - discover
+      operationId: discoverMapAddEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /discover/map/remove_event:
+    delete:
+      summary: The endpoint for removing events in discover.
+      description: |
+        This API takes in one meassage from client remove the event from the user's calendar
+      tags:
+        - discover
+      operationId: discoverMapRemoveEvent
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DiscoverEventRequest'
+      responses:
+        '200':
+          description: A Discover response
+          schema:
+            $ref: '#/definitions/DiscoverEventResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+
+  #/calendar:
+
+  /calendar/recommendation:
+    get:
+      summary: The endpoint for getting event timeslot recommendation.
+      description: |
+        This API takes in one meassage from client and return recommendation on timeslot for an event.
+      tags:
+        - calendar
+      operationId: recommendation
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GetAdviceRequest'
+      responses:
+        '200':
+          description: A create_event/get_advice response
+          schema:
+            $ref: '#/definitions/GetAdviceResponse'
+        '403':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Event:
+    type: object
+    properties:
+      event_id:
+        type: integer
+      creator_id:
+        type: integer
+      event_name:
+        type: string
+      start_time:
+        type: string
+        format: datetime
+      end_time:
+        type: string
+        format: datetime
+      location:
+        type: string
+      coordinate:
+        type: string
+      description:
+        type: string
+      visibility:
+        type: integer
+      create_time:
+        type: string
+        format: datetime
+      capacity:
+        type: integer
+      avatar_url:
+        type: string
+      state:
+        type: integer
+
+  DiscoverSearchRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/DiscoverSearchRequestMessage'
+
+  DiscoverSearchResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/DiscoverSearchResponseMessage'
+
+
+  DiscoverSearchRequestMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      visibility:
+        type: integer
+      time_leftbound:
+        type: string
+        format: datetime
+      time_rightbound:
+        type: string
+        format: datetime
+      event_location:
+        type: string
+      coordinate:
+        type: string
+      radius:
+        type: integer
+      event_name:
+        type: string
+      event_keywords:
+        type: string
+      offset:
+        type: integer
+      limit:
+        type: integer
+
+  DiscoverSearchResponseMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      events:
+        type: array
+        items:
+          $ref: '#/definitions/Event'
+
+  DiscoverEventRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/DiscoverEventRequestMessage'
+
+  DiscoverEventResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/DiscoverEventResponseMessage'
+
+  DiscoverEventRequestMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      event_id:
+        type: integer
+
+  DiscoverEventResponseMessage:
+    type: object
+    properties:
+      response:
+        type: string
+
+
+  CreateEventRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/CreateEventRequestMessage'
+
+  CreateEventResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/CreateEventResponseMessage'
+
+  CreateEventRequestMessage:
+    type: object
+    properties:
+      event:
+        $ref: '#/definitions/Event'
+      participants_id:
+        type: array
+        items:
+          type: integer
+
+  CreateEventResponseMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      event_id:
+        type: integer
+      success:
+        type: integer
+
+  GetAdviceRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/GetAdviceRequestMessage'
+
+  GetAdviceResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/GetAdviceResponseMessage'
+
+  GetAdviceRequestMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      min_start_time:
+        type: string
+        format: datetime
+      max_end_time:
+        type: string
+        format: datetime
+      duration:
+        type: string
+      time_rigidity:
+        type: integer
+      participants_id:
+        type: array
+        items:
+          type: integer
+
+  GetAdviceResponseMessage:
+    type: object
+    properties:
+      user_id:
+        type: integer
+      recommendations:
+        type: array
+        items:
+          $ref: '#/definitions/Advice'
+
+  Advice:
+    type: object
+    properties:
+      score:
+        type: integer
+      start_time:
+        type: string
+        format: datetime
+      end_time:
+        type: string
+        format: datetime
+      conflict_participants_id:
+        type: array
+        items:
+          type: integer
+
+
+
+
+  GeneralRequest:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/Message'
+  GeneralResponse:
+    type: object
+    properties:
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/Message'
+  Message:
+    type: object
+    properties:
+      type:
+        type: string
+      unstructured:
+        $ref: '#/definitions/UnstructuredMessage'
+  UnstructuredMessage:
+    type: object
+    properties:
+      id:
+        type: string
+      text:
+        type: string
+      timestamp:
+        type: string
+        format: datetime
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
