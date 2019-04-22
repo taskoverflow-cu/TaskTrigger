@@ -4,193 +4,65 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<title></title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<style id="compiled-css" type="text/css">
-		#container {
-			max-width: 60%;
-			max-height: 60%;
-			margin-left: 20%;
-			margin-right: 20%;
-			margin-top: 5%;
-		}
+  	<link rel="stylesheet" type="text/css" href="./css/discover.css">
+  	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
+  	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css">
+  	<link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
 
-    	#buttons {
-      		margin-bottom: 20px;
-    	}
-
-	    .button-left {
-	      float: left;
-	      margin-right: 1%;
-	    }
-
-	    .button-right {
-	      float: right;
-	      margin-left: 1%;
-	    }
-
-	    .button-right-wide {
-	    	float: right;
-	    	margin-left: 4%;
-	    }
-
-	    .button-col-middle {
-	    	padding-top: 5%;
-	    	padding-left: 7%;
-	    }
-
-	    #list-container {
-	    	width: 100%;
-	    	clear: both;
-	    }
-
-	    #friend-request-input {
-	    	width: 20%;
-	    }
-
-			#imgDiv img{
-    		width: 100%;
-    		height: 100%;
-			}
-	</style>
-
-	<script type="text/javascript">
-		window.onload=function(){
-	    	$(document).ready(function() {
-	    		var events = [
-	    			{
-	    				"name": "Java Night",
-							"host": "Dr. Zhuang",
-	    				"imgsrc": 'img/java-bordered-turquoise.png',
-							"description": "Come and have fun with Java and prestigious Dr.Zhuang!",
-	    				"addr": '5842 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"time": '7:00 pm, Today'
-	    			},
-	    			{
-	    				"name": "Hackathon with Assemblies",
-							"host": "Mr. Yang",
-	    				"imgsrc": 'img/exhaustedprogrammer.jpg',
-							"description": "True man only useth assemblies - Socrates",
-	    				"addr": '234 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"time": '9:00 pm, Tomorrow'
-	    			},
-	    			{
-	    				"name": "Drink until Overflow",
-							"host": "Mr. Jia",
-	    				"imgsrc": 'img/red-white-wine.jpg',
-							"description": "True man never overflowth - Plato",
-	    				"addr": '22 Hillcrest Rd',
-	    				"phoneNum": '(870) 288-4149',
-	    				"time": '11:00 pm, Feb 30th'
-	    			}
-	    	]
-				//$(this).addClass('active');
-				//$('#button-friends').removeClass('active');
-				//$('#friend-list').hide();
-				$('#event-list').empty().show();
-				for (var i = 0; i < events.length; i++) {
-					var li = $('<li/>').attr('class', 'list-group-item');
-					var container = $('<div/>').attr('class', 'row w-100').appendTo(li);
-
-					var img = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-2 px-0')
-															 .attr('id','imgDiv').append(
-							$('<img/>').attr('src', events[i]['imgsrc'])
-										 .attr('alt', events[i]['name'])
-										 .attr('class', 'rounded-circle mx-auto d-block img-fluid')
-						).appendTo(container);
-
-					var textContainer = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-5 text-sm-left').append(
-							$('<span/>').attr('class', 'float-right pulse')
-						).append(
-							$('<label/>').attr('class', 'name lead').append(events[i]['name'])
-						).append(
-							$('<br>')
-						).append(
-							$('<span/>').attr('class', 'far fa-chess-king fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', events[i]['host'])
-						).append(
-							$('<span/>').attr('class', 'text-muted').append(events[i]['host'])
-						).append(
-							$('<br>')
-						).append(
-							$('<span/>').attr('class', 'fa fa-calendar-alt fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', events[i]['time'])
-						).append(
-							$('<span/>').attr('class', 'text-muted').append(events[i]['time'])
-						).append(
-							$('<br>')
-						).append(
-							$('<span/>').attr('class', 'fa fa-map-marker fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', events[i]['addr'])
-						).append(
-							$('<span/>').attr('class', 'text-muted').append(events[i]['addr'])
-						).append(
-							$('<br>')
-						).append(
-							$('<span/>').attr('class', 'fa fa-phone fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', events[i]['phoneNum'])
-						).append(
-							$('<span/>').attr('class', 'text-muted small').append(events[i]['phoneNum'])
-						).append(
-							$('<br>')
-						).append(
-							$('<span/>').attr('class', 'fa fa-info-circle fa-fw text-muted').attr('data-toggle', 'tooltip').attr('data-original-title', events[i]['description'])
-						).append(
-							$('<span/>').attr('class', 'text-muted small').append(events[i]['description'])
-						).appendTo(container);
-
-					var statusControl = $('<div/>').attr('class', 'col-12 col-sm-6 col-md-4 button-col-middle').append(
-							$('<a/>').attr('id', 'button-viewevent').on('click', function() {
-								console.log('you clicked on viewevent');
-							}).append(
-								//$('<i/>').attr('class', 'far fa-2x fa-check-circle button-right-wide').css('cursor', 'pointer').css('color', 'green')
-								'<a type="button" class="btn btn-primary button-left" href="./viewevent.html">Details</a>'
-							)
-						).append(
-							$('<a/>').attr('id', 'button-add-remove').on('click', function() {
-								var ButtonText = $(this).text();
-								if(ButtonText==='Remove'){
-										console.log("Remove an event.");
-										alert("Event removed successfully.");
-										$("#button-addremove").html("Add");
-								} else {
-										console.log("Add an event.");
-										alert("Event added successfully.");
-										$("#button-addremove").html("Remove");
-								}
-							}).append(
-								//$('<i/>').attr('class', 'far fa-2x fa-times-circle button-right-wide').css('cursor', 'pointer').css('color', 'red')
-								'<a type="button" class="btn btn-primary button-left" id="button-addremove">Add</a>'
-							)
-						).append(
-							$('<div/>').attr('class', 'spinner-border').attr('role', 'status').append(
-									$('<span/>').attr('class', 'sr-only').append('Loading...')
-								)
-						).appendTo(container);
-						$('#event-list').append(li);
-
-		    }
-	    })
-		}
-	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script type="text/javascript" src="js/discover.js"></script>
+	<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+	<script src="js/leaflet.extra-markers.min.js"></script>  
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js"></script>
 
 </head>
 
 <body>
-<div id='container'>
-	<a type="button" class="btn btn-primary button-left" id="button-calendar" href="./calendar.html">Back to Calendar</a>
-	<br><br><br><br>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div id="button-group">
+        <div class="col-sm-4" style="padding: 0px;">
+          <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-friends" href="./friends.html">Friends</a>
+	      <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./calendar.html">
+	      	Calendar
+	      </a>
+        </div>
+        <!-- <div class="col-sm-7" style="padding: 0px;">
+          <div class="col-sm-2 button-left">
+          	<input type="text" class="form-control" name="title" id="event-name" placeholder="Event name:" />
+          </div>
+          <div class="col-sm-2 button-left">
+          	<input type="text" class="form-control" name="location" id="location" placeholder="Location:"/>
+          </div>
+          <div class="col-sm-2 button-left">
+          	<input type="text" class="form-control " name="starts_at" id="starts-at" placeholder="Starts at:" />
+          </div>
+          <div class="col-sm-2 button-left">
+          	<input type="text" class="form-control" name="ends_at" id="ends-at" placeholder="Ends at:" />
+          </div>
+          <div class="col-sm-1 button-left">
+          	<a type="button" class="col-sm-6 btn btn-primary icon-button" id="submit-search">
+	      		<i class="fas fa-search"></i>
+	      	</a>
+	      </div>
+      	</div> -->
+	    <div class="col-sm-8" style="padding: 0px;">
+            <a type="button" class="btn btn-primary button-right icon-button" id="button-calendar-map">
+              <i class="fas fa-map-marked-alt"></i>
+            </a>
+	    </div>
+    </nav>
+  </header>
+
+<div id='discover-container'>
 	<div id='buttons'>
-		<input type="text" class="form-control button-left" id="search-time" placeholder="Input event time">
-		<input type="text" class="form-control button-left" id="search-location" placeholder="Input event location">
-		<input type="text" class="form-control button-left" id="search-name" placeholder="Input event name">
-		<input type="text" class="form-control button-left" id="search-key_words" placeholder="Input event key words">
-		<br>
-		<input type="checkbox" name="search-private" value="private"> Show my private events
- 		<input type="checkbox" name="search-friends" value="friends"> Show friend only events
- 		<input type="checkbox" name="search-public" value="public" checked> Show public events <br> <br>
-		<input type="submit" class="btn btn-primary button-left" id="submit-search" value="Search for events!">
-		<a type="button" class="btn btn-primary button-right" id="button-event-map" href="./map.html">See Events on Map</a>
-		<div style="clear: both"></div>
+		<input type="checkbox" name="search-private" value="private"> Private </input>
+ 		<input type="checkbox" name="search-friends" value="friends"> Friend </input>
+ 		<input type="checkbox" name="search-public" value="public" checked> Public </input>
 	</div>
 	<div id='list-container'>
 		<ul id="event-list" class='main-list' style='padding-left:0px;'></ul>
@@ -205,6 +77,20 @@
 	  </nav>
 	</div>
 </div>
+
+<div id="map-container" style="display:none;">
+    <form class="form-inline" id="event-map-controls" style="padding:10px; margin:0px;">
+	    <div class="form-check form-check-inline">
+    	    <input class="form-control map-datepicker" type="text" name="starts_at" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
+        	<input class="form-control map-datepicker" type="text" name="ends_at" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
+	        <a type="button" class="map-ckbx btn btn-primary active" id="private-ckbx">Private</a>
+	        <a type="button" class="map-ckbx btn btn-primary active" id="friend-ckbx">Friend</a>
+	        <a type="button" class="map-ckbx btn btn-primary active" id="public-ckbx">Public</a>
+      	</div>
+    </form>
+	<div id="eventmap"></div>
+<div>
+
 </body>
 
 </html>

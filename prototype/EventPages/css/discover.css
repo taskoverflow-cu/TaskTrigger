@@ -5,17 +5,21 @@ html, body{
     position: relative;
 }
 
-#cal-container {
-  max-width: 80%;
-  max-height: 80%;
-  margin-left: 10%;
-  margin-right: 10%;
-  margin-top: 5%;
+#discover-container {
+	max-width: 60%;
+	max-height: 60%;
+	margin-left: 20%;
+	margin-right: 20%;
+	margin-top: 5%;
 }
 
 #button-group {
   margin-left: 9%;
   margin-right: 9%;
+}
+
+#buttons {
+	margin-bottom: 20px;
 }
 
 .button-left {
@@ -38,22 +42,14 @@ html, body{
   margin-bottom: 5px;
 }
 
-.row {
-  margin: 5px;
+.button-right-wide {
+	float: right;
+	margin-left: 4%;
 }
 
-.input-group {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.input-group-addon {
-  min-width: 100px;
-  text-align: left;
-}
-
-.bootstrap-tagsinput {
-  width: 100% !important;
+.button-col-middle {
+	padding-top: 5%;
+	padding-left: 7%;
 }
 
 .icon-button {
@@ -61,35 +57,18 @@ html, body{
   padding-right:8px;
 }
 
-#description {
-  height: 80px;
+#list-container {
+	width: 100%;
+	clear: both;
 }
 
-#notification-container {
-
+#friend-request-input {
+	width: 20%;
 }
 
-#invitation-list {
-  border-style: solid;
-  border-width: 1px;
-  border-color: #ddd;
-}
-
-#hidden-container {
-  float: right;
-  display: none;
-  padding: none;
-}
-
-#notification-title {
-  margin-top: 0;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-#notification-list {
-  padding-left: 0px;
-  display: block;
+#imgDiv img{
+	width: 100%;
+	height: 100%;
 }
 
 #event-map-controls {

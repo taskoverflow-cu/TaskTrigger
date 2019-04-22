@@ -14,12 +14,17 @@
 <header>
 <nav class="navbar navbar-default navbar-fixed-top">
   <div id="button-group">
-		<a type="button" class="btn btn-primary button-left" id="button-calendar" href="./calendar.html">Calendar</a>
+  	<div class="col-sm-4" style="padding:0px;">
+		<a type="button" class="col-sm-3 btn btn-primary button-left" id="button-calendar" href="./calendar.html">Calendar</a>
 		<input type="text" class="form-control button-left" id="friend-request-input" placeholder="Recipient's username">
-		<a type="button" class="btn btn-primary button-left" id="button-addfriend">Add Friend</a>
+		<a type="button" class="col-sm-1 btn btn-primary button-left" id="button-search">
+	  		<i class="fas fa-search"></i>
+		</a>
+	</div>
+	<div class="col-sm-8" style="padding:0px;">
 		<a type="button" class="btn btn-primary button-right" id="button-notifications">Friend Requests</a>
 		<a type="button" class="btn btn-primary button-right active" id="button-friends">Friends</a>
-		<div style="clear: left"></div>
+	</div>
   </div>
 </nav>
 </header>
@@ -31,6 +36,7 @@
 </div> -->
 <div id='container'>
 	<div id='list-container' style="clear:left">
+		<ul id="search-list" class='main-list' style='padding-left:0px;'></ul>
 		<ul id="friend-list" class='main-list' style='padding-left:0px;'></ul>
 		<ul id="notification-list" class='main-list' style='padding-left:0px;'></ul>
 	</div>
@@ -39,9 +45,3 @@
 </body>
 
 </html>
-
-
-
-
-
-	
