@@ -22,6 +22,15 @@ html, body{
 	margin-bottom: 20px;
 }
 
+.input-left {
+  padding-left: 10px;
+  padding-right: 0;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .button-left {
   float: left;
   padding-left: 0;
@@ -55,6 +64,12 @@ html, body{
 .icon-button {
   padding-left:8px;
   padding-right:8px;
+}
+
+.leaflet-control-search .search-cancel {
+  /*position: static;*/
+  /*float: left;*/
+  /*margin-left: -22px;*/
 }
 
 #list-container {

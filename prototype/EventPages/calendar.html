@@ -3,30 +3,35 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title></title>
+  <title>Calendar</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="robots" content="noindex, nofollow">
   <meta name="googlebot" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" type="text/css" href="./css/calendar.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" />
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/fullcalendar.min.css">
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/css/bootstrap-datetimepicker.min.css">
-  <link rel="stylesheet" type="text/css" href="css/bootstrap-tagsinput.css">
-  <link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+  <link rel="stylesheet" href="css/leaflet-1.4.0.css"/>
+  <link rel="stylesheet" href="css/fontawesome-5.8.1-all.css">
+  <link rel="stylesheet" href="css/fullcalendar-3.10.0.min.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.7.min.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker-4.17.42.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap-tagsinput-0.6.1.css">
+  <link rel="stylesheet" href="css/leaflet.extra-markers-1.0.9.min.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment-with-locales.min.js"></script>
-  <script type="text/javascript" src="js/fullcalendar.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.42/js/bootstrap-datetimepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/calendar.css">
+
+  <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="js/moment-2.24.0.js"></script>
+  <script type="text/javascript" src="js/fullcalendar-3.10.0.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap-3.3.7.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap-datetimepicker-4.17.42.js"></script>
+  <script type="text/javascript" src="js/bootstrap-tagsinput-0.6.1.js"></script>
+  <script type="text/javascript" src="js/leaflet-1.4.0.js"></script>
+  <script type="text/javascript" src="js/leaflet.extra-markers-1.0.9.min.js"></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg1Y94oiGjpuWv-7DxIJR1vn0W8j2cItA&libraries=places&language=en"></script>
+  <script src="js/jquery.geocomplete-1.7.0.js"></script>
+
   <script type="text/javascript" src="js/calendar.js"></script>
-  <script type="text/javascript" src="js/bootstrap-tagsinput.js"></script>
-  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
-  <script src="js/leaflet.extra-markers.min.js"></script>
+  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
 
 </head>
 <body>
@@ -39,9 +44,25 @@
           <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./discover.html">Discover</a>
         </div>
         <div class="col-sm-8" style="padding: 0px;">
-            <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile">
+            <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile" data-trigger="focus">
               <i class="fas fa-user"></i>
             </a>
+            <div class="popover-title hide" style="width: 300px;">My Profile</div>
+            <div class="popover-content hide" style="padding: 5px">
+              <div class="card" style="width: 300px; padding: 5px;">
+                <div class="row">
+                  <img class="col-sm-2" src="./img/zhenzhang.png" style="margin: 0px; padding: 0px 0px 0px 10px"/>
+                  <div class="col-sm-10">
+                    <h4 id="user-profile-id" style="margin-top: 0px;">Placeholder</h4> 
+                    <p id="user-profile-email">Placeholder</p>
+                  </div>
+                </div>
+                <div>
+                  <p id="user-profile-my-events">My Events Today: </p>
+                  <p id="user-profile-friend-events">Friend Events Today: </p>
+                </div>
+              </div>
+            </div>
             <a type="button" class="btn btn-primary button-right icon-button" id="button-invitations">
               <i class="fas fa-bell"></i>
             </a>
@@ -65,7 +86,7 @@
       <div class="col-sm-3" id='hidden-container'>
         <div id='notification-container'>
           <h2 id="notification-title"> Invitations </h2>
-          <ul id="invitation-list" style='padding-left:0px;'/>
+          <ul id="invitation-list" style='overflow-y: scroll; padding-left:0px;'/>
         </div>
       </div>
     </div>
@@ -74,12 +95,12 @@
   <div id="map-container" style="display:none;">
     <form class="form-inline" id="event-map-controls" style="padding:10px; margin:0px;">
       <div class="form-check form-check-inline">
-        <input class="form-control map-datepicker" type="text" name="starts_at" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
-        <input class="form-control map-datepicker" type="text" name="ends_at" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
-
-       <!--  <a type="button" class="map-ckbx btn btn-primary active" id="private-ckbx">Private</a>
-        <a type="button" class="map-ckbx btn btn-primary active" id="friend-ckbx">Friend</a>
-        <a type="button" class="map-ckbx btn btn-primary active" id="public-ckbx">Public</a> -->
+        <div class="input-group" style="margin: 0px 10px 0px 0px;">
+          <input class="form-control location-autocomplete" type="text" id="map-location" placeholder="Location:" />
+          <span class="input-group-addon" role="button" style="width: auto;"><i class="fas fa-search"></i></span>
+        </div>
+        <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
+        <input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
       </div>
     </form>
     <div id="eventmap"></div>
@@ -104,21 +125,21 @@
           <form action="#" method="POST" class="col-sm-12">
             <div class="input-group">
               <span class="input-group-addon">Event Name</span>
-              <input type="text" class="form-control" name="title" id="title"/>
+              <input type="text" class="form-control" id="title"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Starts at</span>
-              <input class="form-control modal-datepicker" type="text" name="starts_at" id="starts-at"/>
+              <input class="form-control modal-datepicker" type="text" id="starts-at"/>
               <span class="input-group-addon">Ends at</span>
-              <input class="form-control modal-datepicker" type="text" name="ends_at" id="ends-at"/>
+              <input class="form-control modal-datepicker" type="text" id="ends-at"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Location</span>
-              <input type="text" class="form-control" name="location" id="location"></input>
+              <input type="text" class="form-control location-autocomplete" id="location"></input>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Description</span>
-              <input type="text" class="form-control" name="description" id="description"></textarea>
+              <input type="text" class="form-control" id="description"></textarea>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Participants</span>
@@ -154,21 +175,21 @@
           <form action="#" method="POST" class="col-sm-12">
             <div class="input-group">
               <span class="input-group-addon">Event Name</span>
-              <input type="text" class="form-control" name="title" id="title"/>
+              <input type="text" class="form-control" id="title"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Starts at</span>
-              <input class="form-control modal-datepicker" type="text" name="starts_at" id="starts-at"/>
+              <input class="form-control modal-datepicker" type="text" id="starts-at"/>
               <span class="input-group-addon">Ends at</span>
-              <input class="form-control modal-datepicker" type="text" name="ends_at" id="ends-at"/>
+              <input class="form-control modal-datepicker" type="text" id="ends-at"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Location</span>
-              <input type="text" class="form-control" name="location" id="location"></input>
+              <input type="text" class="form-control location-autocomplete" id="location"></input>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Description</span>
-              <input type="text" class="form-control" name="description" id="description"></textarea>
+              <input type="text" class="form-control" id="description"></textarea>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Participants</span>
@@ -201,33 +222,33 @@
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <h2 class="modal-title" style="display:inline-block;">Event Details</h2>
           <div class="input-group" style="float:right; margin-right: 20px; margin-top:1%;">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose Visibility <span class="caret"></span></button>
-            <ul class="dropdown-menu">
-              <li><a href="#">Private Event</a></li>
-              <li><a href="#">Visible to Friends</a></li>
-              <li><a href="#">Public Event</a></li>
-            </ul>
+            <select class="custom-select btn btn-light">
+              <option selected>Choose Visibility</option>
+              <option value="1">Private Event</option>
+              <option value="2">Visible to Friends</option>
+              <option value="3">Public Event</option>
+            </select>
           </div>
         </div>
         <div class="modal-body">
           <form action="#" method="POST" class="col-sm-12">
             <div class="input-group">
               <span class="input-group-addon">Event Name</span>
-              <input type="text" class="form-control" name="title" id="title"/>
+              <input type="text" class="form-control" id="title"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Starts at</span>
-              <input class="form-control modal-datepicker" type="text" name="starts_at" id="starts-at"/>
+              <input class="form-control modal-datepicker" type="text" id="starts-at"/>
               <span class="input-group-addon">Ends at</span>
-              <input class="form-control modal-datepicker" type="text" name="ends_at" id="ends-at"/>
+              <input class="form-control modal-datepicker" type="text" id="ends-at"/>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Location</span>
-              <input type="text" class="form-control" name="location" id="location"></input>
+              <input type="text" class="form-control location-autocomplete" id="location"></input>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Description</span>
-              <input type="text" class="form-control" name="description" id="description"></textarea>
+              <input type="text" class="form-control" id="description"></textarea>
             </div>
             <div class="input-group">
               <span class="input-group-addon">Participants</span>

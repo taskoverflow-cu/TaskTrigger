@@ -1,7 +1,10 @@
-var init_x = 40.807537
-var init_y = -73.962570
-var init_event = "COMS6998 Event"
-var scale = 12
+var map;
+var autocomplete;
+
+var init_x = 40.807537;
+var init_y = -73.962570;
+var init_event = "COMS6998 Event";
+var scale = 12;
 var private_mark_data = [
     {
         location: [40.7911, -73.9694],
@@ -27,7 +30,7 @@ var private_mark_data = [
         date: new Date(2019, 3, 13),
         time: new Date(2019,3,13,8,30,0,0)
     }
-]
+];
 
 var friend_mark_data = [
     {
@@ -54,7 +57,7 @@ var friend_mark_data = [
         date: new Date(2019, 3, 13),
         time: new Date(2019,3,13,8,30,0,0)
     }
-]
+];
 
 var public_mark_data = [
     {
@@ -83,7 +86,6 @@ var public_mark_data = [
     }
 ];
 
-var map;
 var private_mark_whole_list;
 var private_mark_list;
 var private_mark_group;
@@ -122,17 +124,60 @@ var events = [
 		"phoneNum": '(870) 288-4149',
 		"time": '11:00 pm, Feb 30th'
 	}
-]
+];
+
+var user = {
+    "id": "wonderful zhen zhang",
+    "email": "zhenzhang@gmail.com",
+    "MyEventsToday": "123",
+    "FriendEventsToday": "456"
+};
 
 
 $(function() {
 	// header controllers
 	(function() {
+        $('#button-calendar-map').on('click', function() {
+          var map_container = $('#map-container');
+          if (!map_container.is(':visible')) {
+              $('#discover-container').toggle();
+              map_container.toggle("fast", function() {
+                  map_container.css('height', '100%').css('width', '100%');
+                  $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-list');
+                  setTimeout(function(){
+                    map.invalidateSize();
+                  }, 0);
+              });
+          } else {
+              map_container.css('height', '0px').css('width', '0px');
+              map_container.toggle();
+              $('#discover-container').toggle();
+              $('#button-calendar-map').find('i').removeClass('fa-list').addClass('fa-map-marked-alt');
+          }
+        });
 
+        $('#user-profile-id').text(user['id']);
+        $('#user-profile-email').text(user['email'])
+        $('#user-profile-my-events').append(user['MyEventsToday']);
+        $('#user-profile-friend-events').append(user['FriendEventsToday']);
+
+        $('#button-user-profile').popover({
+            html: true,
+            placement: "auto",
+            trigger: 'click',
+            title: function() {
+                return $(this).parent().find(".popover-title").html();
+            },
+            content: function() {
+                return $(this).parent().find(".popover-content").html();
+            }
+        });
 	}());
 
 	// discover initialize
 	(function() {
+        $("#item-list-location").geocomplete();        
+
 		// location = xxx, starts_at = xxx, ends_at = xxx
 		// TODO api, get events
 		$('#event-list').empty().show();
@@ -204,25 +249,6 @@ $(function() {
 				  );
 			// TODO api, confirm request
 		});
-
-        $('#button-calendar-map').on('click', function() {
-          var map_container = $('#map-container');
-          if (!map_container.is(':visible')) {
-              $('#discover-container').toggle();
-              map_container.toggle("fast", function() {
-	              map_container.css('height', '100%').css('width', '100%');
-	              $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-list');
-	              setTimeout(function(){
-	                map.invalidateSize();
-	              }, 0);
-              });
-          } else {
-      	      map_container.css('height', '0px').css('width', '0px');
-          	  map_container.toggle();
-          	  $('#discover-container').toggle();
-              $('#button-calendar-map').find('i').removeClass('fa-list').addClass('fa-map-marked-alt');
-          }
-        });
 	}());
 
 	// map initialize
@@ -281,6 +307,8 @@ $(function() {
                 public_mark_group
             ]
         });
+
+        $("#map-location").geocomplete();
     }());
 
 	// map controllers
@@ -299,31 +327,31 @@ $(function() {
         });
 
         // checkboxes
-        $("#private-ckbx").click(function(){
-            if ($("#private-ckbx").hasClass('active')) {
+        $("#map-private-ckbx").click(function(){
+            if ($("#map-private-ckbx").hasClass('active')) {
                 map.removeLayer(private_mark_group);
-                $("#private-ckbx").removeClass('active');
+                $("#map-private-ckbx").removeClass('active');
             } else {
                 map.addLayer(private_mark_group);
-                $("#private-ckbx").addClass('active');
+                $("#map-private-ckbx").addClass('active');
             }
         });
-        $("#friend-ckbx").click(function(){
-            if ($("#friend-ckbx").hasClass('active')) {
+        $("#map-friend-ckbx").click(function(){
+            if ($("#map-friend-ckbx").hasClass('active')) {
                 map.removeLayer(friend_mark_group);
-            	$("#friend-ckbx").removeClass('active');
+            	$("#map-friend-ckbx").removeClass('active');
             } else {
                 map.addLayer(friend_mark_group);
-            	$("#friend-ckbx").addClass('active');
+            	$("#map-friend-ckbx").addClass('active');
             }
         });
-        $("#public-ckbx").click(function(){
-            if ($("#public-ckbx").hasClass('active')) {
+        $("#map-public-ckbx").click(function(){
+            if ($("#map-public-ckbx").hasClass('active')) {
                 map.removeLayer(public_mark_group);
-            	$("#public-ckbx").removeClass('active');
+            	$("#map-public-ckbx").removeClass('active');
             } else {
                 map.addLayer(public_mark_group);
-            	$("#public-ckbx").addClass('active');
+            	$("#map-public-ckbx").addClass('active');
             }
         });
     }());
@@ -372,7 +400,7 @@ function reduce_layer_group_by_time(visible, group_layer, mark_list, whole_list,
 
 function reduce_all_layer_group_by_time(timestamp, start) {
     private_mark_group = reduce_layer_group_by_time(
-        $("#private-ckbx").hasClass('acive'),
+        $("#map-private-ckbx").hasClass('acive'),
         private_mark_group, 
         private_mark_list, 
         private_mark_whole_list, 
@@ -382,7 +410,7 @@ function reduce_all_layer_group_by_time(timestamp, start) {
     console.log(private_mark_list.length);
     console.log(private_mark_group);
     friend_mark_group = reduce_layer_group_by_time(
-        $("#friend-ckbx").hasClass('active'),
+        $("#map-friend-ckbx").hasClass('active'),
         friend_mark_group, 
         friend_mark_list, 
         friend_mark_whole_list, 
@@ -390,7 +418,7 @@ function reduce_all_layer_group_by_time(timestamp, start) {
         timestamp, start
         )
     public_mark_group = reduce_layer_group_by_time(
-        $("#public-ckbx").hasClass('active'),
+        $("#map-public-ckbx").hasClass('active'),
         public_mark_group, 
         public_mark_list, 
         public_mark_whole_list, 

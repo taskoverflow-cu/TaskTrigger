@@ -1,42 +1,42 @@
 var friends = [
 	{
 		"name": "Mike Anamendolla",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m101.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
 	}, 
 	{
 		"name": "Seth Frazier ",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w102.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'seth.ana@example.com'
 	}, 
 	{
 		"name": "Rosemary Porter",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w103.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
 	},
 	{
 		"name": "Mike Anamendolla",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m101.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
 	}, 
 	{
 		"name": "Seth Frazier ",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w102.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'seth.ana@example.com'
 	}, 
 	{
 		"name": "Rosemary Porter",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w103.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
@@ -46,42 +46,42 @@ var friends = [
 var requests = [
 	{
 		"name": "Peppa Pig",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m104.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
 	}, 
 	{
 		"name": "George Pig",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w105.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'seth.ana@example.com'
 	}, 
 	{
 		"name": "Suzzy Sheep",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w106.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
 	},
 	{
 		"name": "Peppa Pig",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/m104.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
 	}, 
 	{
 		"name": "George Pig",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w105.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'seth.ana@example.com'
 	}, 
 	{
 		"name": "Suzzy Sheep",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w106.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'
@@ -91,14 +91,14 @@ var requests = [
 var search_result = [
 	{
 		"name": "Search result1",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w105.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'seth.ana@example.com'
 	}, 
 	{
 		"name": "Search result2",
-		"imgsrc": 'http://demos.themes.guide/bodeo/assets/img/users/w106.jpg',
+		"imgsrc": './img/zhenzhang.png',
 		"addr": '5842 Hillcrest Rd',
 		"phoneNum": '(870) 288-4149',
 		"email": 'mike.ana@example.com'

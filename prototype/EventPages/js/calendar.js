@@ -34,8 +34,139 @@ var private_mark_whole_list;
 var private_mark_list;
 var private_mark_group;
 
+var events = [
+  {
+    id: "1",
+    title: "event1",
+    start: "2019-03-01",
+    end: "2019-03-20",
+  }
+]
+
+var invitations = [
+  {
+    "EventName": "Office Hour",
+    "Location": "Home",
+    "Host": "Mike",
+    "TimeStart": "2019-3-20 19:00",
+    "TimeEnd": "2019-3-20 20:00",
+    "Description": "sample invitation 1, some descriptions here..."
+  },
+  {
+    "EventName": "Office Hour",
+    "Location": "Home",
+    "Host": "Sam",
+    "TimeStart": "2019-3-20 19:00",
+    "TimeEnd": "2019-3-20 20:00",
+    "Description": "sample invitation 2, some descriptions here..."
+  },
+  {
+    "EventName": "Office Hour",
+    "Location": "Home",
+    "Host": "Mike",
+    "TimeStart": "2019-3-20 19:00",
+    "TimeEnd": "2019-3-20 20:00",
+    "Description": "sample invitation 1, some descriptions here..."
+  },
+  {
+    "EventName": "Office Hour",
+    "Location": "Home",
+    "Host": "Sam",
+    "TimeStart": "2019-3-20 19:00",
+    "TimeEnd": "2019-3-20 20:00",
+    "Description": "sample invitation 2, some descriptions here..."
+  },
+  {
+    "EventName": "Office Hour",
+    "Location": "Home",
+    "Host": "Mike",
+    "TimeStart": "2019-3-20 19:00",
+    "TimeEnd": "2019-3-20 20:00",
+    "Description": "sample invitation 1, some descriptions here..."
+  },
+  {
+    "EventName": "Office Hour",
+    "Location": "Home",
+    "Host": "Sam",
+    "TimeStart": "2019-3-20 19:00",
+    "TimeEnd": "2019-3-20 20:00",
+    "Description": "sample invitation 2, some descriptions here..."
+  }
+]
+
+var user = {
+    "id": "wonderful zhen zhang",
+    "email": "zhenzhang@gmail.com",
+    "MyEventsToday": "123",
+    "FriendEventsToday": "456"
+}
+
 
 $(function() {
+
+    // header buttons
+    (function() {
+        $("#button-groupevent").click(function() {
+            $("#add-group-event-modal").modal("show");
+        });
+
+        $('#button-invitations').on('click', function() {
+            if (! $('#eventmap').is(':visible')) {
+              if (! $('#hidden-container').is(':visible')) {
+                console.log('not visible')
+                $('#shown-container').animate({
+                  width: '75%',
+                }).promise().done(function() {$('#hidden-container').toggle();});
+                $('#invitation-list').height($('table').css('height'));
+              } else {
+                console.log('visible')
+                $('#hidden-container').toggle();
+                $('#shown-container').animate({
+                  width: '100%',
+                });
+              }
+            }
+        });
+
+        $('#button-calendar-map').on('click', function() {
+          $('#cal-container').toggle();
+          var map_container = $('#map-container');
+
+          map_container.toggle("fast", function() {
+            if (map_container.is(':visible')) {
+              map_container.css('height', '100%').css('width', '100%');
+              map_container.css('display', 'block');
+              $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-calendar-alt');
+              setTimeout(function(){
+                map.invalidateSize();
+              }, 0);
+            } else {
+              map_container.css('height', '0px').css('width', '0px');
+              map_container.css('display', 'none');
+              $('#button-calendar-map').find('i').removeClass('fa-calendar-alt').addClass('fa-map-marked-alt');
+            }
+          });
+        });
+
+        $('#user-profile-id').text(user['id']);
+        $('#user-profile-email').text(user['email'])
+        $('#user-profile-my-events').append(user['MyEventsToday']);
+        $('#user-profile-friend-events').append(user['FriendEventsToday']);
+
+        $('#button-user-profile').popover({
+            html: true,
+            placement: "auto",
+            trigger: 'click',
+            title: function() {
+                return $(this).parent().find(".popover-title").html();
+            },
+            content: function() {
+                return $(this).parent().find(".popover-content").html();
+            }
+        });
+    }());
+
+    // calendar 
     (function() {
         $('#calendar').fullCalendar({
             header: {
@@ -47,18 +178,11 @@ $(function() {
             navLinks: true, // can click day/week names to navigate views
             selectable: true,
             selectHelper: true,
-            events: [
-              {
-                title: "event1",
-                start: "2019-03-01",
-                end: "2019-03-20",
-              }
-            ],
+            events: events,
             select: function(start, end) {
                 // Display the modal.
                 // You could fill in the start and end fields based on the parameters
                 $('#add-event-modal').modal('show');
-                // location.href = './addevent.html'
             },
             eventClick: function(event, element) {
                 // Display the modal and set the values to the event values.
@@ -139,7 +263,8 @@ $(function() {
 		})
 
     	$('#view-event-modal').on('hidden.bs.modal', function () {
-		    $(this).find('input').val('');
+		    $(this).find('input').val('').removeAttr('disabled');
+            $(this).find('select').removeAttr('disabled');
 		})
 
         $(".modal-datepicker").datetimepicker();
@@ -208,118 +333,75 @@ $(function() {
         	$(this).closest('.modal').find('#cancel-event').css('display', 'inline');
         	$(this).closest('.modal').find('#save-event').css('display', 'inline');
         });
-    }());
 
-    // header buttons
-    (function() {
-        $("#button-groupevent").click(function() {
-            $("#add-group-event-modal").modal("show");
-        });
-
-        $('#button-invitations').on('click', function() {
-          $('#hidden-container').toggle("fast", function() {
-            console.log($('#eventmap').is('visible'));
-            if (! $('#eventmap').is('visible')) {
-              if ($('#hidden-container').is(':visible')) {
-                console.log('not visible')
-                $('#shown-container').animate({
-                  width: '70%',
-                });
-                $('#invitation-list').height($('table').css('height'));
-                $('#hidden-container').css('display', 'block');
-              } else {
-                console.log('visible')
-                $('#shown-container').animate({
-                  width: '100%',
-                });
-                $('#hidden-container').css('display', 'none');
-              }
-            }
-          });
-        });
-
-        $('#button-calendar-map').on('click', function() {
-          $('#cal-container').toggle();
-          var map_container = $('#map-container');
-
-          map_container.toggle("fast", function() {
-            if (map_container.is(':visible')) {
-              map_container.css('height', '100%').css('width', '100%');
-              map_container.css('display', 'block');
-              $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-calendar-alt');
-              setTimeout(function(){
-                map.invalidateSize();
-              }, 0);
-            } else {
-              map_container.css('height', '0px').css('width', '0px');
-              map_container.css('display', 'none');
-              $('#button-calendar-map').find('i').removeClass('fa-calendar-alt').addClass('fa-map-marked-alt');
-            }
-          });
-        });
+        $('.location-autocomplete').geocomplete();
     }());
 
     // populate invitations
     (function(){
-        var invitations = [
-          {
-            "Host": "Mike",
-            "TimeStart": "2019-3-20 19:00",
-            "TimeEnd": "2019-3-20 20:00",
-            "Description": "sample invitation 1, some descriptions here..."
-          },
-          {
-            "Host": "Sam",
-            "TimeStart": "2019-3-20 19:00",
-            "TimeEnd": "2019-3-20 20:00",
-            "Description": "sample invitation 2, some descriptions here..."
-          }
-        ]
         for(var i=0; i<invitations.length; i++) {
-          var li = $("<li/>").attr('class', 'list-group-item').css('border', 'none').css('border-bottom', '2px solid #ddd');
-          var container = $('<div/>').attr('class', 'row w-100').append(
-                $('<row/>').append(
-                  $('<div />').attr('class', 'col-12 col-md-3').append(
-                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['Host'])
-                  )
+          var li = $("<li/>").attr('class', 'list-group-item').attr('id', '123')
+                             .css('border', 'none').css('border-bottom', '2px solid #ddd').css('padding-top', '5px').css('padding-bottom', '5px')
+                             .hover(function() {
+                                $(this).css('backgroundColor', '#ddd');
+                                var id = $(this).attr('id');
+                                var tmp = {
+                                    id: id,
+                                    title: "mouseover",
+                                    start: "2019-04-01",
+                                    end: "2019-04-20",
+                                    borderColor: "#ddd",
+                                    backgroundColor: "#ddd"
+                                }
+                                $('#calendar').fullCalendar('renderEvent', tmp);
+                             }, function() {
+                                $(this).css('backgroundColor', '#fff');
+                                var id = $(this).attr('id');
+                                $('#calendar').fullCalendar('refetchEvents');
+                             });
+          var container = $('<div/>').attr('class', 'card').append(
+                $('<div/>').attr('class', 'row card-body').append(
+                    $('<img/>').attr('class', 'col-sm-4').attr('src', './img/zhenzhang.png').css('padding', '5px 5px 5px 10px')
                 ).append(
-                  $('<div />').attr('class', 'col-12 col-md-9').append(
-                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['TimeStart'])
-                  ).append(
-                    $("<br/>")
-                  ).append(
-                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['TimeEnd'])
-                  )
-                )
-              ).append(
-                $('<row/>').append(
-                  $('<div/>').attr('class', 'col-12 col-md-12').css('padding-right', '0').append(
-                    $('<span/>').attr('class', 'text-muted').append(invitations[i]['Description'])
-                  )
-                )
-              ).append(
-                $('<row/>').css('float', 'right').append(
-                  $('<a/>').attr('type', 'button').attr('href', './viewGroupEventRequest.html').css('padding-right', '6px').css('padding-top', 'none').css('padding-bottom', 'none').append('more')
+                    $('<div />').attr('class', 'col-sm-6').css('padding', '5px').append(
+                      $('<h5 />').attr('class', 'card-title').append(invitations[i]['EventName'])
+                    ).append(
+                      $('<h6 />').attr('class', 'card-subtitle mb-2 text-muted').append(invitations[i]['Host'])
+                    ).append(
+                      $('<h6 />').attr('class', 'card-subtitle mb-2 text-muted').append(invitations[i]['Location'])
+                    )
                 ).append(
-                  $('<a/>').attr('type', 'button').css('padding-right', '6px').css('padding-top', 'none').css('padding-bottom', 'none').on('click', function() {
-                    $(this).closest('li').animate({
-                      margin: '0px',
-                      padding: '0px',
-                      height: '0px'
-                    }, 500, function() {
-                      $(this).remove();
-                    });
-                  }).append('accept')
-                ).append(
-                  $('<a/>').attr('type', 'button').css('padding-right', '6px').css('padding-top', 'none').css('padding-bottom', 'none').on('click', function() {
-                    $(this).closest('li').animate({
-                      margin: '0px',
-                      padding: '0px',
-                      height: '0px'
-                    }, 500, function() {
-                      $(this).remove();
-                    });
-                  }).append('ignore')
+                    $('<div />').attr('class', 'col-sm-2').append(
+                      $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-more-btn').css('margin-top', '20px').css('margin-bottom', '0px')
+                               .on('click', function(){
+                                   $('#view-event-modal').modal('show');
+                                   $('#view-event-modal input').attr("disabled","disabled");
+                                   $("#view-event-modal select").attr("disabled", "disabled");
+                               }).append($('<i/>').attr('class', 'fas fa-ellipsis-h'))
+                    ).append(
+                      $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-accept-btn').css('margin', '0px')
+                               .on('click', function() {
+                                   $(this).closest('li').animate({
+                                     margin: '0px',
+                                     padding: '0px',
+                                     height: '0px'
+                                   }, 500, function() {
+                                     $(this).remove();
+                                   });
+                      }).append($('<i/>').attr('class', 'fas fa-plus-square'))
+                    ).append(
+                      $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-ignore-btn').css('margin', '0px')
+                               .on('click', function() {
+                                   $(this).closest('li').animate({
+                                     margin: '0px',
+                                     padding: '0px',
+                                     height: '0px'
+                                   }, 500, function() {
+                                     $(this).remove();
+                                   });
+                                   $('#calendar').fullCalendar('refetchEvents');
+                      }).append($('<i/>').attr('class', 'fas fa-minus-square'))
+                    )
                 )
               ).appendTo(li);
           $('#invitation-list').append(li);
