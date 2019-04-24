@@ -141,17 +141,22 @@ $(function() {
           var map_container = $('#map-container');
           if (!map_container.is(':visible')) {
               $('#discover-container').toggle();
-              map_container.toggle("fast", function() {
-                  map_container.css('height', '100%').css('width', '100%');
-                  $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-list');
+              map_container.toggle().promise().done(function(){
+                  map_container.animate({
+                    height: '100%'
+                  });
                   setTimeout(function(){
                     map.invalidateSize();
-                  }, 0);
+                  }, 400);
               });
+              $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-list');
           } else {
-              map_container.css('height', '0px').css('width', '0px');
-              map_container.toggle();
-              $('#discover-container').toggle();
+              map_container.animate({
+                height: 0
+              }).promise().done(function() {
+                  map_container.toggle();
+                  $('#discover-container').toggle();
+              });
               $('#button-calendar-map').find('i').removeClass('fa-list').addClass('fa-map-marked-alt');
           }
         });

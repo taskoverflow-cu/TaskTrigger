@@ -1,3 +1,5 @@
+var table_height;
+
 var init_x = 40.807537
 var init_y = -73.962570
 var init_event = "COMS6998 Event"
@@ -30,6 +32,7 @@ var private_mark_data = [
 ]
 
 var map;
+var shadow_marker;
 var private_mark_whole_list;
 var private_mark_list;
 var private_mark_group;
@@ -45,6 +48,9 @@ var events = [
 
 var invitations = [
   {
+    "id": "123",
+    "lat": "40.785950",
+    "lng": "-73.963077",
     "EventName": "Office Hour",
     "Location": "Home",
     "Host": "Mike",
@@ -53,6 +59,9 @@ var invitations = [
     "Description": "sample invitation 1, some descriptions here..."
   },
   {
+    "id": "124",
+    "lat": "40.797293",
+    "lng": "-73.953182",
     "EventName": "Office Hour",
     "Location": "Home",
     "Host": "Sam",
@@ -61,6 +70,9 @@ var invitations = [
     "Description": "sample invitation 2, some descriptions here..."
   },
   {
+    "id": "125",
+    "lat": "40.785950",
+    "lng": "-73.963077",
     "EventName": "Office Hour",
     "Location": "Home",
     "Host": "Mike",
@@ -69,6 +81,9 @@ var invitations = [
     "Description": "sample invitation 1, some descriptions here..."
   },
   {
+    "id": "126",
+    "lat": "40.785950",
+    "lng": "-73.963077",
     "EventName": "Office Hour",
     "Location": "Home",
     "Host": "Sam",
@@ -77,6 +92,9 @@ var invitations = [
     "Description": "sample invitation 2, some descriptions here..."
   },
   {
+    "id": "127",
+    "lat": "40.785950",
+    "lng": "-73.963077",
     "EventName": "Office Hour",
     "Location": "Home",
     "Host": "Mike",
@@ -85,6 +103,9 @@ var invitations = [
     "Description": "sample invitation 1, some descriptions here..."
   },
   {
+    "id": "128",
+    "lat": "40.785950",
+    "lng": "-73.963077",
     "EventName": "Office Hour",
     "Location": "Home",
     "Host": "Sam",
@@ -111,41 +132,48 @@ $(function() {
         });
 
         $('#button-invitations').on('click', function() {
-            if (! $('#eventmap').is(':visible')) {
-              if (! $('#hidden-container').is(':visible')) {
-                console.log('not visible')
-                $('#shown-container').animate({
-                  width: '75%',
-                }).promise().done(function() {$('#hidden-container').toggle();});
-                $('#invitation-list').height($('table').css('height'));
-              } else {
-                console.log('visible')
-                $('#hidden-container').toggle();
-                $('#shown-container').animate({
-                  width: '100%',
-                });
-              }
-            }
+          if (! $('#right-container').is(':visible')) {
+            $('#left-container').animate({
+              width: '75%',
+            }).promise().done(function() {$('#right-container').toggle();});
+            console.log($('#left-container').height(), $('h2').height(), $('#left-container').height() - $('h2').height())
+            $('#invitation-list').height(table_height);
+            console.log($('#invitation-list'))
+          } else {
+            $('#right-container').toggle();
+            $('#left-container').animate({
+              width: '100%',
+            });
+            setTimeout(function(){
+                map.invalidateSize();
+            }, 500);
+          }
         });
 
         $('#button-calendar-map').on('click', function() {
-          $('#cal-container').toggle();
-          var map_container = $('#map-container');
-
-          map_container.toggle("fast", function() {
-            if (map_container.is(':visible')) {
-              map_container.css('height', '100%').css('width', '100%');
-              map_container.css('display', 'block');
-              $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-calendar-alt');
-              setTimeout(function(){
-                map.invalidateSize();
-              }, 0);
+            var map_container = $('#map-container');
+            if (!map_container.is(':visible')) {
+                $('#calendar-container').toggle();
+                map_container.toggle().promise().done(function(){
+                    map_container.animate({
+                        height: '100%'
+                    });
+                    setTimeout(function(){
+                        map.invalidateSize();
+                    }, 400);
+                });
+                // map_container.css('height', '100%').css('width', '100%');
+                $('#button-calendar-map').find('i').removeClass('fa-map-marked-alt').addClass('fa-calendar-alt');
             } else {
-              map_container.css('height', '0px').css('width', '0px');
-              map_container.css('display', 'none');
-              $('#button-calendar-map').find('i').removeClass('fa-calendar-alt').addClass('fa-map-marked-alt');
+                // map_container.css('height', '0px').css('width', '0px');
+                map_container.animate({
+                    height: 0
+                }).promise().done(function(){
+                    map_container.toggle();
+                    $('#calendar-container').toggle();
+                });
+                $('#button-calendar-map').find('i').removeClass('fa-calendar-alt').addClass('fa-map-marked-alt');
             }
-          });
         });
 
         $('#user-profile-id').text(user['id']);
@@ -228,7 +256,9 @@ $(function() {
         map.doubleClickZoom.disable(); 
         map.on("dblclick", function(e) {
             $('#add-event-modal').modal('show');
-        })
+        });
+
+        table_height = $('table').height();
     }());
 
     // map control widgets
@@ -334,30 +364,49 @@ $(function() {
         	$(this).closest('.modal').find('#save-event').css('display', 'inline');
         });
 
-        $('.location-autocomplete').geocomplete();
+        $('.location-autocomplete').geocomplete({
+        });
     }());
 
     // populate invitations
     (function(){
         for(var i=0; i<invitations.length; i++) {
-          var li = $("<li/>").attr('class', 'list-group-item').attr('id', '123')
+          var li = $("<li/>").attr('class', 'list-group-item').attr('id', invitations[i]['id'])
+                             .attr('lat', invitations[i]['lat']).attr('lng', invitations[i]['lng'])
                              .css('border', 'none').css('border-bottom', '2px solid #ddd').css('padding-top', '5px').css('padding-bottom', '5px')
                              .hover(function() {
                                 $(this).css('backgroundColor', '#ddd');
-                                var id = $(this).attr('id');
-                                var tmp = {
-                                    id: id,
-                                    title: "mouseover",
-                                    start: "2019-04-01",
-                                    end: "2019-04-20",
-                                    borderColor: "#ddd",
-                                    backgroundColor: "#ddd"
+                                if ($('#calendar-container').is(':visible')) {
+                                    var id = $(this).attr('id');
+                                    var tmp = {
+                                        id: id,
+                                        title: "mouseover",
+                                        start: "2019-04-01",
+                                        end: "2019-04-20",
+                                        borderColor: "#ddd",
+                                        backgroundColor: "#ddd"
+                                    }
+                                    $('#calendar').fullCalendar('renderEvent', tmp);
                                 }
-                                $('#calendar').fullCalendar('renderEvent', tmp);
+                                if ($('#map-container').is(':visible')) {
+                                    shadow_marker = L.marker([parseFloat($(this).attr('lat')), parseFloat($(this).attr('lng'))], {
+                                        "icon": L.ExtraMarkers.icon({
+                                            icon: 'fa-plus',
+                                            prefix: 'fa',
+                                            markerColor: 'green'
+                                        })
+                                    });
+                                    shadow_marker.addTo(map);
+                                }
                              }, function() {
                                 $(this).css('backgroundColor', '#fff');
                                 var id = $(this).attr('id');
-                                $('#calendar').fullCalendar('refetchEvents');
+                                if ($('#calendar-container').is(':visible')) {
+                                    $('#calendar').fullCalendar('refetchEvents');
+                                }
+                                if ($('#map-container').is(':visible')) {
+                                    map.removeLayer(shadow_marker);
+                                }
                              });
           var container = $('<div/>').attr('class', 'card').append(
                 $('<div/>').attr('class', 'row card-body').append(

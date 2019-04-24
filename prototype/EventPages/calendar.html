@@ -51,7 +51,7 @@
             <div class="popover-content hide" style="padding: 5px">
               <div class="card" style="width: 300px; padding: 5px;">
                 <div class="row">
-                  <img class="col-sm-2" src="./img/zhenzhang.png" style="margin: 0px; padding: 0px 0px 0px 10px"/>
+                  <img class="col-sm-2" src="./img/zhenzhang.png" style="margin: 0px; padding: 0px"/>
                   <div class="col-sm-10">
                     <h4 id="user-profile-id" style="margin-top: 0px;">Placeholder</h4> 
                     <p id="user-profile-email">Placeholder</p>
@@ -75,35 +75,32 @@
     </nav>
   </header>
 
-  <div id='cal-container'>
-    <div class="row">
-      <div class="col-sm-12" id='shown-container'>
-        <div id='calendar-container'>
-          <div id='calendar'></div>
-          <div id='datepicker'></div>
-        </div>
+  <div class="row" id="main-container" style="width: 100%; height: 100%; position: relative;">
+    <div class="col-sm-12" id='left-container' style="width: 100%; height: 100%; padding: 0px;">
+      <div id='calendar-container'>
+        <div id='calendar'></div>
+        <div id='datepicker'></div>
       </div>
-      <div class="col-sm-3" id='hidden-container'>
-        <div id='notification-container'>
-          <h2 id="notification-title"> Invitations </h2>
-          <ul id="invitation-list" style='overflow-y: scroll; padding-left:0px;'/>
-        </div>
+      <div id="map-container" style="position: relative; display: none;">
+        <form class="form-inline" id="event-map-controls">
+          <div class="form-check form-check-inline">
+            <div class="input-group" style="margin: 0px 10px 0px 0px;">
+              <input class="form-control location-autocomplete" type="text" id="map-location" placeholder="Location:" />
+              <span class="input-group-addon" role="button" style="width: auto;"><i class="fas fa-search"></i></span>
+            </div>
+            <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
+            <input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
+          </div>
+        </form>
+        <div id="eventmap"></div>
       </div>
     </div>
-  </div>
-
-  <div id="map-container" style="display:none;">
-    <form class="form-inline" id="event-map-controls" style="padding:10px; margin:0px;">
-      <div class="form-check form-check-inline">
-        <div class="input-group" style="margin: 0px 10px 0px 0px;">
-          <input class="form-control location-autocomplete" type="text" id="map-location" placeholder="Location:" />
-          <span class="input-group-addon" role="button" style="width: auto;"><i class="fas fa-search"></i></span>
-        </div>
-        <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
-        <input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
+    <div class="col-sm-3" id='right-container' style="display:none; padding-right: 0px;">
+      <div id='notification-container'>
+        <h2 id="notification-title"> Invitations </h2>
+        <ul id="invitation-list" style='overflow-y: scroll; padding-left:0px;'> </ul>
       </div>
-    </form>
-    <div id="eventmap"></div>
+    </div>
   </div>
 
   <div class="modal fade" id="add-event-modal" tabindex="-1" role="dialog" data-backdrop='static'>

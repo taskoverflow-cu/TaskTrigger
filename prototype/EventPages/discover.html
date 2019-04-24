@@ -61,55 +61,57 @@
     </nav>
   </header>
 
-<div id='discover-container'>
-    <form class="form-inline" id="item-list-controls" style="padding:10px; margin:0px;">
-	    <div class="form-check form-check-inline row">
-    		<div class='col-sm-9' style="padding:0;">
-	    	    <input class="input-left form-control" type="text" id="item-list-event-name" placeholder="Event name:" style="width:18%;"/>
-	    	    <input class="input-left form-control map-datepicker" type="text" name="starts_at" id="item-list-starts-at" placeholder="Starts at:" style="width:22%;"/>
-	        	<input class="input-left form-control map-datepicker" type="text" name="ends_at" id="item-list-ends-at" placeholder="Ends at:" style="width:22%;"/>
-	    	    <div class="input-group" style="width:30%;">
-	    	    	<input class="form-control" type="text" id="item-list-location" placeholder="Location:" />
-				    <span class="input-group-addon" role="button"><i class="fas fa-search"></i></span>
-	    	    </div>
+<div style="width: 100%; height: 100%; position: relative;">
+  <div id='discover-container'>
+      <form class="form-inline" id="item-list-controls" style="padding:10px; margin:0px;">
+  	    <div class="form-check form-check-inline row">
+      		<div class='col-sm-9' style="padding:0;">
+  	    	    <input class="input-left form-control" type="text" id="item-list-event-name" placeholder="Event name:" style="width:18%;"/>
+  	    	    <input class="input-left form-control map-datepicker" type="text" name="starts_at" id="item-list-starts-at" placeholder="Starts at:" style="width:22%;"/>
+  	        	<input class="input-left form-control map-datepicker" type="text" name="ends_at" id="item-list-ends-at" placeholder="Ends at:" style="width:22%;"/>
+  	    	    <div class="input-group" style="width:30%;">
+  	    	    	<input class="form-control" type="text" id="item-list-location" placeholder="Location:" />
+  				    <span class="input-group-addon" role="button"><i class="fas fa-search"></i></span>
+  	    	    </div>
+          	</div>
+          	<div class="col-sm-3" style="padding:0;">
+  		        <a type="button" class="col-sm-3 button-right map-ckbx btn btn-primary active" id="item-list-private-ckbx">Private</a>
+  		        <a type="button" class="col-sm-3 button-right map-ckbx btn btn-primary active" id="item-list-friend-ckbx">Friend</a>
+  		        <a type="button" class="col-sm-3 button-right map-ckbx btn btn-primary active" id="item-list-public-ckbx">Public</a>
+  	        </div>
         	</div>
-        	<div class="col-sm-3" style="padding:0;">
-		        <a type="button" class="col-sm-3 button-right map-ckbx btn btn-primary active" id="item-list-private-ckbx">Private</a>
-		        <a type="button" class="col-sm-3 button-right map-ckbx btn btn-primary active" id="item-list-friend-ckbx">Friend</a>
-		        <a type="button" class="col-sm-3 button-right map-ckbx btn btn-primary active" id="item-list-public-ckbx">Public</a>
-	        </div>
-      	</div>
-    </form>
-	<div id='list-container'>
-		<ul id="event-list" class='main-list' style='padding-left:0px;'></ul>
-	</div>
-	<div class="text-center">
-	  <nav class="p-2" aria-label="...">
-	    <ul class="pagination">
-	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-	      <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
-	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
-		</ul>
-	  </nav>
-	</div>
-</div>
+      </form>
+  	<div id='list-container'>
+  		<ul id="event-list" class='main-list' style='padding-left:0px;'></ul>
+  	</div>
+  	<div class="text-center">
+  	  <nav class="p-2" aria-label="...">
+  	    <ul class="pagination">
+  	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
+  	      <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
+  	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
+  		</ul>
+  	  </nav>
+  	</div>
+  </div>
 
-<div id="map-container" style="display:none;">
-    <form class="form-inline" id="event-map-controls" style="padding:10px; margin:0px;">
-	    <div class="form-check form-check-inline">
-    	    <div class="input-group" style="width:30%; margin-right: 10px;">
-    	    	<input class="form-control" type="text" id="map-location" placeholder="Location:" />
-			    <span class="input-group-addon" role="button"><i class="fas fa-search"></i></span>
-    	    </div>
-    	    <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px; width: 19%;"/>
-        	<input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;width: 19%;"/>
-	        <a type="button" class="map-ckbx btn btn-primary active" id="map-private-ckbx">Private</a>
-	        <a type="button" class="map-ckbx btn btn-primary active" id="map-friend-ckbx">Friend</a>
-	        <a type="button" class="map-ckbx btn btn-primary active" id="map-public-ckbx">Public</a>
-      	</div>
-    </form>
-	<div id="eventmap"></div>
-<div>
+  <div id="map-container" style="display:none; position: relative;">
+      <form class="form-inline" id="event-map-controls">
+  	    <div class="form-check form-check-inline">
+      	    <div class="input-group" style="width:30%; margin-right: 10px;">
+      	    	<input class="form-control" type="text" id="map-location" placeholder="Location:" />
+  			    <span class="input-group-addon" role="button"><i class="fas fa-search"></i></span>
+      	    </div>
+      	    <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px; width: 19%;"/>
+          	<input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;width: 19%;"/>
+  	        <a type="button" class="map-ckbx btn btn-primary active" id="map-private-ckbx">Private</a>
+  	        <a type="button" class="map-ckbx btn btn-primary active" id="map-friend-ckbx">Friend</a>
+  	        <a type="button" class="map-ckbx btn btn-primary active" id="map-public-ckbx">Public</a>
+        	</div>
+      </form>
+  	<div id="eventmap"></div>
+  <div>
+</div>
 
 </body>
 
