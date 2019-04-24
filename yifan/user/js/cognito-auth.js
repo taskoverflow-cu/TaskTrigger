@@ -8,12 +8,9 @@
     let globalUserPoolClientAppId = window.appconfig.cognito.userPoolClientId;
     let globalIdentityPoolId = window.appconfig.cognito.identityPool;
     let globalRegion = window.appconfig.cognito.region;
-    let globalLF0ApiUrl = window.appconfig.api.LF0URL;
-    let globalLF0Method = appconfig.api.LF0Method1;
-
     if (!(globalUserPoolId &&
         globalUserPoolClientAppId &&
-        globalRegion && globalIdentityPoolId && globalLF0ApiUrl && globalLF0Method)) {
+        globalRegion && globalIdentityPoolId)) {
         console.log("not enough global config!");
         return;
     }
