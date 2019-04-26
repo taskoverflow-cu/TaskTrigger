@@ -30,4 +30,4 @@
    ```
 5. 该post authentication lambda的返回值和上面格式一样，所以可以直接`return event`
 
-jerry login: http: //235239962467.signin.aws.amazon.com/console 
+jerry login: http://235239962467.signin.aws.amazon.com/console 
