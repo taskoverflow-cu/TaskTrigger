@@ -245,6 +245,7 @@ definitions:
         type: string
       coordinate:
         type: string
+        example: "123.24,15.22"
       description:
         type: string
       visibility:
@@ -293,6 +294,7 @@ definitions:
         type: string
       coordinate:
         type: string
+        example: "123.24,15.22"
       radius:
         type: integer
       event_name:
