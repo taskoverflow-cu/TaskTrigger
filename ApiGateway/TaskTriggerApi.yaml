@@ -13,7 +13,7 @@ paths:
     get:
       summary: The endpoint for searching events in discover.
       description: |
-        This API takes in one meassage from client and return a list of events
+        This API takes in one meassage from client and return a list of events.
       tags:
         - discover
       operationId: discoverSearchEvent
@@ -25,9 +25,10 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DiscoverSearchRequest'
+          description: For visibility, 1 for private, 2 for friend only, 4 for public. One visibility each time when sending search request! Eg, don’t mix public and private! This tortunes the backend
       responses:
         '200':
-          description: A Discover response
+          description: For state, 0 for not in, not full; 1 for already in; 2 full not in
           schema:
             $ref: '#/definitions/DiscoverSearchResponse'
         '403':
@@ -115,9 +116,10 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/DiscoverSearchRequest'
+          description: For visibility, 1 for private, 2 for friend only, 4 for public. One visibility each time when sending search request! Eg, don’t mix public and private! This tortunes the backend
       responses:
         '200':
-          description: A Discover response
+          description: For state, 0 for not in, not full; 1 for already in; 2 full not in
           schema:
             $ref: '#/definitions/DiscoverSearchResponse'
         '403':
@@ -339,7 +341,9 @@ definitions:
   DiscoverEventResponseMessage:
     type: object
     properties:
-      response:
+      success:
+        type: integer
+      info:
         type: string
 
 

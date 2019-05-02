@@ -45,7 +45,8 @@ def lambda_handler(event, context):
                 }
             print (the_event)
             if not the_event or the_event[0]['state'] == 0:  # event nonexist or inactive
-                results.append({"response": "success|invalid event"})
+                #results.append({"response": "success|invalid event"})
+                results.append({"success": 1, "info": "invalid event"})
             elif int(message["user_id"]) == the_event[0]["creator_id"]:  # creator removes event. Delete the event
                 #delete the event
                 delete_qry =  "UPDATE Event "
@@ -67,9 +68,11 @@ def lambda_handler(event, context):
                         "message": "LF_RemoveEvent: Fail to delete!"
                     }
                 # TODO: Delete the event from ES!
-                results.append({"response": "success|deleted"})
+                #results.append({"response": "success|deleted"})
+                results.append({"success": 1, "info": "deleted"})
             else: #simple remove
-                results.append({"response": "success|removed"})
+                #results.append({"response": "success|removed"})
+                results.append({"success": 1, "info": "removed"})
 
             # Try to delete participation anyway
             quit_qry = "UPDATE ParticipateEvent "

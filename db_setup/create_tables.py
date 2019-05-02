@@ -117,7 +117,8 @@ with conn.cursor() as cur:
     command = "CREATE TABLE ParticipateEvent(\
         participate_event_id integer primary key auto_increment,\
         participant_id integer not null,\
-        event_id integer not null\
+        event_id integer not null,\
+        state integer not null\
     )"
     try:
         cur.execute(command)

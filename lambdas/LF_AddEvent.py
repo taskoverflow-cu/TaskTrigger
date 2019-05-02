@@ -41,9 +41,9 @@ def lambda_handler(event, context):
 
         with conn.cursor() as cur:
             try:
-                cur.execute(qry) #get all participants
+                cur.execute(qry)  # get all participants
                 rows = cur.fetchall()
-                cur.execute(event_qry) # get the event info
+                cur.execute(event_qry)  # get the event info
                 the_event = cur.fetchall()
             except Exception as e:
                 print(e)
@@ -52,19 +52,22 @@ def lambda_handler(event, context):
                     "code": 500,
                     "message": "LF_AddEvent: Fail to execute query!"
                 }
-            print (the_event)
+            print(the_event)
             if not the_event or the_event[0]['state'] == 0:  # event nonexist or inactive
-                results.append({"response": "fail|invalid event"})
+                # results.append({"response": "fail|invalid event"})
+                results.append({"success": 0, "info": "invalid event"})
                 conn.commit()
                 continue
 
             capacity = the_event[0]['capacity']
             if int(message["user_id"]) in map(lambda t: t['participant_id'], rows):  # user is already in
-                results.append({"response": "success|already in"})
+                # results.append({"response": "success|already in"})
+                results.append({"success": 1, "info": "already in"})
             elif len(rows) >= capacity:  # event full
-                results.append({"response": "fail|full"})
+                # results.append({"response": "fail|full"})
+                results.append({"success": 0, "info": "full"})
             else:  # add him to event
-                add_req  = "INSERT INTO "
+                add_req = "INSERT INTO "
                 add_req += "ParticipateEvent(participant_id, event_id, state) "
                 add_req += "VALUES ({},{},1);".format(message["user_id"], message["event_id"])
 
@@ -78,12 +81,12 @@ def lambda_handler(event, context):
                         "message": "LF_AddEvent: Fail to execute insert!"
                     }
 
-                results.append({"response": "success|added"})
-
+                # results.append({"response": "success|added"})
+                results.append({"success": 1, "info": "added"})
         conn.commit()
 
     conn.close()
-    return results
+    return {"messages": results}
 
 event = {"messages":[{"user_id": 15, "event_id":1}]}
 event = {"messages":[{"user_id": 16, "event_id":2}]}
