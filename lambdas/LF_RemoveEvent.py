@@ -1,6 +1,25 @@
 import json
 from config import *
 import pymysql
+from elasticsearch import Elasticsearch
+
+def delete_from_ES(event_id):
+
+    es_host = "https://vpc-tasktrigger-domain-bmmm3cd2xeh4x3iex5aug35u3q.us-east-1.es.amazonaws.com"
+    es_port = 443
+
+    es = Elasticsearch([es_host+":"+str(es_port),])
+
+    doc = {
+      "query":{
+        "term":
+            {"event_id": event_id}
+      }
+    }
+    es.delete_by_query(index='events',
+                       doc_type='Event',
+                       body= doc )
+    print("Event: {} deleted from ES".format(event_id))
 
 def lambda_handler(event, context):
     # TODO implement
@@ -44,6 +63,7 @@ def lambda_handler(event, context):
                     "message": "LF_RemoveEvent: Fail to execute event query!"
                 }
             print (the_event)
+            #print (message["user_id"])
             if not the_event or the_event[0]['state'] == 0:  # event nonexist or inactive
                 #results.append({"response": "success|invalid event"})
                 results.append({"success": 1, "info": "invalid event"})
@@ -67,7 +87,8 @@ def lambda_handler(event, context):
                         "code": 500,
                         "message": "LF_RemoveEvent: Fail to delete!"
                     }
-                # TODO: Delete the event from ES!
+                # Delete the event from ES!
+                delete_from_ES(int(message["event_id"]))
                 #results.append({"response": "success|deleted"})
                 results.append({"success": 1, "info": "deleted"})
             else: #simple remove
