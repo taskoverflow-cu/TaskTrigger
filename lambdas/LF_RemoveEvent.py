@@ -7,7 +7,6 @@ def delete_from_ES(event_id):
 
     es_host = "https://vpc-tasktrigger-domain-bmmm3cd2xeh4x3iex5aug35u3q.us-east-1.es.amazonaws.com"
     es_port = 443
-
     es = Elasticsearch([es_host+":"+str(es_port),])
 
     doc = {

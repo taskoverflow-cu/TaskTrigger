@@ -5,8 +5,8 @@ from elasticsearch import Elasticsearch#, RequestsHttpConnection
 the_event = { "visibility": 4,
             "event_id":     6,
             "creator_id":   15,
-            "start_time":   1234567890,
-            "end_time":     9876543333,
+            "start_time":   1234567890000, # epoch in milliseconds!
+            "end_time":     9876543333000,
             "coordinate":   "41.12,-71.34",
             "event_name":   "Java Night",
             "description":  "Come and play with java programming!"
