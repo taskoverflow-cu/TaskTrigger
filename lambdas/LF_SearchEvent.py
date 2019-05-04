@@ -6,14 +6,16 @@ import re
 
 DEFAULT_GEO_RADIUS = "3km"
 
+
 def parse_words(s):
     tmp = ""
     for char in s:
-        if char in [ ';' , ',' , '.' ]:
+        if char in [';', ',', '.']:
             tmp += " "
         else:
             tmp += char
     return " ".join(tmp.split())
+
 
 def build_must_query(message):
     must_q = []
@@ -34,25 +36,26 @@ def build_must_query(message):
 
     return must_q
 
+
 def build_should_query(message):
     should_q = []
     if "coordinate" in message:
-        radius = str(message['radius'])+"km" if 'radius' in message else DEFAULT_GEO_RADIUS
-        coordinate  = message["coordinate"] # assume format: "123,-12"
+        radius = str(message['radius']) + "km" if 'radius' in message else DEFAULT_GEO_RADIUS
+        coordinate = message["coordinate"]  # assume format: "123,-12"
         should_q.append(
-        {
-            "geo_distance": {
-                "distance": radius,
-                "coordinate": coordinate
+            {
+                "geo_distance": {
+                    "distance": radius,
+                    "coordinate": coordinate
+                }
             }
-        }
         )
     if "event_name" in message:
         qstring = parse_words(message['event_name'])
         should_q.append(
             {
                 "match": {
-                    "event_name": qstring # default operator is or
+                    "event_name": qstring  # default operator is or
                 }
             }
         )
@@ -60,31 +63,34 @@ def build_should_query(message):
         qstring = parse_words(message['event_keywords'])
         should_q.append(
             {
-                "multi_match" : {
-                  "query":    qstring,
-                  "fields": [ "event_name", "description" ],
-                  "type": "most_fields" # consider "cross_fields"
+                "multi_match": {
+                    "query": qstring,
+                    "fields": ["event_name", "description"],
+                    "type": "most_fields"  # consider "cross_fields"
                 }
             }
         )
 
     return should_q
 
+
 def build_query(filter_q, must_q, should_q, limit, offset):
-    return {
+    query = {
         "from": offset, "size": limit,
-        "query":{
-            "bool":{
+        "query": {
+            "bool": {
                 "filter": filter_q,
-                "must"  : must_q,
+                "must": must_q,
                 "should": should_q
             }
         }
     }
+    # print (query)
+    return query
+
 
 def get_friends_id(user_id, conn):
-
-    sql_q =  "SELECT DISTINCT user_id2 "
+    sql_q = "SELECT DISTINCT user_id2 "
     sql_q += "FROM Friend "
     sql_q += "WHERE user_id1 = {} AND state = 1;".format(user_id)
     with conn.cursor() as cur:
@@ -97,18 +103,19 @@ def get_friends_id(user_id, conn):
             exit()
         conn.commit()
 
-    friends_id = list( map(lambda t: t['user_id2'], rows) )
+    friends_id = list(map(lambda t: t['user_id2'], rows))
 
     return friends_id
 
 
-
-def get_events_sql(event_id_list, conn): #[1,2,3,4]
+def get_events_sql(event_id_list, conn):  # [1,2,3,4]
 
     # Perhaps needless to check event state? ES only keeps active events.
-    sql_q =  "SELECT * "
+    sql_q = "SELECT * "
     sql_q += "FROM Event "
     sql_q += "WHERE event_id in {} AND state = 1;".format(str(tuple(event_id_list)))
+    # print (sql_q)
+
     with conn.cursor() as cur:
         try:
             cur.execute(sql_q)  # get events
@@ -120,9 +127,11 @@ def get_events_sql(event_id_list, conn): #[1,2,3,4]
         conn.commit()
     return rows
 
-def handle_es_res(es_res, conn):
 
+def handle_es_res(es_res, conn):
     event_id_list = list(map(lambda t: int(t['_source']['event_id']), es_res['hits']['hits']))
+    if not event_id_list:
+        return []
     events = get_events_sql(event_id_list, conn)
 
     # sort the events according to the ES order
@@ -135,15 +144,15 @@ def handle_es_res(es_res, conn):
 
     return events
 
-def get_private_events(message, conn, es):
 
+def get_private_events(message, conn, es):
     limit = int(message["limit"])
     offset = int(message['offset'])
     filter_q = [
-            { "term" : { "visibility" : 1 } },
-            { "term" : { "creator_id" : int(message["user_id"]) } }
+        {"term": {"visibility": 1}},
+        {"term": {"creator_id": int(message["user_id"])}}
     ]
-    must_q   = build_must_query(message)
+    must_q = build_must_query(message)
     should_q = build_should_query(message)
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
@@ -153,19 +162,18 @@ def get_private_events(message, conn, es):
     return events
 
 
-
 def get_friendonly_events(message, conn, es):
-    #Get friendlist and then use terms
-    #Nested query: https://www.elastic.co/guide/en/elasticsearch/guide/current/combining-filters.html
+    # Get friendlist and then use terms
+    # Nested query: https://www.elastic.co/guide/en/elasticsearch/guide/current/combining-filters.html
     limit = int(message["limit"])
     offset = int(message['offset'])
-    friends_id = get_friends_id( int(message["user_id"]), conn)
+    friends_id = get_friends_id(int(message["user_id"]), conn)
     if not friends_id:
         return []
 
     filter_q = [
-        {"term" : { "visibility": 2 } },
-        {"terms": { "creator_id": friends_id } }
+        {"term": {"visibility": 2}},
+        {"terms": {"creator_id": friends_id}}
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
@@ -178,7 +186,6 @@ def get_friendonly_events(message, conn, es):
 
 
 def get_public_events(message, conn, es):
-
     limit = int(message["limit"])
     offset = int(message['offset'])
 
@@ -195,7 +202,6 @@ def get_public_events(message, conn, es):
     return events
 
 
-
 def lambda_handler(event, context):
     messages = event['messages']
 
@@ -209,8 +215,6 @@ def lambda_handler(event, context):
                                cursorclass=pymysql.cursors.DictCursor,
                                connect_timeout=5)
 
-        es_host = "https://vpc-tasktrigger-domain-bmmm3cd2xeh4x3iex5aug35u3q.us-east-1.es.amazonaws.com"
-        es_port = 443
         es = Elasticsearch([es_host + ":" + str(es_port), ])
     except Exception as e:
         print(e)
@@ -225,19 +229,19 @@ def lambda_handler(event, context):
         cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;")
 
     for message in messages:
-        if   int(message['visibility']) == 1: # return private events
+        if int(message['visibility']) == 1:  # return private events
             events = get_private_events(message, conn, es)
-        elif int(message['visibility']) == 2: # return friends' friend-only events
+        elif int(message['visibility']) == 2:  # return friends' friend-only events
             events = get_friendonly_events(message, conn, es)
-        elif int(message['visibility']) == 4: # return public events
+        elif int(message['visibility']) == 4:  # return public events
             events = get_public_events(message, conn, es)
-        else: # invalid message
+        else:  # invalid message
             return {
-              "code": 500,
-              "message": "LF_SearchEvent: Invalid Visibility!"
+                "code": 500,
+                "message": "LF_SearchEvent: Invalid Visibility!"
             }
 
         results.append({"user_id": int(message['user_id']),
-                         "events": events })
+                        "events": events})
 
     return {"messages": results}
