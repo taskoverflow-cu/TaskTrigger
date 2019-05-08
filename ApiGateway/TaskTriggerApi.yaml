@@ -238,9 +238,11 @@ definitions:
       start_time:
         type: string
         format: datetime
+        example: "12345678.123"
       end_time:
         type: string
         format: datetime
+        example: "14345678.123"
       location:
         type: string
       coordinate:
@@ -286,9 +288,11 @@ definitions:
         type: integer
       time_leftbound:
         type: string
+        example: "10345678.123"
         format: datetime
       time_rightbound:
         type: string
+        example: "12345678.123"
         format: datetime
       event_location:
         type: string
