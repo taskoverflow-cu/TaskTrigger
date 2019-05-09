@@ -245,9 +245,12 @@ definitions:
         example: "14345678.123"
       location:
         type: string
-      coordinate:
+      longitude:
         type: string
-        example: "123.24,15.22"
+        example: "23.23"
+      latitude:
+        type: string
+        example: "-41.75"
       description:
         type: string
       visibility:
@@ -296,9 +299,12 @@ definitions:
         format: datetime
       event_location:
         type: string
-      coordinate:
+      longitude:
         type: string
-        example: "123.24,15.22"
+        example: "23.23"
+      latitude:
+        type: string
+        example: "-41.75"
       radius:
         type: integer
       event_name:
