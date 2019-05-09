@@ -37,14 +37,14 @@ var private_mark_whole_list;
 var private_mark_list;
 var private_mark_group;
 
-var events = [
-  {
-    id: "1",
-    title: "event1",
-    start: "2019-03-01",
-    end: "2019-03-20",
-  }
-]
+// var events = [
+//   {
+//     id: "1",
+//     title: "event1",
+//     start: "2019-03-01",
+//     end: "2019-03-20",
+//   }
+// ]
 
 var invitations = [
   {
@@ -196,69 +196,79 @@ $(function() {
 
     // calendar 
     (function() {
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            defaultDate: format_date(new Date()),
-            navLinks: true, // can click day/week names to navigate views
-            selectable: true,
-            selectHelper: true,
-            events: events,
-            select: function(start, end) {
-                // Display the modal.
-                // You could fill in the start and end fields based on the parameters
-                $('#add-event-modal').modal('show');
-            },
-            eventClick: function(event, element) {
-                // Display the modal and set the values to the event values.
-                $('#view-event-modal').modal('show');
-                $('#view-event-modal').find('#title').val(event.title);
-                $('#view-event-modal').find('#starts-at').val(event.start);
-                $('#view-event-modal').find('#ends-at').val(event.end);
-                $('#view-event-modal').find('#location').val(event.location);
-                $('#view-event-modal').find('#description').val(event.description);
-                $('#view-event-modal').find('#participants').val(event.participants);
-            },
-            editable: true,
-            eventLimit: "more", // allow "more" link when too many events
-            height: $(window).height()*0.8
-        });
+        apigClient.search_calendar({
+            // TODO: params
+        }, {}).then(function(response) {
+            var events = response[]
 
-        private_mark_whole_list = [];
-        for(var i=0; i<private_mark_data.length; i++) {
-            var cur_marker = L.ExtraMarkers.icon({
-                icon: 'fa-number',
-                number: i+1,
-                markerColor: 'blue'
-            })
-            var cur_marker = L.marker(private_mark_data[i]['location'], {"icon": cur_marker}).bindPopup(
-                L.popup().setContent(make_popup_content(private_mark_data[i]['content']))
-            );
-            private_mark_whole_list.push(cur_marker)
-        }
-        private_mark_list = private_mark_whole_list.slice(0);
-        private_mark_group = L.layerGroup(private_mark_list);
-
-        var base_layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultDate: format_date(new Date()),
+                navLinks: true, // can click day/week names to navigate views
+                selectable: true,
+                selectHelper: true,
+                events: events,
+                select: function(start, end) {
+                    // Display the modal.
+                    // You could fill in the start and end fields based on the parameters
+                    $('#add-event-modal').modal('show');
+                },
+                eventClick: function(event, element) {
+                    // Display the modal and set the values to the event values.
+                    $('#view-event-modal').modal('show');
+                    $('#view-event-modal').find('#title').val(event.title);
+                    $('#view-event-modal').find('#starts-at').val(event.start);
+                    $('#view-event-modal').find('#ends-at').val(event.end);
+                    $('#view-event-modal').find('#location').val(event.location);
+                    $('#view-event-modal').find('#description').val(event.description);
+                    $('#view-event-modal').find('#participants').val(event.participants);
+                },
+                editable: true,
+                eventLimit: "more", // allow "more" link when too many events
+                height: $(window).height()*0.8
             });
-        map = L.map('eventmap', {
-            center: [init_x, init_y], 
-            zoom: scale,
-            layers: [
-                base_layer,
-                private_mark_group
-            ]
-        });
-        map.doubleClickZoom.disable(); 
-        map.on("dblclick", function(e) {
-            $('#add-event-modal').modal('show');
         });
 
-        table_height = $('table').height();
+        apigClient.search_map({
+            // TODO: params
+        }, {}).then(function(response) {
+            private_mark_whole_list = [];
+            for(var i=0; i<private_mark_data.length; i++) {
+                var cur_marker = L.ExtraMarkers.icon({
+                    icon: 'fa-number',
+                    number: i+1,
+                    markerColor: 'blue'
+                })
+                var cur_marker = L.marker(private_mark_data[i]['location'], {"icon": cur_marker}).bindPopup(
+                    L.popup().setContent(make_popup_content(private_mark_data[i]['content']))
+                );
+                private_mark_whole_list.push(cur_marker)
+            }
+            private_mark_list = private_mark_whole_list.slice(0);
+            private_mark_group = L.layerGroup(private_mark_list);
+
+            var base_layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                });
+            map = L.map('eventmap', {
+                center: [init_x, init_y], 
+                zoom: scale,
+                layers: [
+                    base_layer,
+                    private_mark_group
+                ]
+            });
+            map.doubleClickZoom.disable(); 
+            map.on("dblclick", function(e) {
+                $('#add-event-modal').modal('show');
+            });
+
+            table_height = $('table').height(); 
+        });
     }());
 
     // map control widgets
@@ -375,91 +385,96 @@ $(function() {
 
     // populate invitations
     (function(){
-        for(var i=0; i<invitations.length; i++) {
-          var li = $("<li/>").attr('class', 'list-group-item').attr('id', invitations[i]['id'])
-                             .attr('lat', invitations[i]['lat']).attr('lng', invitations[i]['lng'])
-                             .css('border', 'none').css('border-bottom', '2px solid #ddd').css('padding-top', '5px').css('padding-bottom', '5px')
-                             .hover(function() {
-                                $(this).css('backgroundColor', '#ddd');
-                                if ($('#calendar-container').is(':visible')) {
-                                    var id = $(this).attr('id');
-                                    var tmp = {
-                                        id: id,
-                                        title: "mouseover",
-                                        start: "2019-04-01",
-                                        end: "2019-04-20",
-                                        borderColor: "#ddd",
-                                        backgroundColor: "#ddd"
+        apigClient.get_invitations({
+                // params
+        }, {}).then(function(response) {
+            var invitations = respons[];
+            for(var i=0; i<invitations.length; i++) {
+                var li = $("<li/>").attr('class', 'list-group-item').attr('id', invitations[i]['id'])
+                                 .attr('lat', invitations[i]['lat']).attr('lng', invitations[i]['lng'])
+                                 .css('border', 'none').css('border-bottom', '2px solid #ddd').css('padding-top', '5px').css('padding-bottom', '5px')
+                                 .hover(function() {
+                                    $(this).css('backgroundColor', '#ddd');
+                                    if ($('#calendar-container').is(':visible')) {
+                                        var id = $(this).attr('id');
+                                        var tmp = {
+                                            id: id,
+                                            title: "mouseover",
+                                            start: "2019-04-01",
+                                            end: "2019-04-20",
+                                            borderColor: "#ddd",
+                                            backgroundColor: "#ddd"
+                                        }
+                                        $('#calendar').fullCalendar('renderEvent', tmp);
                                     }
-                                    $('#calendar').fullCalendar('renderEvent', tmp);
-                                }
-                                if ($('#map-container').is(':visible')) {
-                                    shadow_marker = L.marker([parseFloat($(this).attr('lat')), parseFloat($(this).attr('lng'))], {
-                                        "icon": L.ExtraMarkers.icon({
-                                            icon: 'fa-plus',
-                                            prefix: 'fa',
-                                            markerColor: 'green'
-                                        })
-                                    });
-                                    shadow_marker.addTo(map);
-                                }
-                             }, function() {
-                                $(this).css('backgroundColor', '#fff');
-                                var id = $(this).attr('id');
-                                if ($('#calendar-container').is(':visible')) {
-                                    $('#calendar').fullCalendar('refetchEvents');
-                                }
-                                if ($('#map-container').is(':visible')) {
-                                    map.removeLayer(shadow_marker);
-                                }
-                             });
-          var container = $('<div/>').attr('class', 'card').append(
-                $('<div/>').attr('class', 'row card-body').append(
-                    $('<img/>').attr('class', 'col-sm-4').attr('src', './img/zhenzhang.png').css('padding', '5px 5px 5px 10px')
-                ).append(
-                    $('<div />').attr('class', 'col-sm-6').css('padding', '5px').append(
-                      $('<h5 />').attr('class', 'card-title').append(invitations[i]['EventName'])
+                                    if ($('#map-container').is(':visible')) {
+                                        shadow_marker = L.marker([parseFloat($(this).attr('lat')), parseFloat($(this).attr('lng'))], {
+                                            "icon": L.ExtraMarkers.icon({
+                                                icon: 'fa-plus',
+                                                prefix: 'fa',
+                                                markerColor: 'green'
+                                            })
+                                        });
+                                        shadow_marker.addTo(map);
+                                    }
+                                 }, function() {
+                                    $(this).css('backgroundColor', '#fff');
+                                    var id = $(this).attr('id');
+                                    if ($('#calendar-container').is(':visible')) {
+                                        $('#calendar').fullCalendar('refetchEvents');
+                                    }
+                                    if ($('#map-container').is(':visible')) {
+                                        map.removeLayer(shadow_marker);
+                                    }
+                                 });
+              var container = $('<div/>').attr('class', 'card').append(
+                    $('<div/>').attr('class', 'row card-body').append(
+                        $('<img/>').attr('class', 'col-sm-4').attr('src', './img/zhenzhang.png').css('padding', '5px 5px 5px 10px')
                     ).append(
-                      $('<h6 />').attr('class', 'card-subtitle mb-2 text-muted').append(invitations[i]['Host'])
+                        $('<div />').attr('class', 'col-sm-6').css('padding', '5px').append(
+                          $('<h5 />').attr('class', 'card-title').append(invitations[i]['EventName'])
+                        ).append(
+                          $('<h6 />').attr('class', 'card-subtitle mb-2 text-muted').append(invitations[i]['Host'])
+                        ).append(
+                          $('<h6 />').attr('class', 'card-subtitle mb-2 text-muted').append(invitations[i]['Location'])
+                        )
                     ).append(
-                      $('<h6 />').attr('class', 'card-subtitle mb-2 text-muted').append(invitations[i]['Location'])
+                        $('<div />').attr('class', 'col-sm-2').append(
+                          $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-more-btn').css('margin-top', '20px').css('margin-bottom', '0px')
+                                   .on('click', function(){
+                                       $('#view-event-modal').modal('show');
+                                       $('#view-event-modal input').attr("disabled","disabled");
+                                       $("#view-event-modal select").attr("disabled", "disabled");
+                                   }).append($('<i/>').attr('class', 'fas fa-ellipsis-h'))
+                        ).append(
+                          $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-accept-btn').css('margin', '0px')
+                                   .on('click', function() {
+                                       $(this).closest('li').animate({
+                                         margin: '0px',
+                                         padding: '0px',
+                                         height: '0px'
+                                       }, 500, function() {
+                                         $(this).remove();
+                                       });
+                          }).append($('<i/>').attr('class', 'fas fa-plus-square'))
+                        ).append(
+                          $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-ignore-btn').css('margin', '0px')
+                                   .on('click', function() {
+                                       $(this).closest('li').animate({
+                                         margin: '0px',
+                                         padding: '0px',
+                                         height: '0px'
+                                       }, 500, function() {
+                                         $(this).remove();
+                                       });
+                                       $('#calendar').fullCalendar('refetchEvents');
+                          }).append($('<i/>').attr('class', 'fas fa-minus-square'))
+                        )
                     )
-                ).append(
-                    $('<div />').attr('class', 'col-sm-2').append(
-                      $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-more-btn').css('margin-top', '20px').css('margin-bottom', '0px')
-                               .on('click', function(){
-                                   $('#view-event-modal').modal('show');
-                                   $('#view-event-modal input').attr("disabled","disabled");
-                                   $("#view-event-modal select").attr("disabled", "disabled");
-                               }).append($('<i/>').attr('class', 'fas fa-ellipsis-h'))
-                    ).append(
-                      $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-accept-btn').css('margin', '0px')
-                               .on('click', function() {
-                                   $(this).closest('li').animate({
-                                     margin: '0px',
-                                     padding: '0px',
-                                     height: '0px'
-                                   }, 500, function() {
-                                     $(this).remove();
-                                   });
-                      }).append($('<i/>').attr('class', 'fas fa-plus-square'))
-                    ).append(
-                      $('<a/>').attr('role', 'button').attr('class', 'button-right invitation-ignore-btn').css('margin', '0px')
-                               .on('click', function() {
-                                   $(this).closest('li').animate({
-                                     margin: '0px',
-                                     padding: '0px',
-                                     height: '0px'
-                                   }, 500, function() {
-                                     $(this).remove();
-                                   });
-                                   $('#calendar').fullCalendar('refetchEvents');
-                      }).append($('<i/>').attr('class', 'fas fa-minus-square'))
-                    )
-                )
-              ).appendTo(li);
-          $('#invitation-list').append(li);
-        };
+                  ).appendTo(li);
+              $('#invitation-list').append(li);
+            };
+        });
     }());
 });
 
