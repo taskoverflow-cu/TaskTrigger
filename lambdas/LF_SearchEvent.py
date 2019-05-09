@@ -39,9 +39,12 @@ def build_must_query(message):
 
 def build_should_query(message):
     should_q = []
-    if "coordinate" in message:
+    if "longitude" in message and "latitude" in message:
         radius = str(message['radius']) + "km" if 'radius' in message else DEFAULT_GEO_RADIUS
-        coordinate = message["coordinate"]  # assume format: "123,-12"
+        coordinate = {
+            "lat": float(message["latitude"]),
+            "lon": float(message["longitude"])
+        }
         should_q.append(
             {
                 "geo_distance": {
