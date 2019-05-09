@@ -2,6 +2,7 @@ import json
 from config import *
 import pymysql
 from elasticsearch import Elasticsearch
+import logging
 import re
 
 
@@ -66,8 +67,8 @@ def compute_remnant_intervals(min_start_time, max_end_time, intervals):
     return res
 
 
-def get_advice_no_conflict(message, conn, es):
-    participants_id = set(message["participants_id"])
+def get_advice_no_conflict(message, participants_id, conn, es):
+    participants_id = set(participants_id)
     participants_id.add(int(message["user_id"]))
 
     duration = int(float(message["duration"]))#in sec
@@ -90,12 +91,29 @@ def get_advice_no_conflict(message, conn, es):
     return ret
 
 
+def get_invalid_emails(message, logger, conn):
+    emails = message['participants_email']
+    # check whether email is valid
+    invalid_emails = []
+    participants_id = []
+    with conn.cursor() as cur:
+        for email in emails:
+            email_query = "SELECT user_id FROM User WHERE email={}".format("\'" + email + "\'")
+            logger.info(email_query)
+            cur.execute(email_query)
+            result = cur.fetchall()
+            if not result:
+                invalid_emails.append(email)
+            else:
+                participants_id.append(result[0]['user_id'])
 
-
+    return invalid_emails, participants_id
 
 def lambda_handler(event, context):
     messages = event['messages']
 
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
     # connect to RDS and ES
     try:
         conn = pymysql.connect(rds_host,
@@ -120,10 +138,21 @@ def lambda_handler(event, context):
         cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;")
 
     for message in messages:
-        res = get_advice_no_conflict(message, conn, es)
-        results.append({
-            "user_id": message["user_id"],
-            "recommendations": res
-        })
+        invalid_emails, participants_id = get_invalid_emails(message,logger,conn)
+        if len(invalid_emails)>0:
+            results.append({
+                'statusCode': 200,
+                'body': {
+                    'state': '-1',
+                    'message': 'invalid emails',
+                    'data': json.dumps(invalid_emails)
+                }
+            })
+        else:
+            res = get_advice_no_conflict(message,participants_id, conn, es)
+            results.append({
+                "user_id": int(message["user_id"]),
+                "recommendations": res
+            })
 
     return {"messages": results}
