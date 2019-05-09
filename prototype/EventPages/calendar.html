@@ -16,6 +16,7 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap-datetimepicker-4.17.42.css">
   <link rel="stylesheet" type="text/css" href="css/bootstrap-tagsinput-0.6.1.css">
   <link rel="stylesheet" href="css/leaflet.extra-markers-1.0.9.min.css">
+  <link rel="stylesheet" href="css/leaflet-gplaces-autocomplete.css">
 
   <link rel="stylesheet" type="text/css" href="./css/calendar.css">
 
@@ -29,6 +30,7 @@
   <script type="text/javascript" src="js/leaflet.extra-markers-1.0.9.min.js"></script>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg1Y94oiGjpuWv-7DxIJR1vn0W8j2cItA&libraries=places&language=en"></script>
   <script src="js/jquery.geocomplete-1.7.0.js"></script>
+  <script src="js/leaflet-gplaces-autocomplete.js"></script>
 
   <script type="text/javascript" src="js/calendar.js"></script>
   <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
@@ -40,11 +42,11 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div id="button-group">
         <div class="col-sm-4" style="padding: 0px;">
-          <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-friends" href="./friends.html">Friends</a>
+          <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-friends" href="./friends.html" style="margin-left: 0px;">Friends</a>
           <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./discover.html">Discover</a>
         </div>
         <div class="col-sm-8" style="padding: 0px;">
-            <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile" data-trigger="focus">
+            <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile" data-trigger="focus" style="margin-right: 0px;">
               <i class="fas fa-user"></i>
             </a>
             <div class="popover-title hide" style="width: 300px;">My Profile</div>
@@ -82,7 +84,7 @@
         <div id='datepicker'></div>
       </div>
       <div id="map-container" style="position: relative; display: none;">
-        <form class="form-inline" id="event-map-controls">
+        <!-- <form class="form-inline" id="event-map-controls">
           <div class="form-check form-check-inline">
             <div class="input-group" style="margin: 0px 10px 0px 0px;">
               <input class="form-control location-autocomplete" type="text" id="map-location" placeholder="Location:" />
@@ -91,7 +93,7 @@
             <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px;"/>
             <input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;"/>
           </div>
-        </form>
+        </form> -->
         <div id="eventmap"></div>
       </div>
     </div>

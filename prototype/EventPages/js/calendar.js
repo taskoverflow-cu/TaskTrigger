@@ -364,8 +364,13 @@ $(function() {
         	$(this).closest('.modal').find('#save-event').css('display', 'inline');
         });
 
-        $('.location-autocomplete').geocomplete({
-        });
+        new L.Control.GPlaceAutocomplete({
+            prepend: true,
+            callback: function(place){
+                var loc = place.geometry.location;
+                map.panTo([loc.lat(), loc.lng()]);
+            }
+        }).addTo(map);
     }());
 
     // populate invitations

@@ -14,12 +14,17 @@ html, body{
 }
 
 #button-group {
-  margin-left: 9%;
-  margin-right: 9%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 #buttons {
 	margin-bottom: 20px;
+}
+
+.no-left-right-margin {
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .input-left {
@@ -43,8 +48,8 @@ html, body{
 
 .button-right {
   float: right;
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-left: 1%;
   margin-right: 1%;
   margin-top: 5px;
