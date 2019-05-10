@@ -52,15 +52,15 @@
                 </div>
                 <div class="row username">
                     <div class="input-field col s12">
-                        <i class="material-icons prefix">person</i>
-                        <input id="uname-signin" type="text" class="validate">
-                        <label for="uname-signin">User Name</label>
+                        <i class="material-icons prefix">email</i>
+                        <input id="uname-signin" required type="email" class="validate">
+                        <label for="uname-signin">User Email</label>
                     </div>
                 </div>
                 <div class="row passwd">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">lock</i>
-                        <input id="pwd-signin" type="password">
+                        <input id="pwd-signin" required minlength="8" type="password">
                         <label for="pwd-signin">Password</label>
                     </div>
                 </div>
@@ -89,21 +89,21 @@
                 <div class="row username">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">person</i>
-                        <input id="uname-signup" type="text" class="validate">
+                        <input id="uname-signup" required  type="text" class="validate">
                         <label for="uname-signup">User Name</label>
                     </div>
                 </div>
                 <div class="row email">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">email</i>
-                        <input id="email-signup" type="email" class="validate">
+                        <input id="email-signup" required type="email" class="validate">
                         <label for="email-signup">Email</label>
                     </div>
                 </div>
                 <div class="row passwd">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">lock</i>
-                        <input id="pwd-signup" type="password" class="validate">
+                        <input id="pwd-signup" required minlength="8" type="password" class="validate">
                         <label for="pwd-signup">Password</label>
                     </div>
                 </div>
@@ -116,34 +116,7 @@
                 </div>
             </div>
         </div>
-        <!-- continue(before confirm) tab -->
-        <div class="row continue-tab">
-
-            <div class="col s10 push-s1 l6 push-l3">
-                <div class="row logo">
-                    <div class="col s12">
-                        <img src="img/logo.jpg" alt="Logo">
-                    </div>
-                </div>
-                <div class="row prompt">
-                    We have sent an email to <b class="confirm-email-placeholder">Your Email</b>. Please check your
-                    email, follow the instructions to
-                    verify your email address, and then click the button below to continue.
-                </div>
-                <div class="row continue">
-                    <a class="col s10 push-s1 waves-effect waves-light btn" id="btn-continue">Continue</a>
-                </div>
-                <div class="row resend-switch">
-                    Didn't receive a link?
-                    <a href="#" id="btn-resend">Resend it</a>
-
-                </div>
-            </div>
-        </div>
-        <!-- confirm code tab -->
-        <div class="row confirm-tab">
-            
-        </div>
+       
     </div>
 
     <script src="js/jquery-3.1.0.js"></script>
@@ -151,9 +124,11 @@
     <script src="js/aws-cognito-sdk.min.js"></script>
     <script src="js/amazon-cognito-identity.min.js"></script>
     <script src="js/config.js"></script>
-    <!-- <script src="js/cognito-auth.js"></script> -->
-    <!-- <script src="js/portal.js"></script> -->
-    <script src="js/p2.js"></script>
+    <script src="js/cognito-auth.js"></script>
+    <script src="js/user-auth.js"></script>
+    <script src="js/portal.js"></script>
+
+    <!-- <script src="js/p2.js"></script> -->
 </body>
 
 </html>

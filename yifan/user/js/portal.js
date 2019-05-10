@@ -1,3 +1,4 @@
+var SuccessSignInUrl = "portal.html";
 
 $(function () {
     // Materialize Initialization
@@ -25,12 +26,12 @@ $(function () {
 
     // Page Initialization
     (function (window) {
-        let loggedUser = getCurrentUser();
+        let loggedUser = userGetCurrentUser();
+
         if (loggedUser) {
             switchtab('keepuser');
             // change prompt
             $(".keepuser-tab .loggedin-user").text(loggedUser.username);
-
         }
         else {
             switchtab('signin');
@@ -47,7 +48,7 @@ $(function () {
 
     // triggers
     (function (window) {
-        var SuccessSignInUrl = "index.html";
+        
         // switch tab
         $(".signup-tab #to-signin").click(function () {
             $(".signin-tab").show().siblings(".signup-tab").hide();
@@ -62,28 +63,26 @@ $(function () {
         });
 
         $(".keepuser-tab  #resignin").click(function () {
-            signOut();
+            userSignOut();
             switchtab("signin");
         });
 
         $("#btn-signin").click(function (event) {
             // validate
-            let unameInput = $(".signin-tab #uname-signin");
-            let pwdInput = $(".signin-tab #pwd-signin");
-            if (unameInput.hasClass("invalid") || pwdInput.hasClass("invalid")) {
+            let loginEmail = $(".signin-tab #uname-signin");
+            let loginPwd = $(".signin-tab #pwd-signin");
+            if (loginEmail.hasClass("invalid") || loginPwd.hasClass("invalid")) {
                 return false;
             }
-            // signup
-            let uname = unameInput.val();
-            let pwd = pwdInput.val();
+            // signin
+            let email = loginEmail.val();
+            let pwd = loginPwd.val();
             event.preventDefault();
-            signIn(uname, pwd,
+            userSignIn(email, pwd,
                 (result) => {
-                    var accessToken = result.getAccessToken().getJwtToken();
-                    // result.user
+                    // var accessToken = result.getAccessToken().getJwtToken();
                     /* Use the idToken for Logins Map when Federating User Pools with identity pools or when passing through an Authorization Header to an API Gateway Authorizer*/
-                    var idToken = result.idToken.jwtToken;
-                    console.log(idToken);
+                    // var idToken = result.idToken.jwtToken;
                     window.location.href = SuccessSignInUrl;
                 },
                 (err) => {
@@ -98,56 +97,23 @@ $(function () {
             let emailInput = $(".signup-tab #email-signup");
             if (unameInput.hasClass("invalid") || pwdInput.hasClass("invalid")
                 || emailInput.hasClass("invalid")) {
-                // TODO more validate
                 return false;
             }
-
-            $("#btn-signup").attr("disabled", true);
             let email = emailInput.val();
             let uname = unameInput.val();
             let pwd = pwdInput.val();
-
             signUp(uname, pwd, email,
                 (result) => {
-                    // to-continue-tab
-                    switchtab('continue');
-                    $(".confirm-email-placeholder").text(email);
-                    $("#btn-signup").attr("disabled", false);
-                    // savestate
-                    localStorage.setItem("uname", uname);
-                    localStorage.setItem("pwd", pwd);
+                    console.log('Please finish signing up by confirming your email.');
+                    switchtab('signin');
                 },
                 (err) => {
-                    // TODO, better prompt
                     alert(err);
                 });
 
             return false;
         })
 
-        $("#btn-continue").click(function () {
-            // switchtab("confirm");
-            let uname = localStorage.getItem("uname");
-            let pwd = localStorage.getItem("pwd");
-            signIn(uname, pwd,
-                (result) => {
-                    localStorage.removeItem("uname");
-                    localStorage.removeItem("pwd");
-                    window.location.href = SuccessSignInUrl;
-                }, (err) => {
-                    //TODO better prompt
-                    alert('Not Confirmed');
-                });
-        });
 
-        $("#btn-resend").click(function () {
-            let uname = localStorage.getItem("uname");
-            resend_confirm(uname, function (err, result) {
-                if (!err) {
-                    //TODO better prompt
-                    alert('email has been resent.');
-                }
-            });
-        });
     }(window));
 });

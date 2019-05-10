@@ -1,7 +1,3 @@
-
-/*global WildRydes _config AmazonCognitoIdentity AWSCognito*/
-
-
 // get config
 (function scopeWrapper($, wnidow) {
     let globalUserPoolId = window.appconfig.cognito.userPoolId;
@@ -24,8 +20,22 @@
     if (typeof AWSCognito !== 'undefined') {
         AWSCognito.config.region = globalRegion;
     }
+    /**
+     * Function to create a AWS cognitoUser object, not used for user.
+     * @param {} username 
+     */
+    function createCognitoUser(username){
+        return new AmazonCognitoIdentity.CognitoUser({
+            Username: username,
+            Pool: userPool
+        });
+    }
 
-    // OK
+    /**
+     * User signup function, access two callbacks, only one of them will be called
+     * onSuccess: called when signup success. Result will be passed as the sole parameter
+     * onFailure: called when signup fail. Error will be passed as the sole parameter
+     */
     window.signUp = function (username, password, email, onSuccess, onFailure) {
         // userpool,
         var attributeList = [];
@@ -47,7 +57,9 @@
         );
     };
 
-    //OK
+    /**
+     * User signin function
+     */
     window.signIn = function (username, password, onSuccess, onFailure) {
 
         var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
@@ -64,83 +76,72 @@
         });
     };
 
-    // OK
+    /**
+     * Signout function. It clears 
+     */
     window.signOut = function () {
         getCurrentUser().signOut();
     };
 
-    // OK
-    window.resend_confirm = function (username, func) {
-        createCognitoUser(username).resendConfirmationCode(func);
+    /**
+     * Resend confrimation email to this username.
+     */
+    window.resend_confirm = function (username, onSuccess, onFailure) {
+        createCognitoUser(username).resendConfirmationCode(function(err, result){
+            if(err){
+                onFailure(err);
+            }
+            else{
+                onSuccess(result);
+            }
+        });
     }
 
-    // OK
+    /**
+     * Get current loggedin user
+     * Return the information from localstorage
+     */
     window.getCurrentUser = function () {
         return userPool.getCurrentUser();
     };
-    // OK
-    window.createCognitoUser = function (username) {
-        return new AmazonCognitoIdentity.CognitoUser({
-            Username: username,
-            Pool: userPool
-        });
-    }
+    
+   
 
-    // OK
-    window.getCredentialJWTTokensAsync = async function () {
+    // // OK
+    // window.getCredentialJWTTokensAsync = async function () {
 
-        var authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
-            var cognitoUser = getCurrentUser();
-            // console.log(cognitoUser);
-            if (cognitoUser) {
-                cognitoUser.getSession(function sessionCallback(err, session) {
-                    if (err) {
-                        reject(err);
-                    } else if (!session.isValid()) {
-                        resolve(null);
-                    } else {
-                        resolve(session.getIdToken().getJwtToken());
-                    }
-                });
-            } else {
-                resolve(null);
-            }
-        });
-        try {
-            let resToken = await authToken;
-            if (resToken) {
-                return Promise.resolve(resToken);
-            }
-            else {
-                return Promise.reject("Session is Invalid");
-            }
-        }
-        catch{
-            return Promise.reject("Error occurs when send request");
-        }
+    //     var authToken = new Promise(function fetchCurrentAuthToken(resolve, reject) {
+    //         var cognitoUser = getCurrentUser();
+    //         // console.log(cognitoUser);
+    //         if (cognitoUser) {
+    //             cognitoUser.getSession(function sessionCallback(err, session) {
+    //                 if (err) {
+    //                     reject(err);
+    //                 } else if (!session.isValid()) {
+    //                     resolve(null);
+    //                 } else {
+    //                     resolve(session.getIdToken().getJwtToken());
+    //                 }
+    //             });
+    //         } else {
+    //             resolve(null);
+    //         }
+    //     });
+    //     try {
+    //         let resToken = await authToken;
+    //         if (resToken) {
+    //             return Promise.resolve(resToken);
+    //         }
+    //         else {
+    //             return Promise.reject("Session is Invalid");
+    //         }
+    //     }
+    //     catch{
+    //         return Promise.reject("Error occurs when send request");
+    //     }
 
-    }
+    // }
 
-    /* using user Login token to get credential key */
-    window.getCredentialKeys = function (authToken, getCredentialCallback) {
-        // init credential instance
-        AWS.config.region = globalRegion;
-        let loginParams = {};
-        loginParams[`cognito-idp.${globalRegion}.amazonaws.com/${globalUserPoolId}`] = authToken;
-        // console.log(loginParams);
-        // console.log(globalIdentityPoolId);
-        AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: globalIdentityPoolId,
-            Logins: loginParams  // 'cognito-idp.<region>.amazonaws.com/<YOUR_USER_POOL_ID>': result.getIdToken().getJwtToken()
-        });
-        AWS.config.credentials.get(getCredentialCallback); // !!In the call back, we can get those keys
-        // accessKeyId = AWS.config.credentials.accessKeyId;
-        // secretAccessKey = AWS.config.credentials.secretAccessKey;
-        // sessionToken = AWS.config.credentials.sessionToken;
-        // console.log(accessKeyId);
-        // console.log(secretAccessKey);
-        // console.log(sessionToken);
-    }
 
 }(jQuery, window));
 

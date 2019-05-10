@@ -10,7 +10,6 @@ config_list = {
 // Change Here!
 current_config = config_list['tasktrigger'];
 
-
 window.appconfig = {
     cognito: {
         // Cognito User Pool

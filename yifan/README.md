@@ -35,3 +35,4 @@ jerry login: http://235239962467.signin.aws.amazon.com/console
 6. 打包python程序再上传到Lambda function：
     1. pip install 包名 -t .    ： 下载包到本文件夹
     2. zip -r app.zip .   : 打包本文件夹所有内容
+7. JS调用UserPool的API： https://docs.aws.amazon.com/cognito/latest/developerguide/using-amazon-cognito-user-identity-pools-javascript-examples.html
