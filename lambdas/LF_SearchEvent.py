@@ -3,6 +3,7 @@ from config import *
 import pymysql
 from elasticsearch import Elasticsearch
 import re
+import datetime
 
 DEFAULT_GEO_RADIUS = "3km"
 
@@ -34,18 +35,13 @@ def build_must_query(message):
             }
         )
 
-    return must_q
-
-
-def build_should_query(message):
-    should_q = []
     if "longitude" in message and "latitude" in message:
         radius = str(message['radius']) + "km" if 'radius' in message else DEFAULT_GEO_RADIUS
         coordinate = {
-            "lat": float(message["latitude"]),
-            "lon": float(message["longitude"])
+            "lat": str(message["latitude"]),
+            "lon": str(message["longitude"])
         }
-        should_q.append(
+        must_q.append(
             {
                 "geo_distance": {
                     "distance": radius,
@@ -53,6 +49,29 @@ def build_should_query(message):
                 }
             }
         )
+
+    return must_q
+
+
+def build_should_query(message):
+    should_q = []
+    """
+    if "longitude" in message and "latitude" in message:
+        radius = str(message['radius'])+"km" if 'radius' in message else DEFAULT_GEO_RADIUS
+        coordinate  = {
+            "lat": str(message["latitude"]),
+            "lon": str(message["longitude"])
+        }
+        should_q.append(
+        {
+            "geo_distance": {
+                "distance": radius,
+                "coordinate": coordinate
+            }
+        }
+        )
+    """
+
     if "event_name" in message:
         qstring = parse_words(message['event_name'])
         should_q.append(
@@ -88,7 +107,7 @@ def build_query(filter_q, must_q, should_q, limit, offset):
             }
         }
     }
-    # print (query)
+    print(query)
     return query
 
 
@@ -103,6 +122,7 @@ def get_friends_id(user_id, conn):
         except Exception as e:
             print(e)
             conn.close()
+            print(sql_q)
             exit()
         conn.commit()
 
@@ -116,7 +136,10 @@ def get_events_sql(event_id_list, conn):  # [1,2,3,4]
     # Perhaps needless to check event state? ES only keeps active events.
     sql_q = "SELECT * "
     sql_q += "FROM Event "
-    sql_q += "WHERE event_id in {} AND state = 1;".format(str(tuple(event_id_list)))
+    if len(event_id_list) == 1:
+        sql_q += "WHERE event_id = {} AND state = 1;".format(event_id_list[0])
+    else:
+        sql_q += "WHERE event_id in {} AND state = 1;".format(str(tuple(event_id_list)))
     # print (sql_q)
 
     with conn.cursor() as cur:
@@ -125,9 +148,15 @@ def get_events_sql(event_id_list, conn):  # [1,2,3,4]
             rows = cur.fetchall()
         except Exception as e:
             print(e)
+            print(sql_q)
             conn.close()
+
             exit()
         conn.commit()
+    for row in rows:
+        row['start_time'] = int((row['start_time'] - datetime.datetime(1970, 1, 1)).total_seconds())
+        row['end_time'] = int((row['end_time'] - datetime.datetime(1970, 1, 1)).total_seconds())
+        row['create_time'] = int((row['create_time'] - datetime.datetime(1970, 1, 1)).total_seconds())
     return rows
 
 
@@ -145,6 +174,7 @@ def handle_es_res(es_res, conn):
 
     events.sort(key=lambda event: event_id_dic[event["event_id"]])
 
+    # print(events)
     return events
 
 
@@ -159,7 +189,9 @@ def get_private_events(message, conn, es):
     should_q = build_should_query(message)
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
+    print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -182,7 +214,9 @@ def get_friendonly_events(message, conn, es):
     should_q = build_should_query(message)
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
+    print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -199,7 +233,9 @@ def get_public_events(message, conn, es):
     should_q = build_should_query(message)
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
+    print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -246,5 +282,5 @@ def lambda_handler(event, context):
 
         results.append({"user_id": int(message['user_id']),
                         "events": events})
-
+    # print (results)
     return {"messages": results}
