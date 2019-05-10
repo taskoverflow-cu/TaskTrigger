@@ -16,6 +16,7 @@ def handler(event, context):
         return {
             "isBase64Encoded": False,
             "statusCode": 400,
+            "headers" : {"Content-Type": "application/json", "Access-Control-Allow-Origin":"*"},
             "body": json.dumps({
                 'reason': 'uid must be an integer.',
                 'receiveduid': uid
@@ -37,7 +38,7 @@ def handler(event, context):
             result = {
                     "isBase64Encoded": False,
                     "statusCode": 200,
-                    "headers" : {"Content-Type": "application/json"},
+                    "headers" : {"Content-Type": "application/json", "Access-Control-Allow-Origin":"*"},
                     "body": json.dumps(result)
                 }
         else:
@@ -45,7 +46,7 @@ def handler(event, context):
             result = {
                     "isBase64Encoded": False,
                     "statusCode": 400,
-                    "headers" : {"Content-Type": "application/json"},
+                    "headers" : {"Content-Type": "application/json","Access-Control-Allow-Origin":"*"},
                     "body": json.dumps({
                         "reason": "No user with the uid %s"%uid
                     })
