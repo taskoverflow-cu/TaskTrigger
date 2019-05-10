@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: TaskTrigger API
-  description: 'API for TaskTrigger web app, built during the Cloud and Big Data course at Columbia University.'
+  description: 'API for TaskTrigger web app, built during the Cloud and Big Data course at Columbia University. All time is in seconds since epoch! Duration is seconds!'
   version: 1.0.0
 schemes:
   - https
@@ -13,7 +13,7 @@ paths:
     get:
       summary: The endpoint for searching events in discover.
       description: |
-        This API takes in one meassage from client and return a list of events.
+        This API takes in one meassage from client and return a list of events.Radius is numerical(eg, 12.5,"12.5",12). Unit is km.
       tags:
         - discover
       operationId: discoverSearchEvent
@@ -104,7 +104,7 @@ paths:
     get:
       summary: The endpoint for searching events in discover.
       description: |
-        This API takes in one meassage from client and return a list of events
+        This API takes in one meassage from client and return a list of events. Radius is numerical(eg, 12.5,"12.5",12). Unit is km.
       tags:
         - discover
       operationId: discoverMapSearchEvent
@@ -426,10 +426,11 @@ definitions:
         type: string
       time_rigidity:
         type: integer
-      participants_id:
+      participants_email:
         type: array
         items:
-          type: integer
+          type: string
+          example: "123@gmail.com"
 
   GetAdviceResponseMessage:
     type: object
