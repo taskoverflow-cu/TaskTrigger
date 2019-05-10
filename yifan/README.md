@@ -31,3 +31,7 @@
 5. 该post authentication lambda的返回值和上面格式一样，所以可以直接`return event`
 
 jerry login: http://235239962467.signin.aws.amazon.com/console 
+
+6. 打包python程序再上传到Lambda function：
+    1. pip install 包名 -t .    ： 下载包到本文件夹
+    2. zip -r app.zip .   : 打包本文件夹所有内容
