@@ -41,32 +41,13 @@ def handler(event, context):
         result = cursor.fetchall()
         if result:
             for row in result:
-                users.append(row)
+                users.append( json.dumps(row))
+
+
     result = {
                 "isBase64Encoded": False,
                 "statusCode": 200,
                 "headers" : {"Content-Type": "application/json", "Access-Control-Allow-Origin":"*"},
-                "body": json.dumps({
-                    users
-                })
-            }       
+                "body": json.dumps(users)
+            }
     return result
-
-connection = pymysql.connect(host= host,
-                                user=username,
-                                password=password,
-                                db=database,
-                                charset='utf8mb4',
-                                cursorclass=pymysql.cursors.DictCursor)
-
-key = 'yyf'
-limit = 10
-page = 1
-users = []
-with connection.cursor() as cursor:
-    cursor.execute("SELECT * FROM User WHERE email LIKE %s OR username LIKE %s LIMIT %s OFFSET %s", ( '%'+ key + '%',  '%'+ key + '%', limit, (page-1)*limit ) )
-    result = cursor.fetchall()
-    if result:
-        for row in result:
-            users.append(row)
-print( type(json.dumps(users)))
