@@ -6,14 +6,20 @@ import json
 def handler(event, context):
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    uid1 = event['pathParameters']['uid1']
-    uid2 = event['pathParameters']['uid2']
+    
+    uid = event['pathParameters']['uid']
+    page = event['pathParameters']['page']
+    limit = event['pathParameters']['limit']
 
     try:
-        uid1 = int(uid1)
-        uid2 = int(uid2)
+        page = int(page)
+        limit = int(limit)
+        uid = int(uid)
     except:
-        return getBadResponse("Invalid User ID.")
+        return getBadResponse("Invalid parameters.")
+    
+    if(page < 1 or limit < 1):
+        return getBadResponse("Invalid parameters.")
 
     connection = pymysql.connect(host= host,
                                  user=username,
@@ -21,25 +27,22 @@ def handler(event, context):
                                  db=database,
                                  charset='utf8mb4',
                                  cursorclass=pymysql.cursors.DictCursor)
-    # check user 
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM Friend WHERE user_id1 = %s AND user_id2 = %s", (uid1, uid2))
-        result = cursor.fetchone()
-        if result:
-            return getBadResponse("Friendship relation already exists.")
 
-        cursor.execute("SELECT COUNT(user_id) AS count FROM User WHERE user_id=%s OR user_id=%s", (uid1,uid2))
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT COUNT(user_id) AS count FROM User WHERE user_id = %s", uid)
         result = cursor.fetchone()
-        if result['count'] != 2:
+        if result['count'] == 0:
             return getBadResponse("User does not exist.")
-            
-        try:
-            cursor.execute("INSERT INTO Friend(user_id1, user_id2,state) VALUES(%s,%s,1)", (uid1,uid2))
-            cursor.execute("INSERT INTO Friend(user_id1, user_id2,state) VALUES(%s,%s,1)", (uid2,uid1))
-            connection.commit()
-            return getGoodResponse("OK")
-        except:
-            return getBadResponse("Insert failed.")
+
+        users = []    
+        
+        cursor.execute(" SELECT u2.user_id, u2.username, u2.email, u2.avatar_url, u2.cognito_id "  +
+                        "FROM User u1 INNER JOIN Friend f ON u1.user_id = f.user_id1 " + 
+                        "INNER JOIN User u2 ON f.user_id2 = u2.user_id WHERE u1.user_id = %s LIMIT %s OFFSET %s;",(uid, limit, (page-1)*limit ))
+        result = cursor.fetchall()
+        for row in result:
+            users.append(json.dumps(row))
+        return getGoodResponse(users)
 
 
 def getGoodResponse(result):
