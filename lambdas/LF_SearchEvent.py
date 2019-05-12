@@ -160,8 +160,22 @@ def get_events_sql(event_id_list, conn):  # [1,2,3,4]
     return rows
 
 
+def es_res_filter0score(es_res):
+    filtered_res = []
+    for record in es_res['hits']['hits']:
+        if record['_score'] > 0:
+            filtered_res.append(record)
+    return filtered_res
+
+
 def handle_es_res(es_res, conn):
-    event_id_list = list(map(lambda t: int(t['_source']['event_id']), es_res['hits']['hits']))
+    print("Raw ES result:")
+    print(json.dumps(es_res, indent=2))
+    filtered_res = es_res_filter0score(es_res)
+    # event_id_list = list(map(lambda t: int(t['_source']['event_id']), es_res['hits']['hits']))
+    event_id_list = list(map(lambda t: int(t['_source']['event_id']), filtered_res))
+    print("Filtered ES result:")
+    print(json.dumps(filtered_res, indent=2))
     if not event_id_list:
         return []
     events = get_events_sql(event_id_list, conn)
@@ -187,11 +201,14 @@ def get_private_events(message, conn, es):
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
+    if not must_q and not should_q:  # filter-only search
+        must_q += filter_q  # to have positive score for filter-only
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print("ES Query:")
     print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
-    print(json.dumps(res, indent=2))
+    # print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -212,11 +229,14 @@ def get_friendonly_events(message, conn, es):
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
+    if not must_q and not should_q:  # filter-only search
+        must_q += filter_q  # to have positive score for filter-only
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print("ES Query:")
     print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
-    print(json.dumps(res, indent=2))
+    # print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -231,11 +251,14 @@ def get_public_events(message, conn, es):
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
+    if not must_q and not should_q:  # filter-only search
+        must_q += filter_q  # to have positive score for filter-only
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print("ES Query:")
     print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
-    print(json.dumps(res, indent=2))
+    # print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -268,6 +291,8 @@ def lambda_handler(event, context):
         cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;")
 
     for message in messages:
+        print("Incoming message:")
+        print(json.dumps(message, indent=2))
         if int(message['visibility']) == 1:  # return private events
             events = get_private_events(message, conn, es)
         elif int(message['visibility']) == 2:  # return friends' friend-only events
