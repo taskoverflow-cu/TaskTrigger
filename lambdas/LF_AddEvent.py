@@ -93,7 +93,8 @@ def lambda_handler(event, context):
                                   "start_time": str(the_event[0]['start_time']),
                                   "end_time": str(the_event[0]['end_time']),
                                   "location": str(the_event[0]['location']),
-                                  "description": str(the_event[0]['description'])
+                                  "description": str(the_event[0]['description']),
+                                  "user_id": str(message["user_id"])
                                   })
                 # results.append({"response": "success|added"})
                 results.append({"success": 1, "info": "added"})
