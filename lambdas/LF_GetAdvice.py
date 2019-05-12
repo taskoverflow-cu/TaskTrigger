@@ -6,7 +6,7 @@ import logging
 import re
 
 
-def get_busy_intervals(participants_id, min_start_time, max_end_time, conn): # time in sec
+def get_busy_intervals(participants_id, min_start_time, max_end_time, conn):  # time in sec
     """
     must_q = []
     must_q.append(
@@ -23,7 +23,7 @@ def get_busy_intervals(participants_id, min_start_time, max_end_time, conn): # t
     )
     """
     # datetime format: 'YYYY-MM-DD hh:mm:ss'
-    qry =  "SELECT unix_timestamp(Event.start_time) AS start_time, "
+    qry = "SELECT unix_timestamp(Event.start_time) AS start_time, "
     qry += "unix_timestamp(Event.end_time) AS end_time "
     qry += "FROM Event, ParticipateEvent "
     qry += "WHERE ParticipateEvent.event_id = Event.event_id "
@@ -32,7 +32,6 @@ def get_busy_intervals(participants_id, min_start_time, max_end_time, conn): # t
     qry += "AND   Event.state = 1 "
     qry += "AND   Event.start_time < from_unixtime({}) ".format(max_end_time)
     qry += "AND   Event.end_time>from_unixtime({});".format(min_start_time)
-
 
     with conn.cursor() as cur:
         try:
@@ -44,21 +43,23 @@ def get_busy_intervals(participants_id, min_start_time, max_end_time, conn): # t
             exit()
         conn.commit()
 
-    return map(lambda t: [int(t['start_time']),int(t['end_time'])], rows) # return a map object
+    return map(lambda t: [int(t['start_time']), int(t['end_time'])], rows)  # return a map object
 
-def intersect(i1,i2):
-    return not (i1[0]>=i2[1] or i2[0]>=i1[1])
+
+def intersect(i1, i2):
+    return not (i1[0] >= i2[1] or i2[0] >= i1[1])
+
 
 def compute_remnant_intervals(min_start_time, max_end_time, intervals):
-    res = [[min_start_time,max_end_time]]
+    res = [[min_start_time, max_end_time]]
     next_res = []
-    for interval in intervals: # each interval is a busy interval
+    for interval in intervals:  # each interval is a busy interval
         for res_i in res:  # each res_i is a free interval
             if intersect(res_i, interval):
-                if res_i[0]<interval[0]:
-                    next_res.append([res_i[0],interval[0]])
-                if interval[1]<res_i[1]:
-                    next_res.append([interval[1],res_i[1]])
+                if res_i[0] < interval[0]:
+                    next_res.append([res_i[0], interval[0]])
+                if interval[1] < res_i[1]:
+                    next_res.append([interval[1], res_i[1]])
             else:
                 next_res.append(res_i)
         res = next_res
@@ -71,22 +72,27 @@ def get_advice_no_conflict(message, participants_id, conn, es):
     participants_id = set(participants_id)
     participants_id.add(int(message["user_id"]))
 
-    duration = int(float(message["duration"]))#in sec
+    duration = int(float(message["duration"]))  # in sec
     min_start_time = int(float(message["min_start_time"]))
     max_end_time = int(float(message["max_end_time"]))
 
-    intervals = get_busy_intervals(participants_id,min_start_time,max_end_time,conn)
+    intervals = get_busy_intervals(participants_id, min_start_time, max_end_time, conn)
 
-    free_intervals = compute_remnant_intervals(min_start_time,max_end_time, intervals)
+    free_intervals = compute_remnant_intervals(min_start_time, max_end_time, intervals)
 
     ret = []
 
     for i in free_intervals:
-        if i[1]-i[0]>= duration:
-            ret.append({
-                "start_time": str(i[0]),
-                "end_time": str(i[1])
-            })
+        if i[1] - i[0] >= duration:
+            cur_start = i[0]
+            cur_end = cur_start + duration
+            while cur_end <= i[1]:
+                ret.append({
+                    "start_time": str(cur_start),
+                    "end_time": str(cur_end)
+                })
+                cur_start += duration
+                cur_end += duration
 
     return ret
 
@@ -108,6 +114,14 @@ def get_invalid_emails(message, logger, conn):
                 participants_id.append(result[0]['user_id'])
 
     return invalid_emails, participants_id
+
+
+def align_duration(res, duration):
+    for e in res:
+        midpoint = (int(e["start_time"]) + int(e["end_time"])) // 2
+        e["start_time"] = str(midpoint - duration // 2)
+        e["end_time"] = str(midpoint + duration // 2)
+
 
 def lambda_handler(event, context):
     messages = event['messages']
@@ -138,8 +152,8 @@ def lambda_handler(event, context):
         cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;")
 
     for message in messages:
-        invalid_emails, participants_id = get_invalid_emails(message,logger,conn)
-        if len(invalid_emails)>0:
+        invalid_emails, participants_id = get_invalid_emails(message, logger, conn)
+        if len(invalid_emails) > 0:
             results.append({
                 'statusCode': 200,
                 'body': {
@@ -149,7 +163,8 @@ def lambda_handler(event, context):
                 }
             })
         else:
-            res = get_advice_no_conflict(message,participants_id, conn, es)
+            res = get_advice_no_conflict(message, participants_id, conn, es)
+            # align_duration(res, int(message["duration"]))
             results.append({
                 "user_id": int(message["user_id"]),
                 "recommendations": res
