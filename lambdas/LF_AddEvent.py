@@ -1,11 +1,14 @@
 import json
 from config import *
 import pymysql
+from sqs import *
+import datetime
 
 
 def lambda_handler(event, context):
     # TODO implement
     messages = event['messages']
+    print(event)
 
     # connect to RDS
     try:
@@ -32,12 +35,13 @@ def lambda_handler(event, context):
         # check if event if full
         qry = "SELECT DISTINCT participant_id "
         qry += "FROM Event, ParticipateEvent "
-        qry += "WHERE Event.event_id = {} AND ".format(message["event_id"])
-        qry += "ParticipateEvent.event_id = {} AND ".format(message["event_id"])
+        qry += "WHERE Event.event_id = {} AND ".format(int(message["event_id"]))
+        qry += "ParticipateEvent.event_id = {} AND ".format(int(message["event_id"]))
         qry += "ParticipateEvent.state =1;"
 
-        event_qry = "SELECT capacity, creator_id, state "
-        event_qry += "FROM Event WHERE event_id = {};".format(message["event_id"])
+        # event_qry = "SELECT capacity, creator_id, state,  "
+        event_qry = "SELECT *  "
+        event_qry += "FROM Event WHERE event_id = {};".format(int(message["event_id"]))
 
         with conn.cursor() as cur:
             try:
@@ -69,7 +73,7 @@ def lambda_handler(event, context):
             else:  # add him to event
                 add_req = "INSERT INTO "
                 add_req += "ParticipateEvent(participant_id, event_id, state) "
-                add_req += "VALUES ({},{},1);".format(message["user_id"], message["event_id"])
+                add_req += "VALUES ({},{},1);".format(int(message["user_id"]), int(message["event_id"]))
 
                 try:
                     cur.execute(add_req)
@@ -80,7 +84,17 @@ def lambda_handler(event, context):
                         "code": 500,
                         "message": "LF_AddEvent: Fail to execute insert!"
                     }
-
+                sqs = SQSHandler()
+                the_event[0]['start_time'] = (
+                the_event[0]['start_time'] - datetime.datetime(1970, 1, 1)).total_seconds()
+                the_event[0]['end_time'] = (the_event[0]['end_time'] - datetime.datetime(1970, 1, 1)).total_seconds()
+                sqs.send_message({"body": "hello",
+                                  "event_name": str(the_event[0]['event_name']),
+                                  "start_time": str(the_event[0]['start_time']),
+                                  "end_time": str(the_event[0]['end_time']),
+                                  "location": str(the_event[0]['location']),
+                                  "description": str(the_event[0]['description'])
+                                  })
                 # results.append({"response": "success|added"})
                 results.append({"success": 1, "info": "added"})
         conn.commit()
