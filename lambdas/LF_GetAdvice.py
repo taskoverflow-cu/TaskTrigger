@@ -2,7 +2,7 @@ import json
 from config import *
 import pymysql
 from elasticsearch import Elasticsearch
-import logging
+# import logging
 import re
 
 
@@ -27,7 +27,10 @@ def get_busy_intervals(participants_id, min_start_time, max_end_time, conn):  # 
     qry += "unix_timestamp(Event.end_time) AS end_time "
     qry += "FROM Event, ParticipateEvent "
     qry += "WHERE ParticipateEvent.event_id = Event.event_id "
-    qry += "AND   ParticipateEvent.participant_id in {} ".format(str(tuple(participants_id)))
+    if len(participants_id) == 1:
+        qry += "AND   ParticipateEvent.participant_id ={}  ".format(list(participants_id)[0])
+    else:
+        qry += "AND   ParticipateEvent.participant_id in {} ".format(str(tuple(participants_id)))
     qry += "AND   ParticipateEvent.state = 1 "
     qry += "AND   Event.state = 1 "
     qry += "AND   Event.start_time < from_unixtime({}) ".format(max_end_time)
@@ -39,6 +42,8 @@ def get_busy_intervals(participants_id, min_start_time, max_end_time, conn):  # 
             rows = cur.fetchall()
         except Exception as e:
             print(e)
+            print("Wrong query:")
+            print(qry)
             conn.close()
             exit()
         conn.commit()
@@ -97,15 +102,15 @@ def get_advice_no_conflict(message, participants_id, conn, es):
     return ret
 
 
-def get_invalid_emails(message, logger, conn):
+def get_invalid_emails(message, conn):
     emails = message['participants_email']
     # check whether email is valid
     invalid_emails = []
     participants_id = []
     with conn.cursor() as cur:
         for email in emails:
-            email_query = "SELECT user_id FROM User WHERE email={}".format("\'" + email + "\'")
-            logger.info(email_query)
+            email_query = "SELECT user_id FROM User WHERE email={} ;".format("\'" + email + "\'")
+            print(email_query)
             cur.execute(email_query)
             result = cur.fetchall()
             if not result:
@@ -126,8 +131,8 @@ def align_duration(res, duration):
 def lambda_handler(event, context):
     messages = event['messages']
 
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
+    # logger = logging.getLogger(__name__)
+    # logger.setLevel(logging.INFO)
     # connect to RDS and ES
     try:
         conn = pymysql.connect(rds_host,
@@ -152,7 +157,7 @@ def lambda_handler(event, context):
         cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;")
 
     for message in messages:
-        invalid_emails, participants_id = get_invalid_emails(message, logger, conn)
+        invalid_emails, participants_id = get_invalid_emails(message, conn)
         if len(invalid_emails) > 0:
             results.append({
                 'statusCode': 200,
