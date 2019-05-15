@@ -1,0 +1,12 @@
+{
+  "event": {
+    "event_name": "hahaha 5.7_2",
+    "visibility": "1",
+    "capacity": "3",
+    "longitude": "23.23",
+    "latitude": "-41.75",
+    "start_time": "1557114773905",
+    "end_time":   "1557114776905"
+  },
+  "user_id": "12"
+}
