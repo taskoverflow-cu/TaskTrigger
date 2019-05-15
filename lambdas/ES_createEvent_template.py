@@ -7,7 +7,7 @@ the_event = { "visibility": 4,
             "creator_id":   15,
             "start_time":   1234567890000, # epoch in milliseconds!
             "end_time":     9876543333000,
-            "coordinate":   "41.12,-71.34",
+            "coordinate":   {'lat':"12.12","lon": "-23.21"},
             "event_name":   "Java Night",
             "description":  "Come and play with java programming!"
             }

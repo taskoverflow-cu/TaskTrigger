@@ -3,6 +3,7 @@ from config import *
 import pymysql
 from elasticsearch import Elasticsearch
 import re
+import datetime
 
 DEFAULT_GEO_RADIUS = "3km"
 
@@ -34,15 +35,13 @@ def build_must_query(message):
             }
         )
 
-    return must_q
-
-
-def build_should_query(message):
-    should_q = []
-    if "coordinate" in message:
+    if "longitude" in message and "latitude" in message:
         radius = str(message['radius']) + "km" if 'radius' in message else DEFAULT_GEO_RADIUS
-        coordinate = message["coordinate"]  # assume format: "123,-12"
-        should_q.append(
+        coordinate = {
+            "lat": str(message["latitude"]),
+            "lon": str(message["longitude"])
+        }
+        must_q.append(
             {
                 "geo_distance": {
                     "distance": radius,
@@ -50,6 +49,29 @@ def build_should_query(message):
                 }
             }
         )
+
+    return must_q
+
+
+def build_should_query(message):
+    should_q = []
+    """
+    if "longitude" in message and "latitude" in message:
+        radius = str(message['radius'])+"km" if 'radius' in message else DEFAULT_GEO_RADIUS
+        coordinate  = {
+            "lat": str(message["latitude"]),
+            "lon": str(message["longitude"])
+        }
+        should_q.append(
+        {
+            "geo_distance": {
+                "distance": radius,
+                "coordinate": coordinate
+            }
+        }
+        )
+    """
+
     if "event_name" in message:
         qstring = parse_words(message['event_name'])
         should_q.append(
@@ -85,7 +107,7 @@ def build_query(filter_q, must_q, should_q, limit, offset):
             }
         }
     }
-    # print (query)
+    print(query)
     return query
 
 
@@ -100,6 +122,7 @@ def get_friends_id(user_id, conn):
         except Exception as e:
             print(e)
             conn.close()
+            print(sql_q)
             exit()
         conn.commit()
 
@@ -113,7 +136,10 @@ def get_events_sql(event_id_list, conn):  # [1,2,3,4]
     # Perhaps needless to check event state? ES only keeps active events.
     sql_q = "SELECT * "
     sql_q += "FROM Event "
-    sql_q += "WHERE event_id in {} AND state = 1;".format(str(tuple(event_id_list)))
+    if len(event_id_list) == 1:
+        sql_q += "WHERE event_id = {} AND state = 1;".format(event_id_list[0])
+    else:
+        sql_q += "WHERE event_id in {} AND state = 1;".format(str(tuple(event_id_list)))
     # print (sql_q)
 
     with conn.cursor() as cur:
@@ -122,14 +148,34 @@ def get_events_sql(event_id_list, conn):  # [1,2,3,4]
             rows = cur.fetchall()
         except Exception as e:
             print(e)
+            print(sql_q)
             conn.close()
+
             exit()
         conn.commit()
+    for row in rows:
+        row['start_time'] = int((row['start_time'] - datetime.datetime(1970, 1, 1)).total_seconds())
+        row['end_time'] = int((row['end_time'] - datetime.datetime(1970, 1, 1)).total_seconds())
+        row['create_time'] = int((row['create_time'] - datetime.datetime(1970, 1, 1)).total_seconds())
     return rows
 
 
+def es_res_filter0score(es_res):
+    filtered_res = []
+    for record in es_res['hits']['hits']:
+        if record['_score'] > 0:
+            filtered_res.append(record)
+    return filtered_res
+
+
 def handle_es_res(es_res, conn):
-    event_id_list = list(map(lambda t: int(t['_source']['event_id']), es_res['hits']['hits']))
+    print("Raw ES result:")
+    print(json.dumps(es_res, indent=2))
+    filtered_res = es_res_filter0score(es_res)
+    # event_id_list = list(map(lambda t: int(t['_source']['event_id']), es_res['hits']['hits']))
+    event_id_list = list(map(lambda t: int(t['_source']['event_id']), filtered_res))
+    print("Filtered ES result:")
+    print(json.dumps(filtered_res, indent=2))
     if not event_id_list:
         return []
     events = get_events_sql(event_id_list, conn)
@@ -142,6 +188,7 @@ def handle_es_res(es_res, conn):
 
     events.sort(key=lambda event: event_id_dic[event["event_id"]])
 
+    # print(events)
     return events
 
 
@@ -154,9 +201,14 @@ def get_private_events(message, conn, es):
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
+    if not must_q and not should_q:  # filter-only search
+        must_q += filter_q  # to have positive score for filter-only
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print("ES Query:")
+    print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
+    # print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -177,9 +229,14 @@ def get_friendonly_events(message, conn, es):
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
+    if not must_q and not should_q:  # filter-only search
+        must_q += filter_q  # to have positive score for filter-only
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print("ES Query:")
+    print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
+    # print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -194,9 +251,14 @@ def get_public_events(message, conn, es):
     ]
     must_q = build_must_query(message)
     should_q = build_should_query(message)
+    if not must_q and not should_q:  # filter-only search
+        must_q += filter_q  # to have positive score for filter-only
 
     doc = build_query(filter_q, must_q, should_q, limit, offset)
+    print("ES Query:")
+    print(json.dumps(doc, indent=2))
     res = es.search(index="events", doc_type="Event", body=doc)
+    # print(json.dumps(res, indent=2))
     events = handle_es_res(res, conn)
 
     return events
@@ -229,6 +291,8 @@ def lambda_handler(event, context):
         cur.execute("SET SESSION TRANSACTION ISOLATION LEVEL REPEATABLE READ;")
 
     for message in messages:
+        print("Incoming message:")
+        print(json.dumps(message, indent=2))
         if int(message['visibility']) == 1:  # return private events
             events = get_private_events(message, conn, es)
         elif int(message['visibility']) == 2:  # return friends' friend-only events
@@ -243,5 +307,5 @@ def lambda_handler(event, context):
 
         results.append({"user_id": int(message['user_id']),
                         "events": events})
-
+    # print (results)
     return {"messages": results}
