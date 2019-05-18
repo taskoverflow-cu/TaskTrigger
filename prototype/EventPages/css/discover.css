@@ -1,8 +1,20 @@
 html, body{
     height: 100%;
     width: 100%;
-    overflow-y: hidden;
+    overflow-y: visible;
     position: relative;
+}
+
+.pac-container{
+    margin-top: -45px;
+  }
+
+#form-container {
+  max-width: 80%;
+  max-height: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 3%;
 }
 
 #discover-container {
@@ -10,16 +22,30 @@ html, body{
 	max-height: 60%;
 	margin-left: 20%;
 	margin-right: 20%;
-	margin-top: 5%;
+	margin-top: 0%;
 }
 
 #button-group {
-  margin-left: 9%;
-  margin-right: 9%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 #buttons {
 	margin-bottom: 20px;
+}
+
+.no-left-right-margin {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.input-left {
+  padding-left: 10px;
+  padding-right: 0;
+  margin-left: 1%;
+  margin-right: 1%;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .button-left {
@@ -34,8 +60,8 @@ html, body{
 
 .button-right {
   float: right;
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 10px;
+  padding-right: 10px;
   margin-left: 1%;
   margin-right: 1%;
   margin-top: 5px;
@@ -57,6 +83,12 @@ html, body{
   padding-right:8px;
 }
 
+.leaflet-control-search .search-cancel {
+  /*position: static;*/
+  /*float: left;*/
+  /*margin-left: -22px;*/
+}
+
 #list-container {
 	width: 100%;
 	clear: both;
@@ -73,8 +105,8 @@ html, body{
 
 #event-map-controls {
   position: absolute;
-  top: 11%;
-  right: 11%;
+  top: 0%;
+  right: 0%;
   z-index: 5;
   background-color: #fff;
   padding: 5px;
@@ -97,5 +129,14 @@ html, body{
   max-height: 80%;
   margin-left: 10%;
   margin-right: 10%;
-  margin-top: 5%;
+  margin-top: 0%;
+}
+
+#event-map-controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 5px 10px 10px;
+  z-index: 5;
+  background-color: #fff;
 }

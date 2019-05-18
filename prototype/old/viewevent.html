@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <meta charset="UTF-8">
+    <meta name="author" content="Yifan Yang">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View Event</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- header -->
+        <div class="row">
+            <div class="header col s12">
+                <div class="logo">
+                    <h1>Event Detail</h1>
+                </div>
+                <div class="nav"></div>
+            </div>
+        </div>
+        <!-- form -->
+        <div class="row">
+            <form action="#" method="POST" class="col s12">
+                <div class="row">
+                    <div class="content col s12 l8">
+                        <!-- name -->
+                        <div class="row">
+                            <div class="name input-field col s12 l6">
+                                <input id="ename" type="text" disabled value="YourEventName">
+                                <label for="ename">Event Name:</label>
+
+                            </div>
+                            <!-- datettime -->
+                            <div class="datetime col s12 l6">
+                                <div class="row">
+                                    <div class="date input-field  col s6">
+                                        <input type="text" class="datepicker" id="date" disabled value="2018-9-12">
+                                        <label for="date">Time:</label>
+                                    </div>
+                                    <div class="time input-field col s6">
+                                        <input type="text" class="timepicker" id="time" disabled value="07:05pm">
+                                        <label for="time">Time:</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <!-- location -->
+                            <div class="loc input-field col s12">
+                                <textarea id="location" class="materialize-textarea" disabled>haha</textarea>
+                                <label for="location">Location:</label>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- description -->
+                            <div class="desc input-field col s12">
+                                <textarea id="description" class="materialize-textarea" disabled>haha</textarea>
+                                <label for="description">Description:</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- Participant -->
+                            <div class="parti col s12">
+                                <label for="partis">Participant:</label>
+                                <input id="partis" type="text" disabled value="Participants">
+
+                                <!-- <div class="chips chips-placeholder" id="partis"></div> -->
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <!-- Visibility -->
+                            <div class="vis input-field col s12 l6">
+
+                                <input id="visibility" type="text" disabled value="Participants">
+                                <label for="visibility">Visibility:</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- buttons -->
+                    <div class="control-btn col s12 l2">
+                        <div class="row">
+                            <div class="col s3 push-s3">
+                                <a class="waves-effect waves-light btn blue darken-1">Edit</a>
+                            </div>
+                            <div class="col s3 push-s5 ">
+                                <a class="waves-effect waves-light btn blue darken-1">Delete</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/addevent.js"></script>
+</body>
+
+</html>
