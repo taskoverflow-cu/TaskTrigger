@@ -59,7 +59,7 @@ apiGateway.core.utils = {
     },
     copy: function (obj) {
         if (null == obj || "object" != typeof obj) return obj;
-        var copy = new obj.constructor();
+        var copy = obj.constructor();
         for (var attr in obj) {
             if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
         }

@@ -22,95 +22,91 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDg1Y94oiGjpuWv-7DxIJR1vn0W8j2cItA&libraries=places&language=en"></script>
 	<script src="js/jquery.geocomplete-1.7.0.js"></script>
   <script src="js/leaflet-gplaces-autocomplete.js"></script>
+  
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/axios/dist/axios.standalone.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/sha256.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/hmac.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/enc-base64.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/url-template/url-template.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/utils.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/apigClient.js"></script>
 
+  <script src="js/aws-cognito-sdk.min.js"></script>
+  <script src="js/amazon-cognito-identity.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/cognito-auth.js"></script>
+  <script src="js/user-auth.js"></script>
+
+  <script src="js/config.js"></script>
+  <script type="text/javascript" src="test/tests.js"></script>
   <script type="text/javascript" src="js/discover.js"></script>
 </head>
 
 <body>
   <header>
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0px;">
       <div id="button-group">
         <div class="col-sm-4" style="padding: 0px;">
           <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-friends" href="./friends.html" style="margin-left: 0px;">Friends</a>
-	      <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./calendar.html">
-	      	Calendar
-	      </a>
+  	      <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./calendar.html">
+  	      	Calendar
+  	      </a>
         </div>
 	    <div class="col-sm-8" style="padding: 0px;">
-            <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile" style="margin-right: 0px;">
-              <i class="fas fa-user"></i>
-            </a>
-            <div class="popover-title hide" style="width: 300px;">My Profile</div>
-            <div class="popover-content hide" style="padding: 5px">
-              <div class="card" style="width: 300px; padding: 5px;">
-                <div class="row">
-                  <img class="col-sm-2" src="./img/zhenzhang.png" style="margin: 0px; padding: 0px 0px 0px 10px"/>
-                  <div class="col-sm-10">
-                    <h4 id="user-profile-id" style="margin-top: 0px;">Placeholder</h4> 
-                    <p id="user-profile-email">Placeholder</p>
-                  </div>
-                </div>
-                <div>
-                  <p id="user-profile-my-events">My Events Today: </p>
-                  <p id="user-profile-friend-events">Friend Events Today: </p>
-                </div>
+        <a type="button" class="btn btn-primary button-right icon-button" id="signout" style="margin-right: 0px;"><i class="fas fa-sign-out-alt"></i></a>
+        <a type="button" class="btn btn-primary button-right icon-button" id="button-user-profile" data-trigger="focus">
+          <i class="fas fa-user"></i>
+        </a>
+        <div class="popover-title hide" style="width: 300px">
+          My Profile
+        </div>
+        <div class="popover-content hide" style="padding: 5px">
+          <div class="card" style="width: 300px; padding: 5px;">
+            <div class="row">
+              <img class="col-sm-2" src="./img/default_avatar.png" style="margin: 0px; padding: 0px 0px 0px 10px"/>
+              <div class="col-sm-10">
+                <h4 id="user-profile-id" style="margin-top: 0px;">Placeholder</h4> 
+                <p id="user-profile-email">Placeholder</p>
               </div>
             </div>
-            <a type="button" class="btn btn-primary button-right icon-button" id="button-calendar-map">
-              <i class="fas fa-map-marked-alt"></i>
-            </a>
+          </div>
+        </div>
+        <a type="button" class="btn btn-primary button-right icon-button" id="button-calendar-map">
+          <i class="fas fa-map-marked-alt"></i>
+        </a>
 	    </div>
     </nav>
   </header>
 
 <div style="width: 100%; height: 100%; position: relative;">
-  <div id='discover-container'>
-      <form class="form-inline" id="item-list-controls" style="padding:10px; margin:0px;">
-  	    <div class="form-check form-check-inline row">
-      		<div class='col-sm-8 no-left-right-margin' style="padding:0;">
-	    	    <input class="input-left form-control" type="text" id="item-list-event-name" placeholder="Event name:" style="width:18%;"/>
-	    	    <input class="input-left form-control map-datepicker" type="text" name="starts_at" id="item-list-starts-at" placeholder="Starts at:" style="width:22%;"/>
-	        	<input class="input-left form-control map-datepicker" type="text" name="ends_at" id="item-list-ends-at" placeholder="Ends at:" style="width:22%;"/>
-	    	    <div class="input-group" style="width:30%;">
-	    	    	<input class="form-control" type="text" id="item-list-location" placeholder="Location:" />
-				      <span class="input-group-addon" role="button"><i class="fas fa-search"></i></span>
-	    	    </div>
-        	</div>
-        	<div class="col-sm-4 no-left-right-margin" style="padding:0;">
-		        <a type="button" class="col-sm-3 button-right no-left-right-margin map-ckbx btn btn-primary active" id="item-list-private-ckbx">Private</a>
-		        <a type="button" class="col-sm-3 button-right no-left-right-margin map-ckbx btn btn-primary active" id="item-list-friend-ckbx">Friend</a>
-		        <a type="button" class="col-sm-3 button-right no-left-right-margin map-ckbx btn btn-primary active" id="item-list-public-ckbx">Public</a>
-	        </div>
+  <div id="form-container">
+    <form class="form-inline" id="item-list-controls" style="padding:10px; margin:0px;">
+	    <div class="form-check form-check-inline row">
+    		<div class='col-sm-8 no-left-right-margin' style="padding:0;">
+    	    <input class="input-left form-control" type="text" id="item-list-event-name" placeholder="Event name:" style="width:18%;"/>
+    	    <input class="input-left form-control map-datepicker" type="text" name="starts_at" id="item-list-starts-at" placeholder="Starts at:" style="width:22%;"/>
+        	<input class="input-left form-control map-datepicker" type="text" name="ends_at" id="item-list-ends-at" placeholder="Ends at:" style="width:22%;"/>
+  	    	<input class="form-control" type="text" id="item-list-location" placeholder="Location:" />
       	</div>
-      </form>
-  	<div id='list-container'>
-  		<ul id="event-list" class='main-list' style='padding-left:0px;'></ul>
-  	</div>
-  	<div class="text-center">
-  	  <nav class="p-2" aria-label="...">
-  	    <ul class="pagination">
-  	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Previous</a></li>
-  	      <li class="page-item active"><a class="page-link" href="#">1 <span class="sr-only">(current)</span></a></li>
-  	      <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1">Next</a></li>
-  		</ul>
-  	  </nav>
-  	</div>
+      	<div class="col-sm-4 no-left-right-margin" style="padding:0;">
+          <a type="button" class="col-sm-3 button-right no-left-right-margin map-ckbx btn btn-primary" id="item-public-ckbx">Public</a>
+          <a type="button" class="col-sm-3 button-right no-left-right-margin map-ckbx btn btn-primary" id="item-friend-ckbx">Friend</a>
+	        <a type="button" class="col-sm-3 button-right no-left-right-margin map-ckbx btn btn-primary" id="item-private-ckbx">Private</a>
+        </div>
+    	</div>
+    </form>
+  </div>
+  <div id='discover-container'>
+    <div id='list-container'>
+      <ul id="event-list" class='main-list' style='padding-left:0px;'></ul>
+    </div>
   </div>
 
   <div id="map-container" style="display:none; position: relative;">
-      <form class="form-inline" id="event-map-controls">
-  	    <div class="form-check form-check-inline">
-      	    <div class="input-group" style="width:30%; margin-right: 10px;">
-      	    	<input class="form-control" type="text" id="map-location" placeholder="Location:" />
-  			    <span class="input-group-addon" role="button"><i class="fas fa-search"></i></span>
-      	    </div>
-      	    <input class="form-control map-datepicker" type="text" id="map-starts-at" placeholder="Starts at:" style="margin-right: 10px; width: 19%;"/>
-          	<input class="form-control map-datepicker" type="text" id="map-ends-at" placeholder="Ends at:" style="margin-right: 10px;width: 19%;"/>
-  	        <a type="button" class="map-ckbx btn btn-primary active" id="map-private-ckbx">Private</a>
-  	        <a type="button" class="map-ckbx btn btn-primary active" id="map-friend-ckbx">Friend</a>
-  	        <a type="button" class="map-ckbx btn btn-primary active" id="map-public-ckbx">Public</a>
-        	</div>
-      </form>
   	<div id="eventmap"></div>
   <div>
 </div>

@@ -1,0 +1,49 @@
+/* No-message-prompt start */
+#noCognitoMessage{
+    display: none;
+}
+/* No-message-prompt end */
+
+.container .keepuser-tab .loggedin-user{
+    text-transform:none;
+    /* font-family: Arial, Helvetica, sans-serif; */
+    font-size: 1.1rem;
+}
+
+/* tab start */
+.container{
+    padding-top: 50px;
+}
+.container > .signin-tab,
+.container > .signup-tab,
+.container > .continue-tab,
+.container > .confirm-tab,
+.container > .keepuser-tab
+{
+    display: none;
+}
+/* logo */
+.container .logo img{
+    display: block;
+    margin: auto;
+    height: 100px;
+}
+
+.container .signup #btn-signup,
+.container .signin #btn-signin{
+    margin: auto;
+}
+
+.container .prompt,
+.container .signin-tab .signup-switch,
+.container .signup-tab .signin-switch,
+.container .continue-tab .resend-switch,
+.container .keepuser-tab .signin-switch
+ {
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+
+
+/* tab end */

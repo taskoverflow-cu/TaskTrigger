@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    
+    <link rel="stylesheet" href="css/materialize.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/portal.css">
+
+    <title>Portal</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- keepuser tab -->
+        <div class="row keepuser-tab">
+            <div class="col s10 push-s1 l6 push-l3">
+                <div class="row logo">
+                    <div class="col s12">
+                        <img src="img/logo.jpg" alt="Logo">
+                    </div>
+                </div>
+                <div class="row prompt">
+                    You are now logged in with user <b class="loggedin-user">foo</b>
+                </div>
+                <div class="row keepsignin">
+                    <a class="col s10 push-s1 waves-effect waves-light btn" id="btn-keepsignin">
+                        Sign In as <b class="loggedin-user">foo</b>
+                    </a>
+                </div>
+                <div class="row signin-switch">
+                    <a href="#" id="resignin">Sign in as a different user?</a>
+                </div>
+            </div>
+        </div>
+        <!-- signin tab -->
+        <div class="row signin-tab">
+
+            <div class="col s10 push-s1 l6 push-l3">
+                <div class="row logo">
+                    <div class="col s12">
+                        <img src="img/logo.jpg" alt="Logo">
+                    </div>
+                </div>
+                <div class="row prompt">
+                    Sign in with your username and password
+                </div>
+                <div class="row username">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">email</i>
+                        <input id="uname-signin" required type="email" class="validate">
+                        <label for="uname-signin">User Email</label>
+                    </div>
+                </div>
+                <div class="row passwd">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">lock</i>
+                        <input id="pwd-signin" required minlength="8" type="password">
+                        <label for="pwd-signin">Password</label>
+                    </div>
+                </div>
+                <div class="row signin">
+                    <a class="col s4 push-s4 waves-effect waves-light btn" id="btn-signin">Sign In</a>
+                </div>
+                <div class="row signup-switch">
+                    Need an Account?
+                    <a href="#" id="to-signup">Sign up</a>
+
+                </div>
+            </div>
+        </div>
+        <!-- signup tab -->
+        <div class="row signup-tab">
+
+            <div class="col s10 push-s1 l6 push-l3">
+                <div class="row logo">
+                    <div class="col s12">
+                        <img src="img/logo.jpg" alt="Logo">
+                    </div>
+                </div>
+                <div class="row prompt">
+                    Sign up with a new account
+                </div>
+                <div class="row username">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">person</i>
+                        <input id="uname-signup" required  type="text" class="validate">
+                        <label for="uname-signup">User Name</label>
+                    </div>
+                </div>
+                <div class="row email">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">email</i>
+                        <input id="email-signup" required type="email" class="validate">
+                        <label for="email-signup">Email</label>
+                    </div>
+                </div>
+                <div class="row passwd">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">lock</i>
+                        <input id="pwd-signup" required minlength="8" type="password" class="validate">
+                        <label for="pwd-signup">Password</label>
+                    </div>
+                </div>
+                <div class="row signup">
+                    <a class="col s4 push-s4 waves-effect waves-light btn" id="btn-signup">Sign Up</a>
+                </div>
+                <div class="row signin-switch">
+                    Already have an account? Sign in
+                    <a href="#" id="to-signin">Sign in</a>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/axios/dist/axios.standalone.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/sha256.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/hmac.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/enc-base64.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/url-template/url-template.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/utils.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/apigClient.js"></script>
+
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="js/aws-cognito-sdk.min.js"></script>
+    <script src="js/amazon-cognito-identity.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/cognito-auth.js"></script>
+    <script src="js/user-auth.js"></script>
+    <script src="js/portal.js"></script>
+    <script src="js/config.js"></script>
+
+    <!-- <script src="js/p2.js"></script> -->
+</body>
+
+</html>

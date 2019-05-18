@@ -7,7 +7,28 @@
   	<link rel="stylesheet" href="css/fontawesome-5.8.1-all.css">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="./css/friends.css">
+	
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/axios/dist/axios.standalone.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/hmac-sha256.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/rollups/sha256.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/hmac.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/CryptoJS/components/enc-base64.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/url-template/url-template.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/sigV4Client.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/apiGatewayClient.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/simpleHttpClient.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/lib/apiGatewayCore/utils.js"></script>
+  <script type="text/javascript" src="js/apiGateway-js-sdk/apigClient.js"></script>
+
 	<script src="js/jquery-3.3.1.js"></script>
+  <script src="js/aws-cognito-sdk.min.js"></script>
+  <script src="js/amazon-cognito-identity.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/cognito-auth.js"></script>
+  <script type="text/javascript" src="js/user-auth.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="test/tests.js"></script>
 	<script src="js/friends.js"></script>
 </head>
 
@@ -16,12 +37,14 @@
   <div id="button-group">
   	<div class="col-sm-4" style="padding:0px;">
 			<a type="button" class="col-sm-3 btn btn-primary button-left" id="button-calendar" href="./calendar.html" style="margin-left: 0px;">Calendar</a>
-	    <div class="input-group col-sm-8">
-				<input type="text" class="form-control button-left" id="friend-request-input" placeholder="Recipient's username" style="width:100%;">
-				<span class="input-group-addon" role="button" id="button-search" style="margin:5px 1% 5px 1%;"><i class="fas fa-search" style="margin-top: 5px;"></i></span>
-			</div>
+      <a type="button" class="col-sm-3 btn btn-primary button-left" id="button-discover" href="./discover.html" style="margin-left: 0px;">Discover</a>
 		</div>
-		<div class="col-sm-8" style="padding:0px;">
+    <div class="col-sm-4" style="padding:0px">
+      <div class="col-sm-9">
+        <input type="text" class="form-control button-left" id="friend-request-input" placeholder="Recipient's username" style="width:100%; padding-left:10px;">
+      </div>
+    </div>
+		<div class="col-sm-4" style="padding:0px;">
 			<a type="button" class="btn btn-primary button-right" id="button-notifications">Friend Requests</a>
 			<a type="button" class="btn btn-primary button-right active" id="button-friends">Friends</a>
 		</div>

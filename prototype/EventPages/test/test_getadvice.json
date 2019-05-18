@@ -1,0 +1,15 @@
+{
+  "messages": [
+    {
+      "user_id": 19,
+      "min_start_time": "1557110000",
+      "max_end_time": "1557119000",
+      "duration": "2000",
+      "time_rigidity": 0,
+      "participants_email": [
+        "zzhang1@gmail.com",
+        "zzhang2@gmail.com"
+      ]
+    }
+  ]
+}

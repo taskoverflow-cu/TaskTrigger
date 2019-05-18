@@ -1,0 +1,124 @@
+{
+  "messages":[
+    {
+      "event": {
+        "event_name": "E1",
+        "visibility": "4",
+        "capacity": "2",
+        "longitude": "-73.5",
+        "latitude": "40.75",
+        "start_time": "1557110000",
+        "end_time":   "1557111000"
+      },
+      "user_id": "18"
+    },
+    {
+      "event": {
+        "event_name": "E2",
+        "visibility": "1",
+        "capacity": "2",
+        "longitude": "-73.5",
+        "latitude": "40.50",
+        "start_time": "1557118000",
+        "end_time":   "1557119000"
+      },
+      "user_id": "18"
+    },
+    {
+      "event": {
+        "event_name": "E3",
+        "visibility": "4",
+        "capacity": "1",
+        "longitude": "-73.4",
+        "latitude": "40.50",
+        "start_time": "1557111500",
+        "end_time":   "1557112000"
+      },
+      "user_id": "19"
+    },
+    {
+      "event": {
+        "event_name": "E4",
+        "visibility": "1",
+        "capacity": "1",
+        "longitude": "-73.5",
+        "latitude": "40.50",
+        "start_time": "1557117000",
+        "end_time":   "1557117200"
+      },
+      "user_id": "19"
+    },
+    {
+      "event": {
+        "event_name": "E5",
+        "visibility": "2",
+        "capacity": "3",
+        "longitude": "-73.5",
+        "latitude": "40.50",
+        "start_time": "1557111750",
+        "end_time":   "1557117500"
+      },
+      "user_id": "20"
+    },
+    {
+      "event": {
+        "event_name": "E6",
+        "visibility": "1",
+        "capacity": "3",
+        "longitude": "-73.5",
+        "latitude": "40.30",
+        "start_time": "1557118300",
+        "end_time":   "1557118800"
+      },
+      "user_id": "20"
+    },
+    {
+      "event": {
+        "event_name": "E7",
+        "visibility": "2",
+        "capacity": "2",
+        "longitude": "-73.5",
+        "latitude": "40.35",
+        "start_time": "1557110000",
+        "end_time":   "1557111200"
+      },
+      "user_id": "21"
+    },
+    {
+      "event": {
+        "event_name": "E8",
+        "visibility": "4",
+        "capacity": "2",
+        "longitude": "-73.5",
+        "latitude": "40.4",
+        "start_time": "1557116000",
+        "end_time":   "1557118150"
+      },
+      "user_id": "21"
+    },
+    {
+      "event": {
+        "event_name": "E9",
+        "visibility": "4",
+        "capacity": "3",
+        "longitude": "-70.5",
+        "latitude": "40.4",
+        "start_time": "1557110000",
+        "end_time":   "1557111500"
+      },
+      "user_id": "22"
+    },
+    {
+      "event": {
+        "event_name": "E10",
+        "visibility": "4",
+        "capacity": "2",
+        "longitude": "-20.5",
+        "latitude": "40.4",
+        "start_time": "1557113000",
+        "end_time":   "1557113500"
+      },
+      "user_id": "22"
+    }
+  ]
+}

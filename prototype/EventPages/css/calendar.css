@@ -1,9 +1,13 @@
 html, body{
     height: 100%;
     width: 100%;
-    overflow-y: hidden;
+    overflow-y: visible;
     position: relative;
 }
+
+.pac-container{
+    margin-top: -70px;
+  }
 
 #left-container {
   height: 100%;
